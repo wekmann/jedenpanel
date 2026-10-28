@@ -74,6 +74,33 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #adv{width:100%;height:100%;object-fit:contain;background:#000;display:block}
 #adlabel{position:absolute;top:43px;left:53px;background:#d60f08;color:#fff;font:800 24px Arial,sans-serif;letter-spacing:1px;padding:8px 18px;border-radius:6px;box-shadow:0 6px 14px rgba(0,0,0,.45)}
 
+/* ===== PRZERWA / ZARAZ WRACAMY ===== */
+#brk{position:absolute;inset:0;z-index:40;overflow:hidden;opacity:0;visibility:hidden;background:#050d1c;font-family:'Oswald','Arial Narrow',Impact,Arial,sans-serif;text-transform:uppercase;transition:opacity .7s,visibility 0s .7s}
+#brk.on{opacity:1;visibility:visible;transition:opacity .7s}
+.bk-bg{position:absolute;inset:0;background:radial-gradient(1100px 700px at 15% 10%,#16305c,transparent 60%),radial-gradient(900px 700px at 90% 95%,#8a0a0a,transparent 55%),linear-gradient(160deg,#08142a,#050d1c 60%,#12060a)}
+.bk-st{position:absolute;inset:-200px;background:repeating-linear-gradient(115deg,rgba(255,255,255,.04) 0 2px,transparent 2px 54px);animation:bkst 12s linear infinite}
+@keyframes bkst{to{transform:translateX(59.6px)}}
+.bk-sw{position:absolute;top:0;bottom:0;width:380px;left:-500px;background:linear-gradient(100deg,transparent,rgba(255,80,60,.22),transparent);transform:skewX(-20deg);animation:bksw 7s ease-in-out infinite}
+@keyframes bksw{0%{left:-500px}60%,100%{left:2000px}}
+#bkp i{position:absolute;bottom:-20px;border-radius:50%;background:#fff;animation:bkr linear infinite}
+@keyframes bkr{to{transform:translateY(-1150px);opacity:0}}
+#bkl{position:absolute;left:150px;top:50%;transform:translateY(-50%);width:900px}
+#bklogo{width:130px;height:130px;background:#0a1a2e url(/assets/jeden_logo.png) center/cover no-repeat;border-bottom:6px solid #d60f08;box-shadow:0 10px 30px rgba(0,0,0,.5);margin-bottom:46px}
+#bkt{font-size:190px;font-weight:700;line-height:.95;letter-spacing:2px;color:#fff;text-shadow:0 8px 30px rgba(0,0,0,.6);transform:translateY(50px);opacity:0;transition:transform 1s var(--ease) .3s,opacity 1s .3s}
+#bkline{height:10px;width:0;background:linear-gradient(90deg,#d60f08,#ff6b3d);margin:26px 0;transition:width 1.2s var(--ease) .6s;box-shadow:0 0 24px rgba(255,59,59,.7)}
+#bks{font-size:46px;font-weight:600;opacity:0;color:#cfd8e6;letter-spacing:1px;transition:opacity 1s .9s}
+#bkat{display:inline-block;margin-top:34px;padding:10px 28px;background:#d60f08;border-radius:0 14px 0 0;font-size:34px;font-weight:700;letter-spacing:1px;box-shadow:0 6px 14px rgba(0,0,0,.45)}
+#brk.on #bkt{transform:none;opacity:1}#brk.on #bkline{width:420px}#brk.on #bks{opacity:1}
+#bkr{position:absolute;right:130px;top:50%;width:600px;height:600px;transform:translateY(-50%)}
+#bkr svg{position:absolute;inset:0;width:100%;height:100%}
+#bkd{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
+#bkdig{font-size:170px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;text-shadow:0 6px 24px rgba(0,0,0,.6)}
+#bklab{font-size:30px;letter-spacing:4px;color:#9fb3d1;margin-top:10px}
+#bkf{position:absolute;left:0;right:0;bottom:46px;text-align:center;font-size:28px;letter-spacing:6px;color:#8ea2c4}
+#brk.zero #bkdig{animation:bkp 1s ease-in-out infinite}@keyframes bkp{50%{transform:scale(1.06)}}
+#bkarc{transition:stroke-dashoffset .4s linear;filter:drop-shadow(0 0 18px rgba(255,59,59,.8))}
+#bktk{transform-origin:300px 300px;animation:bkspin 80s linear infinite}@keyframes bkspin{to{transform:rotate(360deg)}}
+
 /* ===== SONDAŻ (sondaz_tv.html) ===== */
 #pstage{position:absolute;inset:0;pointer-events:none}
 #wipe{position:absolute;top:0;bottom:0;left:-40%;width:40%;background:linear-gradient(100deg,transparent,#dc0432 40%,#ff3b3b 60%,transparent);transform:skewX(-20deg);opacity:0}
@@ -177,6 +204,19 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
   </div>
 
   <div id="adwrap"><video id="adv" playsinline preload="auto"></video><div id="adlabel">REKLAMA</div></div>
+  <div id="brk">
+    <div class="bk-bg"></div><div class="bk-st"></div><div class="bk-sw"></div><div id="bkp"></div>
+    <div id="bkl"><div id="bklogo"></div><div id="bkt"></div><div id="bkline"></div><div id="bks"></div><div id="bkat"></div></div>
+    <div id="bkr">
+      <svg viewBox="0 0 600 600"><defs><linearGradient id="bkg" x1="0" x2="1"><stop offset="0" stop-color="#ff3b3b"/><stop offset="1" stop-color="#ff9a3d"/></linearGradient></defs>
+        <circle id="bktk" cx="300" cy="300" r="292" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="6" stroke-dasharray="2 16"/>
+        <circle cx="300" cy="300" r="255" fill="rgba(5,13,28,.55)" stroke="rgba(255,255,255,.1)" stroke-width="18"/>
+        <circle id="bkarc" cx="300" cy="300" r="255" fill="none" stroke="url(#bkg)" stroke-width="18" stroke-linecap="round" stroke-dasharray="1602.2" stroke-dashoffset="0" transform="rotate(-90 300 300)"/>
+      </svg>
+      <div id="bkd"><div id="bkdig"></div><div id="bklab"></div></div>
+    </div>
+    <div id="bkf"></div>
+  </div>
 </div>
 
 <script>
@@ -294,6 +334,51 @@ async function autoAd(slot){
   adQueue = [list[(slot - 1) % list.length]]; nextAd();
 }
 
+/* ---------- przerwa / zaraz wracamy (+ podgląd: ?demo=break lub ?demo=brb) ---------- */
+const DEMO = new URLSearchParams(location.search).get('demo');
+let brk = null, brkTotal = 1, brkKey = '', bmVol = 0, bmT = null, bmKind = '', bmSig = '';
+const bm = new Audio(); bm.loop = true; bm.muted = PREVIEW;
+bm.onerror = () => { if (bm.src.endsWith('zaraz_wracamy.mp3')) { bm.src = '/assets/przerwa.mp3'; bm.play().catch(() => {}); } };
+for (let i = 0; i < 20; i++) { const p = document.createElement('i'), z = 4 + Math.random()*8; p.style.cssText = 'left:'+Math.random()*100+'%;width:'+z+'px;height:'+z+'px;animation-duration:'+(10+Math.random()*14)+'s;animation-delay:-'+Math.random()*20+'s;opacity:'+(.2+Math.random()*.5); $('bkp').appendChild(p); }
+function bmGo(want, vol, kind){
+  clearInterval(bmT);
+  if (want) {
+    if (bmKind !== kind) { bmKind = kind; bm.src = kind === 'brb' ? '/assets/zaraz_wracamy.mp3' : '/assets/przerwa.mp3'; bm.volume = 0; bmVol = 0; }
+    if (bm.paused) { const p = bm.play(); if (p) p.catch(() => {}); }
+  }
+  bmT = setInterval(() => {
+    const t = want ? vol : 0; bmVol += Math.sign(t - bmVol) * Math.min(.04, Math.abs(t - bmVol)); bm.volume = Math.max(0, Math.min(1, bmVol));
+    if (Math.abs(t - bmVol) < .001) { clearInterval(bmT); if (!want) { bm.pause(); bmKind = ''; } }
+  }, 60);
+}
+function renderBreak(k){
+  const on = !!(k && k.visible); brk = on ? k : null; $('brk').classList.toggle('on', on);
+  if (!on) { bmSig = ''; bmGo(false, 0, ''); $('brk').classList.remove('zero'); return; }
+  const brb = k.kind === 'brb';
+  $('bkt').textContent = k.title || (brb ? 'Zaraz wracamy' : 'Przerwa');
+  $('bks').textContent = k.subtitle ? k.subtitle : (brb ? 'Nie odchodź od ekranu' : 'Wrócimy za chwilę');
+  $('bkf').textContent = k.footer || '';
+  const end = k.endsAt ? Date.parse(k.endsAt) : 0, key = (k.endsAt || '') + '|' + (k.startedAt || '');
+  if (key !== brkKey) { brkKey = key; brkTotal = end ? Math.max(1, (end - (k.startedAt ? Date.parse(k.startedAt) : Date.now() + skew)) / 1000) : 1; }
+  $('bkat').style.display = end ? '' : 'none'; if (end) $('bkat').textContent = 'Wracamy o ' + fmt.format(new Date(end));
+  brkTick();
+}
+function brkTick(){
+  if (!brk) return;
+  const end = brk.endsAt ? Date.parse(brk.endsAt) : 0;
+  if (end) {
+    const rem = (end - (Date.now() + skew)) / 1000, s = Math.max(0, Math.ceil(rem)), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), p2 = n => String(n).padStart(2, '0');
+    $('bkdig').textContent = (h ? h + ':' : '') + p2(m) + ':' + p2(s % 60); $('bkdig').style.fontSize = h ? '120px' : '';
+    $('bkarc').style.strokeDashoffset = 1602.2 * (1 - Math.max(0, Math.min(1, rem / brkTotal)));
+    $('bklab').textContent = s ? 'do powrotu na antenę' : 'już za chwilę';
+    $('brk').classList.toggle('zero', !s);
+  } else { $('bkdig').textContent = '···'; $('bkarc').style.strokeDashoffset = 0; $('bklab').textContent = ''; $('brk').classList.remove('zero'); }
+  const want = brk.music !== false && !$('adwrap').classList.contains('on'), vol = (brk.volume != null ? +brk.volume : 60) / 100, kind = brk.kind === 'brb' ? 'brb' : 'break', sig = want + '|' + vol + '|' + kind;
+  if (sig !== bmSig) { bmSig = sig; bmGo(want, vol, kind); }
+}
+setInterval(brkTick, 250);
+document.addEventListener('pointerdown', () => { bmSig = ''; });
+
 /* ---------- odpytywanie stanu co 2 s ---------- */
 let barSig = '', lastSeq = null;
 try { const v = localStorage.getItem('overlay_poll_seq'); if (v !== null) lastSeq = +v; } catch (e) {}
@@ -301,7 +386,7 @@ const setSeq = s => { lastSeq = s; try { localStorage.setItem('overlay_poll_seq'
 
 let ltPrev = false, ltT = null, ltForceOff = false; // plansza rozmówcy
 function setVis(id, on){ $(id).classList.toggle('off', !on); }
-function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); }
+function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); renderBreak(null); }
 
 /* zbiórka: % = wartość bazowa + 1% co N sekund (liczone wg czasu serwera) */
 let fund = null, skew = 0, qrOk = false;
@@ -347,6 +432,8 @@ function apply(s){
     setVis('qrwrap', !!f.visible);
   } catch (e) { console.error('zbiórka', e); }
 
+  try { renderBreak(s.break_screen); } catch (e) { console.error('przerwa', e); }
+
   try {
     const l = s.lower_third;
     if (l && l.name) {
@@ -391,6 +478,7 @@ function apply(s){
   } catch (e) { console.error('reklamy', e); }
 }
 async function poll(){
+  if (DEMO) { if (!brk) renderBreak({visible: true, kind: DEMO === 'brb' ? 'brb' : 'break', endsAt: new Date(Date.now() + 300000).toISOString(), footer: 'jeden.tv'}); return; }
   if (!KEY) { clearAll(); return; }
   try {
     const r = await fetch('/api/state?key=' + encodeURIComponent(KEY), {cache: 'no-store'});
