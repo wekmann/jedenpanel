@@ -17,32 +17,35 @@ button{padding:14px 18px;border:0;border-radius:10px;background:#d60f08;color:#f
 <textarea id="o" rows="6" placeholder="Odpowiedzi — jedna w linii (2–20)"></textarea>
 <div class="row"><button class="g" id="tn">Tak / Nie</button></div>
 <label><input type="checkbox" id="p" checked> Pokaż wyniki głosującym po zamknięciu</label>
+<label><input type="checkbox" id="nv" checked> Blokuj VPN / proxy / Tor (wymaga klucza PROXYCHECK_KEY w Vercelu)</label>
 <label>Limit głosów z jednego IP: <input type="number" id="l" value="1" min="1" max="50" style="width:80px"></label>
 <button id="mk">Utwórz ankietę</button><div class="err" id="e"></div></div></div></main>
 <script>
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const $=s=>document.querySelector(s);
-let tm;
+let tm,curLive=false;
 async function api(a,b){const r=await fetch('/api/ankieta/admin/'+a,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b||{})});return[r.ok,await r.json().catch(()=>({}))]}
 async function login(){
   const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('#k').value})});
   const j=await r.json().catch(()=>({}));
   if(r.ok){$('#le').textContent='';tick()}else $('#le').textContent=j.error||'Błąd.'}
 async function act(a){
+  if(a==='live'){await api('live',{visible:!curLive});tick();return}
   if(a==='delete'&&!confirm('Usunąć ankietę wraz z głosami?'))return;
   if(a==='reset'&&!confirm('Wyzerować wszystkie głosy?'))return;
   await api(a);tick()}
 async function mk(){
-  const[ok,j]=await api('create',{title:$('#t').value,options:$('#o').value.split('\n'),pub:$('#p').checked,ipLimit:$('#l').value});
+  const[ok,j]=await api('create',{title:$('#t').value,options:$('#o').value.split('\n'),pub:$('#p').checked,noVpn:$('#nv').checked,ipLimit:$('#l').value});
   $('#e').textContent=ok?'':(j.err||'Błąd.');if(ok)tick()}
 async function tick(){
   clearTimeout(tm);const[ok,j]=await api('get');
   if(!ok){$('#login').style.display='';$('#app').style.display='none';if(j.err)$('#le').textContent=j.err;return}
-  $('#login').style.display='none';$('#app').style.display='';const p=j.poll;
+  $('#login').style.display='none';$('#app').style.display='';const p=j.poll;curLive=!!(p&&p.live);
   if(!p)$('#cur').innerHTML='<p>Brak ankiety. Utwórz nową poniżej.</p>';
   else{const t=p.total||1,nm={};p.results.forEach(x=>nm[x.id]=x.text);
     $('#cur').innerHTML='<h1>'+esc(p.title)+' <span class="tag '+p.status+'">'+{draft:'SZKIC',open:'OTWARTA',closed:'ZAMKNIĘTA'}[p.status]+'</span></h1>'
     +'<div class="row"><button data-a="open">Otwórz</button><button class="g" data-a="close">Zamknij</button><button class="g" data-a="reset">Zeruj głosy</button><button class="g" data-a="delete">Usuń</button></div>'
-    +'<p>Link dla głosujących: <b>'+esc(location.origin)+'/glosuj</b> · głosów: <b>'+p.total+'</b> · limit IP: '+p.ipLimit+'</p>'
+    +'<div class="row"><button data-a="live">'+(p.live?'Ukryj wykres z transmisji':'Pokaż wykres na transmisji')+'</button><span style="align-self:center">Wykres na transmisji: <b>'+(p.live?'WIDOCZNY':'ukryty')+'</b></span></div>'
+    +'<p>Link dla głosujących: <b>'+esc(location.origin)+'/glosuj</b> · głosów: <b>'+p.total+'</b> · limit IP: '+p.ipLimit+' · anty-VPN: '+(p.noVpn?(p.vpnReady?'włączony':'<span style="color:#ff8a8a">włączony, ale brak klucza PROXYCHECK_KEY – NIE DZIAŁA</span>'):'wyłączony')+'</p>'
     +p.results.map(x=>'<div class="res"><b>'+esc(x.text)+'</b> — '+x.n+' ('+Math.round(x.n/t*100)+'%)<div class="bar"><i style="width:'+x.n/t*100+'%"></i></div></div>').join('')
     +'<h3>Ostatnie głosy</h3><table>'+p.votes.map(v=>'<tr><td>'+esc(v.n)+'</td><td>'+esc(nm[v.o]||'')+'</td><td>'+new Date(v.t).toLocaleTimeString('pl-PL')+'</td></tr>').join('')+'</table>'}
   tm=setTimeout(tick,3000)}
