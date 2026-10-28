@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>JEDEN – panel streamu</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:linear-gradient(180deg,#0C1A2C,#01183E);color:#fff;font:14px Arial,sans-serif;min-height:100vh}
+h1{margin:0;font-size:20px}h3{margin:0 0 8px;font-size:15px}
+.wrap{max-width:1000px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;margin-bottom:14px}
+label{display:block;color:#9fb3d1;font-size:11px;font-weight:700;text-transform:uppercase;margin:10px 0 4px}
+input[type=text],input[type=number],input[type=password],input[type=url]{padding:8px;border-radius:5px;border:1px solid #2a3f5f;background:#0e2038;color:#fff;font-size:14px;width:100%}
+input[type=checkbox]{width:18px;height:18px;vertical-align:middle;margin-right:8px}
+.chk{display:flex;align-items:center;color:#fff;font-size:14px;text-transform:none;font-weight:700;margin:6px 0}
+button{border:0;border-radius:7px;padding:10px 16px;font-weight:800;cursor:pointer;color:#fff;margin:8px 6px 0 0;font-size:14px}
+.b1{background:linear-gradient(#e6130a,#a10000)}.b2{background:#16305c}.b3{background:#444}.sm{padding:6px 10px;margin:0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button{margin:0;background:#16305c;opacity:.7}.tabs button.on{opacity:1;background:linear-gradient(#e6130a,#a10000)}
+.tab{display:none}.tab.on{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nrow{display:grid;grid-template-columns:1fr auto auto auto;gap:5px;margin-top:6px}
+.prow{display:grid;grid-template-columns:1fr 90px 44px 34px;gap:5px;margin-top:8px;padding:8px;background:rgba(255,255,255,.05);border-radius:6px}
+.prow .lg{grid-column:1/4}
+.prow input[type=color]{width:44px;height:36px;padding:0;border:0;background:none}
+.msg{margin-top:8px;font-weight:700;min-height:18px}.ok{color:#5ee07a}.er{color:#ff6b6b}
+#prevWrap{width:960px;max-width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:8px;border:1px solid rgba(255,255,255,.2);
+ background:repeating-conic-gradient(#2b2f38 0 25%,#1d2027 0 50%) 0 0/24px 24px}
+#prevFrame{position:absolute;left:0;top:0;width:1920px;height:1080px;border:0;transform-origin:0 0;background:transparent}
+#login{max-width:340px;margin:12vh auto}
+ol li{margin-bottom:6px}code{background:#0e2038;padding:2px 6px;border-radius:4px;word-break:break-all}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="login" class="box" hidden>
+  <h1>JEDEN – panel streamu</h1>
+  <label for="pw">Hasło admina</label>
+  <input type="password" id="pw" autocomplete="current-password">
+  <button class="b1" id="bLogin">Zaloguj</button>
+  <div class="msg er" id="loginMsg"></div>
+</div>
+
+<div class="wrap" id="app" hidden>
+  <div class="top"><h1>🎬 JEDEN – panel streamu</h1><button class="b3 sm" id="bLogout">Wyloguj</button></div>
+
+  <div class="box">
+    <h3>Podgląd na żywo</h3>
+    <div id="prevWrap"><iframe id="prevFrame" title="Podgląd overlayu"></iframe></div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button data-t="tBar" class="on">Pasek</button>
+    <button data-t="tPoll">Sondaż</button>
+    <button data-t="tWidg">Widżety</button>
+    <button data-t="tOver">Overlay</button>
+  </div>
+
+  <!-- PASEK -->
+  <div class="tab on box" id="tBar">
+    <label class="chk"><input type="checkbox" id="barVis">Pasek widoczny</label>
+    <label for="l1">Linia 1 nagłówka</label><input type="text" id="l1" maxlength="200">
+    <label for="l2">Linia 2 nagłówka</label><input type="text" id="l2" maxlength="200">
+    <label>Newsy w tickerze</label>
+    <div id="newsList"></div>
+    <button class="b2 sm" id="newsAdd" style="margin-top:8px">+ Dodaj news</button>
+    <div class="grid2">
+      <div><label for="sp">Prędkość (px/s)</label><input type="number" id="sp" min="10" max="1000"></div>
+      <div></div>
+      <div><label for="mr">Odstęp od prawej (px)</label><input type="number" id="mr" min="0" max="1920"></div>
+      <div><label for="mb">Odstęp od dołu (px)</label><input type="number" id="mb" min="0" max="1080"></div>
+    </div>
+    <button class="b1" id="barSave">Zapisz</button><div class="msg" id="barMsg"></div>
+  </div>
+
+  <!-- SONDAŻ -->
+  <div class="tab box" id="tPoll">
+    <label for="pT">Pytanie</label><input type="text" id="pT" maxlength="200">
+    <label for="pS">Podpis (źródło)</label><input type="text" id="pS" maxlength="200">
+    <label for="pH">Chowaj po (sekundy, 0 = nie chowaj)</label><input type="number" id="pH" min="0" max="3600" style="max-width:160px">
+    <label>Opcje (nazwa · % · kolor · usuń) + logo URL</label>
+    <div id="pRows"></div>
+    <button class="b2 sm" id="pAdd" style="margin-top:8px">+ Dodaj słupek</button><br>
+    <button class="b1" id="pSave">Zapisz</button>
+    <button class="b1" id="pShow">▶ POKAŻ</button>
+    <button class="b3" id="pHide">■ UKRYJ</button>
+    <div class="msg" id="pMsg"></div>
+  </div>
+
+  <!-- WIDŻETY -->
+  <div class="tab box" id="tWidg">
+    <h3>Plakietka „NA ŻYWO”</h3>
+    <label class="chk"><input type="checkbox" id="lbVis">Widoczna</label>
+    <label for="lbText">Tekst</label><input type="text" id="lbText" maxlength="40">
+    <div class="grid2">
+      <div><label for="lbTop">Od góry (px)</label><input type="number" id="lbTop" min="0" max="1080"></div>
+      <div><label for="lbRight">Od prawej (px)</label><input type="number" id="lbRight" min="0" max="1920"></div>
+    </div>
+    <button class="b1" id="lbSave">Zapisz</button><div class="msg" id="lbMsg"></div>
+  </div>
+
+  <!-- OVERLAY -->
+  <div class="tab box" id="tOver">
+    <h3>Link do OBS</h3>
+    <input type="text" id="ovUrl" readonly>
+    <button class="b2" id="ovCopy">Kopiuj</button>
+    <button class="b3" id="ovRegen">Wygeneruj nowy klucz</button>
+    <div class="msg" id="ovMsg"></div>
+    <h3 style="margin-top:18px">Instrukcja OBS</h3>
+    <ol>
+      <li>Dodaj źródło <b>Przeglądarka</b> (Browser).</li>
+      <li>W polu URL wklej powyższy link.</li>
+      <li>Szerokość <b>1920</b>, wysokość <b>1080</b>.</li>
+      <li>Odznacz „Zamykaj źródło, gdy nie jest widoczne” i „Odśwież, gdy scena staje się aktywna”.</li>
+      <li>Ułóż źródło na wierzchu sceny. Po wygenerowaniu nowego klucza wklej w OBS nowy link — stary przestaje działać.</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let cfg = null;
+
+async function api(path, method, body){
+  const r = await fetch(path, {method: method || 'GET', credentials: 'same-origin',
+    headers: {'Content-Type': 'application/json'}, body: body ? JSON.stringify(body) : undefined});
+  let j = {}; try { j = await r.json(); } catch (e) {}
+  if (r.status === 401 && path !== '/api/login') { showLogin(); throw new Error('Sesja wygasła – zaloguj się ponownie'); }
+  if (!r.ok) throw new Error(j.error || ('Błąd ' + r.status));
+  return j;
+}
+const say = (id, m, ok) => { const e = $(id); e.textContent = m; e.className = 'msg ' + (ok ? 'ok' : 'er'); };
+const num = v => v === '' ? NaN : Number(v);
+
+/* ---------- logowanie ---------- */
+function showLogin(){ $('app').hidden = true; $('login').hidden = false; $('pw').focus(); }
+$('bLogin').onclick = async () => {
+  try { await api('/api/login', 'POST', {password: $('pw').value}); $('pw').value = ''; $('loginMsg').textContent = ''; await start(); }
+  catch (e) { $('loginMsg').textContent = e.message; }
+};
+$('pw').onkeydown = e => { if (e.key === 'Enter') $('bLogin').click(); };
+$('bLogout').onclick = async () => { try { await api('/api/login', 'DELETE'); } catch (e) {} $('prevFrame').src = 'about:blank'; showLogin(); };
+
+async function start(){
+  try { cfg = (await api('/api/config')).config; } catch (e) { return; }
+  $('login').hidden = true; $('app').hidden = false;
+  fillBar(); fillPoll(); fillBadge(); fillOverlay();
+}
+
+/* ---------- zakładki ---------- */
+$('tabs').onclick = e => {
+  const t = e.target.dataset && e.target.dataset.t; if (!t) return;
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b === e.target));
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x.id === t));
+};
+
+/* ---------- podgląd ---------- */
+function fitPreview(){ $('prevFrame').style.transform = 'scale(' + ($('prevWrap').clientWidth / 1920) + ')'; }
+addEventListener('resize', fitPreview);
+function setPreview(){ $('prevFrame').src = '/overlay?key=' + encodeURIComponent(cfg.overlayKey); fitPreview(); }
+
+/* ---------- pasek ---------- */
+function newsRow(v){
+  const d = document.createElement('div'); d.className = 'nrow';
+  const i = document.createElement('input'); i.type = 'text'; i.value = v; i.maxLength = 300; i.placeholder = 'Treść newsa';
+  const mk = (t, f) => { const b = document.createElement('button'); b.className = 'b3 sm'; b.textContent = t; b.onclick = f; return b; };
+  d.append(i,
+    mk('↑', () => { if (d.previousElementSibling) d.parentNode.insertBefore(d, d.previousElementSibling); }),
+    mk('↓', () => { if (d.nextElementSibling) d.parentNode.insertBefore(d.nextElementSibling, d); }),
+    mk('✕', () => d.remove()));
+  $('newsList').appendChild(d);
+}
+function fillBar(){
+  const b = cfg.bar;
+  $('barVis').checked = b.visible; $('l1').value = b.line1; $('l2').value = b.line2;
+  $('sp').value = b.speed; $('mr').value = b.marginRight; $('mb').value = b.marginBottom;
+  $('newsList').innerHTML = ''; b.news.forEach(newsRow);
+}
+$('newsAdd').onclick = () => newsRow('');
+async function save(section, data, msgId){
+  try { cfg = (await api('/api/config', 'POST', {section, data})).config; say(msgId, 'Zapisano ✔', true); return true; }
+  catch (e) { say(msgId, e.message, false); return false; }
+}
+$('barSave').onclick = () => save('bar', {
+  visible: $('barVis').checked, line1: $('l1').value, line2: $('l2').value,
+  news: [...document.querySelectorAll('#newsList input')].map(i => i.value.trim()).filter(Boolean),
+  speed: num($('sp').value), marginRight: num($('mr').value), marginBottom: num($('mb').value)
+}, 'barMsg');
+
+/* ---------- sondaż ---------- */
+function pollRow(r){
+  const d = document.createElement('div'); d.className = 'prow';
+  d.innerHTML = '<input type="text" class="n" placeholder="Nazwa" maxlength="60"><input type="number" class="v" min="0" max="100" step="0.01"><input type="color" class="c"><button class="b3 sm">✕</button><input type="url" class="l lg" placeholder="Logo URL (opcjonalnie, https://…)">';
+  d.querySelector('.n').value = r.name; d.querySelector('.v').value = r.value;
+  d.querySelector('.c').value = r.color; d.querySelector('.l').value = r.logo || '';
+  d.querySelector('button').onclick = () => d.remove();
+  $('pRows').appendChild(d);
+}
+function fillPoll(){
+  const p = cfg.poll; $('pT').value = p.title; $('pS').value = p.subtitle; $('pH').value = p.hideAfter;
+  $('pRows').innerHTML = ''; p.rows.forEach(pollRow);
+}
+$('pAdd').onclick = () => pollRow({name: 'Nowa opcja', value: 0, color: '#4a8fe7', logo: ''});
+const pollData = () => ({
+  title: $('pT').value, subtitle: $('pS').value, hideAfter: num($('pH').value),
+  rows: [...document.querySelectorAll('.prow')].map(r => ({
+    name: r.querySelector('.n').value, value: num(r.querySelector('.v').value),
+    color: r.querySelector('.c').value, logo: r.querySelector('.l').value.trim()}))
+});
+$('pSave').onclick = () => save('poll', pollData(), 'pMsg');
+async function pollCmd(action){
+  if (action === 'show' && !(await save('poll', pollData(), 'pMsg'))) return;
+  try { cfg = (await api('/api/poll', 'POST', {action})).config; say('pMsg', action === 'show' ? 'Sondaż uruchomiony ✔' : 'Sondaż ukryty ✔', true); }
+  catch (e) { say('pMsg', e.message, false); }
+}
+$('pShow').onclick = () => pollCmd('show'); $('pHide').onclick = () => pollCmd('hide');
+
+/* ---------- plakietka ---------- */
+function fillBadge(){ const l = cfg.live_badge; $('lbVis').checked = l.visible; $('lbText').value = l.text; $('lbTop').value = l.top; $('lbRight').value = l.right; }
+$('lbSave').onclick = () => save('live_badge', {visible: $('lbVis').checked, text: $('lbText').value, top: num($('lbTop').value), right: num($('lbRight').value)}, 'lbMsg');
+
+/* ---------- overlay / klucz ---------- */
+function fillOverlay(){ $('ovUrl').value = location.origin + '/overlay?key=' + cfg.overlayKey; setPreview(); }
+$('ovCopy').onclick = async () => {
+  try { await navigator.clipboard.writeText($('ovUrl').value); }
+  catch (e) { $('ovUrl').select(); document.execCommand('copy'); }
+  say('ovMsg', 'Skopiowano ✔', true);
+};
+$('ovRegen').onclick = async () => {
+  if (!confirm('Wygenerować nowy klucz? Stary link w OBS przestanie działać i trzeba będzie wkleić nowy.')) return;
+  try { cfg = (await api('/api/key', 'POST')).config; fillOverlay(); say('ovMsg', 'Nowy klucz wygenerowany – wklej nowy link w OBS', true); }
+  catch (e) { say('ovMsg', e.message, false); }
+};
+
+(async () => { try { const j = await api('/api/login'); j.admin ? await start() : showLogin(); } catch (e) { showLogin(); } })();
+</script>
+</body>
+</html>

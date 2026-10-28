@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    { "source": "/panel", "destination": "/panel.html" },
+    { "source": "/overlay", "destination": "/overlay.html" }
+  ],
+  "headers": [
+    { "source": "/(panel|overlay)", "headers": [
+      { "key": "X-Robots-Tag", "value": "noindex, nofollow" } ] },
+    { "source": "/api/(.*)", "headers": [
+      { "key": "Cache-Control", "value": "no-store" } ] }
+  ]
+}
