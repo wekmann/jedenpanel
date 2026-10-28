@@ -109,7 +109,7 @@ const DB_TOKEN = () => process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_RE
 const DB_KEY = 'jeden:stream:v1';
 const mem = (globalThis.__jedenMem ||= {});
 
-async function redis(cmd) {
+export async function redis(cmd) {
   const r = await fetch(DB_URL(), {
     method: 'POST',
     headers: { Authorization: `Bearer ${DB_TOKEN()}`, 'Content-Type': 'application/json' },
@@ -118,6 +118,16 @@ async function redis(cmd) {
   const j = await r.json().catch(() => ({}));
   if (!r.ok || j.error) throw new Error('Błąd bazy danych');
   return j.result;
+}
+export async function redisPipeline(cmds) {
+  const r = await fetch(DB_URL().replace(/\/$/, '') + '/pipeline', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${DB_TOKEN()}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(cmds),
+  });
+  const j = await r.json().catch(() => null);
+  if (!r.ok || !Array.isArray(j)) throw new Error('Błąd bazy danych');
+  return j.map((x) => { if (x.error) throw new Error('Błąd bazy danych'); return x.result; });
 }
 async function dbGet() {
   if (!DB_URL()) return mem[DB_KEY] ? JSON.parse(mem[DB_KEY]) : null;

@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="pl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ankiety — admin</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(900px 500px at 10% 0,#16305c,transparent 60%),#050d1c;color:#fff;font:16px Arial,sans-serif;display:flex;justify-content:center;padding:20px}
+main{width:100%;max-width:760px}.top{background:#d60f08;border-radius:0 18px 0 0;padding:14px 20px;font:800 26px Arial;letter-spacing:1px;border-bottom:5px solid #7a0000}
+.card{background:#0e1c33;padding:22px;border-radius:0 0 14px 14px;box-shadow:0 14px 40px rgba(0,0,0,.5)}h1{font-size:24px;margin:0 0 16px}
+input[type=text],input[type=password],input[type=number],textarea{width:100%;padding:13px;border-radius:10px;border:2px solid #2a3b5c;background:#07142a;color:#fff;font:17px Arial;margin:6px 0}
+button{padding:14px 18px;border:0;border-radius:10px;background:#d60f08;color:#fff;font:800 16px Arial;cursor:pointer}button.g{background:#2a3b5c}
+.err{color:#ff8a8a;min-height:20px;margin:6px 0}.bar{height:12px;background:#07142a;border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:#d60f08;transition:width .5s}.res{margin:12px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}table{width:100%;border-collapse:collapse;font-size:14px}td{padding:6px;border-bottom:1px solid #2a3b5c}
+.tag{display:inline-block;padding:3px 10px;border-radius:20px;background:#2a3b5c;font-size:13px;font-weight:700}.tag.open{background:#2fb344}.tag.closed{background:#d60f08}label{display:block;margin:6px 0}
+</style>
+<main><div class="top">ANKIETY · ADMIN</div><div class="card">
+<div id="login"><input type="password" id="k" placeholder="Hasło admina (to samo co do /panel)"><button id="lg">Zaloguj</button><div class="err" id="le"></div></div>
+<div id="app" style="display:none">
+<div id="cur"></div><hr style="border-color:#2a3b5c;margin:20px 0">
+<h2>Nowa ankieta</h2><input type="text" id="t" placeholder="Tytuł ankiety" maxlength="150">
+<textarea id="o" rows="6" placeholder="Odpowiedzi — jedna w linii (2–20)"></textarea>
+<div class="row"><button class="g" id="tn">Tak / Nie</button></div>
+<label><input type="checkbox" id="p" checked> Pokaż wyniki głosującym po zamknięciu</label>
+<label>Limit głosów z jednego IP: <input type="number" id="l" value="1" min="1" max="50" style="width:80px"></label>
+<button id="mk">Utwórz ankietę</button><div class="err" id="e"></div></div></div></main>
+<script>
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const $=s=>document.querySelector(s);
+let tm;
+async function api(a,b){const r=await fetch('/api/ankieta/admin/'+a,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b||{})});return[r.ok,await r.json().catch(()=>({}))]}
+async function login(){
+  const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('#k').value})});
+  const j=await r.json().catch(()=>({}));
+  if(r.ok){$('#le').textContent='';tick()}else $('#le').textContent=j.error||'Błąd.'}
+async function act(a){
+  if(a==='delete'&&!confirm('Usunąć ankietę wraz z głosami?'))return;
+  if(a==='reset'&&!confirm('Wyzerować wszystkie głosy?'))return;
+  await api(a);tick()}
+async function mk(){
+  const[ok,j]=await api('create',{title:$('#t').value,options:$('#o').value.split('\n'),pub:$('#p').checked,ipLimit:$('#l').value});
+  $('#e').textContent=ok?'':(j.err||'Błąd.');if(ok)tick()}
+async function tick(){
+  clearTimeout(tm);const[ok,j]=await api('get');
+  if(!ok){$('#login').style.display='';$('#app').style.display='none';if(j.err)$('#le').textContent=j.err;return}
+  $('#login').style.display='none';$('#app').style.display='';const p=j.poll;
+  if(!p)$('#cur').innerHTML='<p>Brak ankiety. Utwórz nową poniżej.</p>';
+  else{const t=p.total||1,nm={};p.results.forEach(x=>nm[x.id]=x.text);
+    $('#cur').innerHTML='<h1>'+esc(p.title)+' <span class="tag '+p.status+'">'+{draft:'SZKIC',open:'OTWARTA',closed:'ZAMKNIĘTA'}[p.status]+'</span></h1>'
+    +'<div class="row"><button data-a="open">Otwórz</button><button class="g" data-a="close">Zamknij</button><button class="g" data-a="reset">Zeruj głosy</button><button class="g" data-a="delete">Usuń</button></div>'
+    +'<p>Link dla głosujących: <b>'+esc(location.origin)+'/glosuj</b> · głosów: <b>'+p.total+'</b> · limit IP: '+p.ipLimit+'</p>'
+    +p.results.map(x=>'<div class="res"><b>'+esc(x.text)+'</b> — '+x.n+' ('+Math.round(x.n/t*100)+'%)<div class="bar"><i style="width:'+x.n/t*100+'%"></i></div></div>').join('')
+    +'<h3>Ostatnie głosy</h3><table>'+p.votes.map(v=>'<tr><td>'+esc(v.n)+'</td><td>'+esc(nm[v.o]||'')+'</td><td>'+new Date(v.t).toLocaleTimeString('pl-PL')+'</td></tr>').join('')+'</table>'}
+  tm=setTimeout(tick,3000)}
+$('#lg').onclick=login;$('#k').onkeydown=e=>{if(e.key==='Enter')login()};
+$('#mk').onclick=mk;$('#tn').onclick=()=>{$('#o').value='Tak\nNie'};
+$('#cur').onclick=e=>{const a=e.target.dataset&&e.target.dataset.a;if(a)act(a)};
+tick();
+</script></html>

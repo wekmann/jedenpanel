@@ -1,10 +1,14 @@
 {
   "rewrites": [
     { "source": "/panel", "destination": "/panel.html" },
-    { "source": "/overlay", "destination": "/overlay.html" }
+    { "source": "/overlay", "destination": "/overlay.html" },
+    { "source": "/glosuj", "destination": "/glosuj.html" },
+    { "source": "/ankieta-admin", "destination": "/ankieta-admin.html" },
+    { "source": "/api/ankieta/glos", "destination": "/api/ankieta?a=glos" },
+    { "source": "/api/ankieta/admin/:act", "destination": "/api/ankieta?a=admin&act=:act" }
   ],
   "headers": [
-    { "source": "/(panel|overlay)", "headers": [
+    { "source": "/(panel|overlay|ankieta-admin)", "headers": [
       { "key": "X-Robots-Tag", "value": "noindex, nofollow" } ] },
     { "source": "/api/(.*)", "headers": [
       { "key": "Cache-Control", "value": "no-store" } ] }

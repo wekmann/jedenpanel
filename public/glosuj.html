@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="pl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Głosowanie — JEDEN</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(900px 500px at 10% 0,#16305c,transparent 60%),#050d1c;color:#fff;font:16px Arial,sans-serif;display:flex;justify-content:center;padding:20px}
+main{width:100%;max-width:560px}.top{background:#d60f08;border-radius:0 18px 0 0;padding:14px 20px;font:800 26px Arial;letter-spacing:1px;border-bottom:5px solid #7a0000}
+.card{background:#0e1c33;padding:22px;border-radius:0 0 14px 14px;box-shadow:0 14px 40px rgba(0,0,0,.5)}h1{font-size:26px;margin:0 0 16px}
+input[type=text]{width:100%;padding:13px;border-radius:10px;border:2px solid #2a3b5c;background:#07142a;color:#fff;font:17px Arial;margin:6px 0}
+button{padding:14px 18px;border:0;border-radius:10px;background:#d60f08;color:#fff;font:800 16px Arial;cursor:pointer}button:disabled{opacity:.5}
+.err{color:#ff8a8a;min-height:20px;margin:6px 0}.bar{height:12px;background:#07142a;border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:#d60f08;transition:width .5s}.res{margin:12px 0}
+.opt{display:block;padding:14px 16px;margin:8px 0;border:2px solid #2a3b5c;border-radius:10px;cursor:pointer;font-weight:700}.opt:has(input:checked){border-color:#ff3b3b;background:#1b2a48}.opt input{margin-right:10px;accent-color:#d60f08}
+.msg{text-align:center;padding:26px 0;font-size:20px}#go{width:100%;font-size:18px;padding:16px}
+</style>
+<main><div class="top">JEDEN · GŁOSOWANIE</div><div class="card" id="c">Ładowanie…</div></main>
+<script>
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const $=s=>document.querySelector(s);
+let did=localStorage.getItem('jd');if(!did){did=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('jd',did)}
+let cur='';
+function draw(r){
+  const k=[r.status,r.id,r.voted,r.results?r.total:''].join();if(k===cur)return;cur=k;const c=$('#c');
+  if(r.status==='none'||r.status==='draft'){c.innerHTML='<div class="msg">Brak aktywnej ankiety.<br><small>Ta strona odświeży się sama.</small></div>';return}
+  let h='<h1>'+esc(r.title)+'</h1>';
+  if(r.status==='open'&&!r.voted){
+    h+=r.options.map(o=>'<label class="opt"><input type="radio" name="o" value="'+o.id+'">'+esc(o.text)+'</label>').join('')
+      +'<input type="text" id="n" placeholder="Imię i nazwisko" autocomplete="name" maxlength="60"><div class="err" id="e"></div><button id="go">Oddaj głos</button>';
+    c.innerHTML=h;$('#go').onclick=send;return}
+  if(r.status==='open')h+='<div class="msg">✅ Dziękujemy! Twój głos został zapisany.</div>';
+  else{h+='<div class="msg">Głosowanie zakończone.</div>';
+    if(r.results){const t=r.results.reduce((s,x)=>s+x.n,0)||1;
+      h+=r.results.map(x=>'<div class="res"><b>'+esc(x.text)+'</b> — '+x.n+' ('+Math.round(x.n/t*100)+'%)<div class="bar"><i style="width:'+x.n/t*100+'%"></i></div></div>').join('')}}
+  c.innerHTML=h}
+async function send(){
+  const o=document.querySelector('input[name=o]:checked'),b=$('#go');$('#e').textContent='';
+  if(!o){$('#e').textContent='Wybierz odpowiedź.';return}
+  b.disabled=true;
+  try{const r=await fetch('/api/ankieta/glos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({option:o.value,name:$('#n').value,d:did})});
+    const j=await r.json();
+    if(r.ok){cur='';load()}else{$('#e').textContent=j.err||'Błąd.';b.disabled=false}
+  }catch(e){$('#e').textContent='Brak połączenia.';b.disabled=false}}
+async function load(){try{draw(await(await fetch('/api/ankieta?d='+did,{cache:'no-store'})).json())}catch(e){}}
+load();setInterval(load,8000);
+</script></html>
