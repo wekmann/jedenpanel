@@ -45,6 +45,8 @@ export const DEFAULTS = {
     startedAt: new Date(0).toISOString(),
   },
   poll_cmd: { action: 'hide', seq: 0, at: new Date(0).toISOString() },
+  ads: { volume: 100, everyMinutes: 0, label: true, startedAt: new Date(0).toISOString() },
+  ads_cmd: { action: 'stop', n: 0, seq: 0, at: new Date(0).toISOString() },
 };
 
 /* ---------- walidacja (zod) ---------- */
@@ -67,6 +69,11 @@ export const SCHEMAS = {
     percent: z.number().min(0, '% min. 0').max(100, '% max. 100'),
     everySeconds: z.number().min(0, 'Sekundy min. 0').max(86400, 'Sekundy max. 86400'),
     showQr: z.boolean(),
+  }),
+  ads: z.object({
+    volume: z.number().min(0, 'Głośność min. 0').max(100, 'Głośność max. 100'),
+    everyMinutes: z.number().min(0, 'Minuty min. 0').max(1440, 'Minuty max. 1440'),
+    label: z.boolean(),
   }),
   live_badge: z.object({
     visible: z.boolean(),
@@ -140,11 +147,12 @@ const derivedKey = () => hmac('overlay-key').slice(0, 32);
 
 export async function readConfig() {
   const s = (await dbGet()) || {};
-  const cfg = { overlayKey: s.overlayKey || derivedKey() };
+  const cfg = { overlayKey: s.overlayKey || derivedKey(), rev: Number(s.rev) || 0 };
   for (const k of Object.keys(DEFAULTS)) cfg[k] = { ...DEFAULTS[k], ...(s[k] || {}) };
   return cfg;
 }
 export async function writeConfig(cfg) {
+  cfg.rev = (Number(cfg.rev) || 0) + 1; // numer wersji – panele po nim wykrywają zmiany wprowadzone przez innych
   await dbSet(cfg);
 }
 

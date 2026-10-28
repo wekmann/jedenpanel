@@ -32,6 +32,10 @@ button{border:0;border-radius:7px;padding:10px 16px;font-weight:800;cursor:point
 #prevFrame{position:absolute;left:0;top:0;width:1920px;height:1080px;border:0;transform-origin:0 0;background:transparent}
 #login{max-width:340px;margin:12vh auto}
 ol li{margin-bottom:6px}code{background:#0e2038;padding:2px 6px;border-radius:4px;word-break:break-all}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center;color:#9fb3d1;font-size:12px}
+.chip{margin:0;padding:7px 12px;border-radius:20px;background:#16305c;font-size:13px}
+.chip.on{background:#1f7a36}.chip small{opacity:.8;font-weight:600}
+.adbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.adbtns button{margin:0}
 @media(max-width:700px){.grid2{grid-template-columns:1fr}}
 </style>
 </head>
@@ -55,11 +59,14 @@ ol li{margin-bottom:6px}code{background:#0e2038;padding:2px 6px;border-radius:4p
     <div id="prevWrap"><iframe id="prevFrame" title="Podgląd overlayu"></iframe></div>
   </div>
 
+  <div class="chips" id="chips">Na antenie (kliknij, aby przełączyć):</div>
+
   <div class="tabs" id="tabs">
     <button data-t="tBar" class="on">Pasek</button>
     <button data-t="tPoll">Sondaż</button>
     <button data-t="tFund">Zbiórka</button>
     <button data-t="tWidg">Widżety</button>
+    <button data-t="tAds">Reklamy</button>
     <button data-t="tOver">Overlay</button>
   </div>
 
@@ -121,6 +128,26 @@ ol li{margin-bottom:6px}code{background:#0e2038;padding:2px 6px;border-radius:4p
     <button class="b1" id="lbSave">Zapisz</button><div class="msg" id="lbMsg"></div>
   </div>
 
+  <!-- REKLAMY -->
+  <div class="tab box" id="tAds">
+    <h3>Odtwarzanie</h3>
+    <div>Pliki z folderu <code>public/ads/</code> (<code>1.mp4</code>, <code>2.mp4</code>, …) – wykryto: <b id="adCount">…</b></div>
+    <div class="adbtns" id="adList"></div>
+    <div class="adbtns">
+      <button class="b1" id="adNext">▶ Następna reklama</button>
+      <button class="b1" id="adAll">▶ Wszystkie po kolei</button>
+      <button class="b3" id="adStop">■ Stop</button>
+      <button class="b2" id="adScan">↻ Odśwież listę</button>
+    </div>
+    <h3 style="margin-top:18px">Ustawienia</h3>
+    <div class="grid2">
+      <div><label for="adVol">Głośność (0–100)</label><input type="number" id="adVol" min="0" max="100"></div>
+      <div><label for="adEv">Automatycznie co ile minut (0 = tylko ręcznie)</label><input type="number" id="adEv" min="0" max="1440"></div>
+    </div>
+    <label class="chk"><input type="checkbox" id="adLabel">Pokazuj plakietkę „REKLAMA”</label>
+    <button class="b1" id="adSave">Zapisz</button><div class="msg" id="adMsg"></div>
+  </div>
+
   <!-- OVERLAY -->
   <div class="tab box" id="tOver">
     <h3>Link do OBS</h3>
@@ -167,7 +194,7 @@ async function start(){
   let r; try { r = await api('/api/config'); } catch (e) { return; }
   cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); $('dbWarn').hidden = !!r.persistent;
   $('login').hidden = true; $('app').hidden = false;
-  fillBar(); fillPoll(); fillFund(); fillBadge(); fillOverlay();
+  fillBar(); fillPoll(); fillFund(); fillBadge(); fillAds(); fillOverlay(); renderChips(); scanAds();
 }
 
 /* ---------- zakładki ---------- */
@@ -180,7 +207,7 @@ $('tabs').onclick = e => {
 /* ---------- podgląd ---------- */
 function fitPreview(){ $('prevFrame').style.transform = 'scale(' + ($('prevWrap').clientWidth / 1920) + ')'; }
 addEventListener('resize', fitPreview);
-function setPreview(){ $('prevFrame').src = '/overlay?key=' + encodeURIComponent(cfg.overlayKey); fitPreview(); }
+function setPreview(){ $('prevFrame').src = '/overlay?preview=1&key=' + encodeURIComponent(cfg.overlayKey); fitPreview(); }
 
 /* ---------- pasek ---------- */
 function newsRow(v){
@@ -200,8 +227,8 @@ function fillBar(){
   $('newsList').innerHTML = ''; b.news.forEach(newsRow);
 }
 $('newsAdd').onclick = () => newsRow('');
-async function save(section, data, msgId){
-  try { const r = await api('/api/config', 'POST', {section, data}); cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); say(msgId, 'Zapisano ✔', true); return true; }
+async function save(section, data, msgId, auto){
+  try { const r = await api('/api/config', 'POST', {section, data, auto}); cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); dirty[section] = false; renderChips(); say(msgId, 'Zapisano ✔', true); return true; }
   catch (e) { say(msgId, e.message, false); return false; }
 }
 $('barSave').onclick = () => save('bar', {
@@ -246,18 +273,87 @@ function fundNow(){
 function fillFund(){
   const f = cfg.fund;
   $('fVis').checked = f.visible; $('fQr').checked = f.showQr; $('fL1').value = f.line1; $('fAm').value = f.amount; $('fL2').value = f.line2;
-  $('fPct').value = fundNow(); $('fEv').value = f.everySeconds;
+  $('fPct').value = fundNow(); $('fEv').value = f.everySeconds; fTouched = false;
 }
-setInterval(() => { if (cfg) $('fNow').textContent = fundNow() + '%'; }, 500);
+let fTouched = false;
+$('fPct').addEventListener('input', () => { fTouched = true; });
+setInterval(() => { if (!cfg) return; $('fNow').textContent = fundNow() + '%'; if (!fTouched && document.activeElement !== $('fPct')) $('fPct').value = fundNow(); }, 500);
 $('fSave').onclick = async () => {
   const ok = await save('fund', {visible: $('fVis').checked, showQr: $('fQr').checked, line1: $('fL1').value, amount: $('fAm').value, line2: $('fL2').value,
-    percent: num($('fPct').value), everySeconds: num($('fEv').value)}, 'fMsg');
+    percent: fTouched ? num($('fPct').value) : fundNow(), everySeconds: num($('fEv').value)}, 'fMsg', !fTouched);
   if (ok) fillFund();
 };
 
 /* ---------- plakietka ---------- */
 function fillBadge(){ const l = cfg.live_badge; $('lbVis').checked = l.visible; $('lbText').value = l.text; $('lbTop').value = l.top; $('lbRight').value = l.right; }
 $('lbSave').onclick = () => save('live_badge', {visible: $('lbVis').checked, text: $('lbText').value, top: num($('lbTop').value), right: num($('lbRight').value)}, 'lbMsg');
+
+/* ---------- reklamy ---------- */
+function fillAds(){ const a = cfg.ads; $('adVol').value = a.volume; $('adEv').value = a.everyMinutes; $('adLabel').checked = a.label; }
+$('adSave').onclick = () => save('ads', {volume: num($('adVol').value), everyMinutes: num($('adEv').value), label: $('adLabel').checked}, 'adMsg');
+async function adCmd(action, n){
+  try { cfg = (await api('/api/ads', 'POST', {action, n: n || 0})).config; say('adMsg', action === 'stop' ? 'Reklama zatrzymana ✔' : 'Reklama uruchomiona ✔', true); }
+  catch (e) { say('adMsg', e.message, false); }
+}
+$('adNext').onclick = () => adCmd('play', 0); $('adAll').onclick = () => adCmd('all'); $('adStop').onclick = () => adCmd('stop');
+async function scanAds(){
+  const found = [];
+  await Promise.all(Array.from({length: 40}, (_, i) => i + 1).map(async n => {
+    try { const r = await fetch('/ads/' + n + '.mp4', {method: 'HEAD', cache: 'no-store'});
+      if (r.ok && /video|octet/i.test(r.headers.get('content-type') || '')) found.push(n); } catch (e) {}
+  }));
+  found.sort((a, b) => a - b); $('adCount').textContent = found.length || 'brak';
+  $('adList').replaceChildren(...found.map(n => { const b = document.createElement('button'); b.className = 'b2 sm'; b.textContent = '▶ ' + n + '.mp4'; b.onclick = () => adCmd('play', n); return b; }));
+}
+$('adScan').onclick = scanAds;
+
+/* ---------- żywa synchronizacja z innymi osobami ---------- */
+const SEC = {tBar: 'bar', tPoll: 'poll', tFund: 'fund', tWidg: 'live_badge', tAds: 'ads'};
+const FILL = {bar: fillBar, poll: fillPoll, fund: fillFund, live_badge: fillBadge, ads: fillAds};
+const MSG = {bar: 'barMsg', poll: 'pMsg', fund: 'fMsg', live_badge: 'lbMsg', ads: 'adMsg'};
+const NAME = {bar: 'Pasek', fund: 'Zbiórka', live_badge: 'Na żywo'};
+const dirty = {};
+const markDirty = e => { const t = e.target.closest && e.target.closest('.tab'); if (t && SEC[t.id]) dirty[SEC[t.id]] = true; };
+document.addEventListener('input', markDirty);
+document.addEventListener('click', e => { if (e.target.matches && e.target.matches('.nrow button,#newsAdd,.prow button,#pAdd')) markDirty(e); });
+
+function renderChips(){
+  const box = $('chips'); box.replaceChildren(box.firstChild);
+  Object.keys(NAME).forEach(k => {
+    const on = !!cfg[k].visible, b = document.createElement('button');
+    b.className = 'chip' + (on ? ' on' : ''); b.innerHTML = (on ? '● ' : '○ ') + NAME[k] + ' <small>' + (on ? 'NA ANTENIE' : 'wyłączone') + '</small>';
+    b.onclick = async () => {
+      try { const r = await api('/api/config', 'POST', {section: k, patch: {visible: !cfg[k].visible}}); cfg = r.config; if (!dirty[k]) FILL[k](); renderChips(); }
+      catch (e) { say(MSG[k], e.message, false); }
+    };
+    box.appendChild(b);
+  });
+}
+function conflict(k){
+  const el = $(MSG[k]); el.className = 'msg er'; el.textContent = '⚠ Ktoś inny zmienił te ustawienia. ';
+  const b = document.createElement('button'); b.className = 'b2 sm'; b.textContent = 'Wczytaj zmiany (utracisz swoje)';
+  b.onclick = () => { dirty[k] = false; FILL[k](); el.textContent = ''; }; el.appendChild(b);
+}
+let syncing = false;
+async function sync(){
+  if (!cfg || syncing || document.hidden || $('app').hidden) return;
+  syncing = true;
+  try {
+    const r = await api('/api/config?rev=' + cfg.rev);
+    skew = Date.parse(r.serverNow) - Date.now();
+    if (r.unchanged) return;
+    const old = cfg; cfg = r.config;
+    for (const k in FILL) {
+      if (JSON.stringify(old[k]) === JSON.stringify(cfg[k])) continue;
+      dirty[k] ? conflict(k) : FILL[k]();
+    }
+    if (old.overlayKey !== cfg.overlayKey) fillOverlay();
+    renderChips();
+  } catch (e) { /* chwilowy brak sieci – spróbujemy za chwilę */ }
+  finally { syncing = false; }
+}
+setInterval(sync, 2500);
+document.addEventListener('visibilitychange', sync);
 
 /* ---------- overlay / klucz ---------- */
 function fillOverlay(){ $('ovUrl').value = location.origin + '/overlay?key=' + cfg.overlayKey; setPreview(); }

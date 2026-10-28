@@ -15,6 +15,8 @@ export default async function handler(req, res) {
       fund: cfg.fund,
       poll: cfg.poll,
       poll_cmd: cfg.poll_cmd,
+      ads: cfg.ads,
+      ads_cmd: cfg.ads_cmd,
     });
   } catch (e) { fail(res, e); }
 }

@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap" rel="stylesheet">
 <title>JEDEN overlay</title>
 <style>
 :root{--ease:cubic-bezier(.16,1,.3,1)}
@@ -40,15 +42,26 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #fundwrap.off{transform:translateX(calc(100% + 400px))}
 #fqrbox{background:#fff;padding:10px;box-shadow:0 6px 14px rgba(0,0,0,.45);display:none}
 #fqr{display:block;width:176px;height:176px}
-#fcard{width:620px;background:#01183E;border-top:6px solid #dc2626;box-shadow:0 6px 14px rgba(0,0,0,.45);overflow:hidden}
-#ftext{padding:14px 26px 12px;text-transform:uppercase}
-#fl1{font-size:24px;font-weight:800;letter-spacing:1px;color:#fff}
-#fam{font-size:60px;font-weight:900;line-height:1.05;color:#4fc3ff;letter-spacing:-1px}
-#fl2{font-size:22px;font-weight:800;line-height:1.2;color:#fff;margin-top:2px}
-#fstrip{background:#fff;padding:10px 16px}
-#ftrack{position:relative;height:34px;background:#dfe3e8;border:2px solid #9aa3b2;overflow:hidden}
+#fcard{position:relative;width:520px;background:#050d1c;border-top:6px solid #dc2626;box-shadow:0 6px 14px rgba(0,0,0,.45);overflow:hidden;font-family:'Oswald','Arial Narrow',Impact,Arial,sans-serif}
+#fbg{position:absolute;left:0;right:0;top:0;height:240px;background:#1a2438 center/cover no-repeat}
+#fbg svg{position:absolute;inset:0;width:100%;height:100%}
+#fbg.photo svg{display:none}
+#fshade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,13,28,.2) 0,rgba(5,13,28,.55) 130px,#050d1c 245px)}
+#ftext{position:relative;padding:112px 20px 4px;text-align:center;text-transform:uppercase;text-shadow:0 2px 0 rgba(0,0,0,.55),0 3px 12px rgba(0,0,0,.85)}
+#frow{display:flex;align-items:baseline;justify-content:center;gap:14px;white-space:nowrap}
+#fl1{font-size:28px;font-weight:700;letter-spacing:.5px;color:#fff}
+#fam{font-size:58px;font-weight:700;line-height:1.1;color:#4fc3ff}
+#fl2{font-size:36px;font-weight:700;line-height:1.12;color:#fff;margin-top:2px;text-wrap:balance}
+#fstrip{position:relative;padding:12px 20px 20px}
+#ftrack{position:relative;height:44px;background:#07142a;border:2px solid #c9d1dc;border-radius:3px;overflow:hidden}
 #ffill{height:100%;width:0;background:#2fb344;transition:width .8s var(--ease)}
-#fpct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#0b1b30}
+#fpct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+
+/* ===== REKLAMY (pełny ekran, pliki public/ads/1.mp4, 2.mp4 …) ===== */
+#adwrap{position:absolute;inset:0;background:#000;opacity:0;visibility:hidden;z-index:50;transition:opacity .5s,visibility 0s .5s}
+#adwrap.on{opacity:1;visibility:visible;transition:opacity .5s}
+#adv{width:100%;height:100%;object-fit:contain;background:#000;display:block}
+#adlabel{position:absolute;top:43px;left:53px;background:#d60f08;color:#fff;font:800 24px Arial,sans-serif;letter-spacing:1px;padding:8px 18px;border-radius:6px;box-shadow:0 6px 14px rgba(0,0,0,.45)}
 
 /* ===== SONDAŻ (sondaz_tv.html) ===== */
 #pstage{position:absolute;inset:0;pointer-events:none}
@@ -110,7 +123,25 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
   <div id="fundwrap" class="off">
     <div id="fqrbox"><img id="fqr" alt=""></div>
     <div id="fcard">
-      <div id="ftext"><div id="fl1"></div><div id="fam"></div><div id="fl2"></div></div>
+      <div id="fbg"><svg viewBox="0 0 520 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <clipPath id="fcl"><path d="M0 6C30-8 60 20 90 6S150-6 180 8V88C150 74 120 100 90 86S30 100 0 88Z"/></clipPath>
+          <linearGradient id="fsh" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".25" stop-color="#000" stop-opacity="0"/><stop offset=".5" stop-color="#000" stop-opacity=".16"/><stop offset=".75" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></linearGradient>
+          <g id="flg"><g clip-path="url(#fcl)"><rect width="180" height="48" fill="#fff"/><rect y="48" width="180" height="60" fill="#d4213d"/><rect width="180" height="110" fill="url(#fsh)"/></g></g>
+        </defs>
+        <rect width="520" height="240" fill="#2a1d22"/>
+        <g opacity=".95">
+          <use href="#flg" transform="translate(-40 40) rotate(-8) scale(1.1)"/>
+          <line x1="-22" y1="30" x2="-6" y2="240" stroke="#222" stroke-width="5"/>
+          <use href="#flg" transform="translate(120 -6) rotate(3) scale(1.45)"/>
+          <line x1="124" y1="-6" x2="118" y2="240" stroke="#222" stroke-width="5"/>
+          <use href="#flg" transform="translate(330 24) rotate(-4) scale(1.15)"/>
+          <line x1="334" y1="20" x2="330" y2="240" stroke="#222" stroke-width="5"/>
+          <use href="#flg" transform="translate(430 70) rotate(6) scale(.85)"/>
+        </g>
+      </svg></div>
+      <div id="fshade"></div>
+      <div id="ftext"><div id="frow"><span id="fl1"></span><span id="fam"></span></div><div id="fl2"></div></div>
       <div id="fstrip"><div id="ftrack"><div id="ffill"></div><div id="fpct">0%</div></div></div>
     </div>
   </div>
@@ -126,6 +157,8 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
       <div id="flash"></div>
     </div>
   </div>
+
+  <div id="adwrap"><video id="adv" playsinline preload="auto"></video><div id="adlabel">REKLAMA</div></div>
 </div>
 
 <script>
@@ -205,6 +238,44 @@ function hidePoll(quiet){
   if ($('pstage').classList.contains('on')) { $('pstage').className = 'off'; timers = [setTimeout(() => {$('pstage').className = ''}, 800)]; }
 }
 
+
+/* ---------- reklamy: pliki /ads/1.mp4, 2.mp4 … (numerycznie) ---------- */
+const PREVIEW = new URLSearchParams(location.search).get('preview') === '1'; // podgląd w panelu = bez dźwięku
+let adList = [], adScan = 0, adQueue = [], adCfg = {volume: 100}, adRot = 0, lastAdSeq = null, lastSlot = null;
+try { const v = localStorage.getItem('overlay_ads_seq'); if (v !== null) lastAdSeq = +v; } catch (e) {}
+async function scanAds(force){
+  if (!force && Date.now() - adScan < 60000) return adList;
+  adScan = Date.now(); const found = [];
+  await Promise.all(Array.from({length: 40}, (_, i) => i + 1).map(async n => {
+    try { const r = await fetch('/ads/' + n + '.mp4', {method: 'HEAD', cache: 'no-store'});
+      if (r.ok && /video|octet/i.test(r.headers.get('content-type') || '')) found.push(n); } catch (e) {}
+  }));
+  return adList = found.sort((a, b) => a - b);
+}
+function endAds(){
+  adQueue = []; const v = $('adv'); $('adwrap').classList.remove('on'); v.pause();
+  setTimeout(() => { if (!$('adwrap').classList.contains('on')) v.removeAttribute('src'); }, 700);
+}
+function nextAd(){
+  if (!adQueue.length) return endAds();
+  const n = adQueue.shift(), v = $('adv');
+  v.muted = PREVIEW; v.volume = Math.max(0, Math.min(1, (+adCfg.volume || 0) / 100));
+  v.src = '/ads/' + n + '.mp4'; $('adwrap').classList.add('on');
+  const p = v.play(); if (p) p.catch(() => { v.muted = true; v.play().catch(nextAd); });
+}
+$('adv').onended = nextAd; $('adv').onerror = () => { if ($('adwrap').classList.contains('on')) nextAd(); };
+async function runAdCmd(c){
+  if (c.action === 'stop') return endAds();
+  const list = await scanAds(true); if (!list.length) return;
+  if (c.action === 'all') adQueue = list.slice();
+  else adQueue = [(c.n > 0 && list.includes(c.n)) ? c.n : list[adRot++ % list.length]];
+  nextAd();
+}
+async function autoAd(slot){
+  const list = await scanAds(false); if (!list.length || $('adwrap').classList.contains('on')) return;
+  adQueue = [list[(slot - 1) % list.length]]; nextAd();
+}
+
 /* ---------- odpytywanie stanu co 2 s ---------- */
 let barSig = '', lastSeq = null;
 try { const v = localStorage.getItem('overlay_poll_seq'); if (v !== null) lastSeq = +v; } catch (e) {}
@@ -216,6 +287,7 @@ function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis
 /* zbiórka: % = wartość bazowa + 1% co N sekund (liczone wg czasu serwera) */
 let fund = null, skew = 0, qrOk = false;
 const qr = $('fqr'); qr.onload = () => { qrOk = true; showQr(); }; qr.onerror = () => { qrOk = false; showQr(); }; qr.src = '/assets/kodqr.png';
+const bgImg = new Image(); bgImg.onload = () => { $('fbg').style.backgroundImage = 'url(/assets/zbiorka_bg.jpg)'; $('fbg').classList.add('photo'); }; bgImg.src = '/assets/zbiorka_bg.jpg';
 function showQr(){ $('fqrbox').style.display = (fund && fund.showQr && qrOk) ? 'block' : 'none'; }
 function fundPct(){
   if (!fund) return 0;
@@ -246,7 +318,7 @@ function apply(s){
   try {
     const f = s.fund; fund = f;
     $('fl1').textContent = f.line1; $('fam').textContent = f.amount; $('fl2').textContent = f.line2;
-    $('fl1').style.display = f.line1 ? '' : 'none'; $('fam').style.display = f.amount ? '' : 'none'; $('fl2').style.display = f.line2 ? '' : 'none';
+    $('fl1').style.display = f.line1 ? '' : 'none'; $('frow').style.display = (f.line1 || f.amount) ? '' : 'none'; $('fam').style.display = f.amount ? '' : 'none'; $('fl2').style.display = f.line2 ? '' : 'none';
     showQr(); renderFund();
     setVis('fundwrap', !!f.visible);
   } catch (e) { console.error('zbiórka', e); }
@@ -260,6 +332,22 @@ function apply(s){
       else if (c.action === 'hide') hidePoll();
     }
   } catch (e) { console.error('sondaż', e); }
+
+  try {
+    const a = s.ads, c = s.ads_cmd; adCfg = a;
+    if ($('adv').volume !== undefined && $('adwrap').classList.contains('on')) $('adv').volume = Math.max(0, Math.min(1, (+a.volume || 0) / 100));
+    $('adlabel').style.display = a.label ? '' : 'none';
+    if (c && c.seq !== lastAdSeq) {
+      const fresh = Date.parse(s.serverNow) - Date.parse(c.at) <= 30000;
+      lastAdSeq = c.seq; try { localStorage.setItem('overlay_ads_seq', String(c.seq)); } catch (e) {}
+      if (c.action === 'stop' || fresh) runAdCmd(c);
+    }
+    if (+a.everyMinutes > 0) {
+      const slot = Math.floor((Date.parse(s.serverNow) - Date.parse(a.startedAt)) / (a.everyMinutes * 60000));
+      if (lastSlot !== null && slot > lastSlot && slot > 0) autoAd(slot);
+      lastSlot = slot;
+    } else lastSlot = null;
+  } catch (e) { console.error('reklamy', e); }
 }
 async function poll(){
   if (!KEY) { clearAll(); return; }
