@@ -12,6 +12,7 @@ export default async function handler(req, res) {
       serverNow: new Date().toISOString(),
       bar: cfg.bar,
       live_badge: cfg.live_badge,
+      fund: cfg.fund,
       poll: cfg.poll,
       poll_cmd: cfg.poll_cmd,
     });

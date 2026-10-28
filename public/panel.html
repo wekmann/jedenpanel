@@ -48,6 +48,8 @@ ol li{margin-bottom:6px}code{background:#0e2038;padding:2px 6px;border-radius:4p
 <div class="wrap" id="app" hidden>
   <div class="top"><h1>🎬 JEDEN – panel streamu</h1><button class="b3 sm" id="bLogout">Wyloguj</button></div>
 
+  <div class="box" id="dbWarn" hidden style="border-color:#ff6b6b"><b style="color:#ff6b6b">⚠ Brak bazy danych.</b> Ustawienia się nie zapiszą i overlay ich nie zobaczy. W Vercelu: <b>Storage → Upstash Redis</b> → podłącz do projektu, potem <b>Redeploy</b>.</div>
+
   <div class="box">
     <h3>Podgląd na żywo</h3>
     <div id="prevWrap"><iframe id="prevFrame" title="Podgląd overlayu"></iframe></div>
@@ -56,6 +58,7 @@ ol li{margin-bottom:6px}code{background:#0e2038;padding:2px 6px;border-radius:4p
   <div class="tabs" id="tabs">
     <button data-t="tBar" class="on">Pasek</button>
     <button data-t="tPoll">Sondaż</button>
+    <button data-t="tFund">Zbiórka</button>
     <button data-t="tWidg">Widżety</button>
     <button data-t="tOver">Overlay</button>
   </div>
@@ -71,7 +74,7 @@ ol li{margin-bottom:6px}code{background:#0e2038;padding:2px 6px;border-radius:4p
     <div class="grid2">
       <div><label for="sp">Prędkość (px/s)</label><input type="number" id="sp" min="10" max="1000"></div>
       <div></div>
-      <div><label for="mr">Odstęp od prawej (px)</label><input type="number" id="mr" min="0" max="1920"></div>
+      <div><label for="mr">Przesunięcie w poziomie od środka (px, + w prawo)</label><input type="number" id="mr" min="-960" max="960"></div>
       <div><label for="mb">Odstęp od dołu (px)</label><input type="number" id="mb" min="0" max="1080"></div>
     </div>
     <button class="b1" id="barSave">Zapisz</button><div class="msg" id="barMsg"></div>
@@ -89,6 +92,21 @@ ol li{margin-bottom:6px}code{background:#0e2038;padding:2px 6px;border-radius:4p
     <button class="b1" id="pShow">▶ POKAŻ</button>
     <button class="b3" id="pHide">■ UKRYJ</button>
     <div class="msg" id="pMsg"></div>
+  </div>
+
+  <!-- ZBIÓRKA -->
+  <div class="tab box" id="tFund">
+    <label class="chk"><input type="checkbox" id="fVis">Widżet zbiórki widoczny (nad paskiem, prawa krawędź równo z paskiem)</label>
+    <label class="chk"><input type="checkbox" id="fQr">Pokaż kod QR (plik <code>public/assets/kodqr.png</code>)</label>
+    <label for="fL1">Górna linia</label><input type="text" id="fL1" maxlength="80">
+    <label for="fAm">Kwota</label><input type="text" id="fAm" maxlength="40">
+    <label for="fL2">Dolna linia</label><input type="text" id="fL2" maxlength="160">
+    <div class="grid2">
+      <div><label for="fPct">Procent (0–100)</label><input type="number" id="fPct" min="0" max="100" step="1"></div>
+      <div><label for="fEv">Co ile sekund przybywa 1% (0 = nie rośnie)</label><input type="number" id="fEv" min="0" max="86400" step="1"></div>
+    </div>
+    <div style="margin-top:8px">Teraz na streamie: <b id="fNow">0%</b></div>
+    <button class="b1" id="fSave">Zapisz</button><div class="msg" id="fMsg"></div>
   </div>
 
   <!-- WIDŻETY -->
@@ -123,7 +141,7 @@ ol li{margin-bottom:6px}code{background:#0e2038;padding:2px 6px;border-radius:4p
 
 <script>
 const $ = id => document.getElementById(id);
-let cfg = null;
+let cfg = null, skew = 0;
 
 async function api(path, method, body){
   const r = await fetch(path, {method: method || 'GET', credentials: 'same-origin',
@@ -146,9 +164,10 @@ $('pw').onkeydown = e => { if (e.key === 'Enter') $('bLogin').click(); };
 $('bLogout').onclick = async () => { try { await api('/api/login', 'DELETE'); } catch (e) {} $('prevFrame').src = 'about:blank'; showLogin(); };
 
 async function start(){
-  try { cfg = (await api('/api/config')).config; } catch (e) { return; }
+  let r; try { r = await api('/api/config'); } catch (e) { return; }
+  cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); $('dbWarn').hidden = !!r.persistent;
   $('login').hidden = true; $('app').hidden = false;
-  fillBar(); fillPoll(); fillBadge(); fillOverlay();
+  fillBar(); fillPoll(); fillFund(); fillBadge(); fillOverlay();
 }
 
 /* ---------- zakładki ---------- */
@@ -177,18 +196,18 @@ function newsRow(v){
 function fillBar(){
   const b = cfg.bar;
   $('barVis').checked = b.visible; $('l1').value = b.line1; $('l2').value = b.line2;
-  $('sp').value = b.speed; $('mr').value = b.marginRight; $('mb').value = b.marginBottom;
+  $('sp').value = b.speed; $('mr').value = b.offsetX; $('mb').value = b.marginBottom;
   $('newsList').innerHTML = ''; b.news.forEach(newsRow);
 }
 $('newsAdd').onclick = () => newsRow('');
 async function save(section, data, msgId){
-  try { cfg = (await api('/api/config', 'POST', {section, data})).config; say(msgId, 'Zapisano ✔', true); return true; }
+  try { const r = await api('/api/config', 'POST', {section, data}); cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); say(msgId, 'Zapisano ✔', true); return true; }
   catch (e) { say(msgId, e.message, false); return false; }
 }
 $('barSave').onclick = () => save('bar', {
   visible: $('barVis').checked, line1: $('l1').value, line2: $('l2').value,
   news: [...document.querySelectorAll('#newsList input')].map(i => i.value.trim()).filter(Boolean),
-  speed: num($('sp').value), marginRight: num($('mr').value), marginBottom: num($('mb').value)
+  speed: num($('sp').value), offsetX: num($('mr').value), marginBottom: num($('mb').value)
 }, 'barMsg');
 
 /* ---------- sondaż ---------- */
@@ -218,6 +237,23 @@ async function pollCmd(action){
   catch (e) { say('pMsg', e.message, false); }
 }
 $('pShow').onclick = () => pollCmd('show'); $('pHide').onclick = () => pollCmd('hide');
+
+/* ---------- zbiórka ---------- */
+function fundNow(){
+  const f = cfg.fund, inc = f.everySeconds > 0 ? Math.max(0, Date.now() + skew - Date.parse(f.startedAt)) / 1000 / f.everySeconds : 0;
+  return Math.max(0, Math.min(100, Math.floor((+f.percent || 0) + inc)));
+}
+function fillFund(){
+  const f = cfg.fund;
+  $('fVis').checked = f.visible; $('fQr').checked = f.showQr; $('fL1').value = f.line1; $('fAm').value = f.amount; $('fL2').value = f.line2;
+  $('fPct').value = fundNow(); $('fEv').value = f.everySeconds;
+}
+setInterval(() => { if (cfg) $('fNow').textContent = fundNow() + '%'; }, 500);
+$('fSave').onclick = async () => {
+  const ok = await save('fund', {visible: $('fVis').checked, showQr: $('fQr').checked, line1: $('fL1').value, amount: $('fAm').value, line2: $('fL2').value,
+    percent: num($('fPct').value), everySeconds: num($('fEv').value)}, 'fMsg');
+  if (ok) fillFund();
+};
 
 /* ---------- plakietka ---------- */
 function fillBadge(){ const l = cfg.live_badge; $('lbVis').checked = l.visible; $('lbText').value = l.text; $('lbTop').value = l.top; $('lbRight').value = l.right; }

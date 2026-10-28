@@ -14,7 +14,7 @@ export const DEFAULTS = {
       'NeoPVT ATAKUJE POSŁÓW PRAWA I SUWERENNOŚCI!',
     ],
     speed: 106,
-    marginRight: 53,
+    offsetX: 0,
     marginBottom: 43,
   },
   live_badge: { visible: false, text: 'NA ŻYWO', top: 43, right: 53 },
@@ -34,6 +34,16 @@ export const DEFAULTS = {
       { name: 'KD', value: 3.57, color: '#9aa3b2', logo: '' },
     ],
   },
+  fund: {
+    visible: false,
+    line1: 'POTRZEBUJEMY',
+    amount: '250 000ZŁ',
+    line2: 'NA ORGANIZACJĘ TRANSMISJI MARSZU 11 LISTOPADA',
+    percent: 0,
+    everySeconds: 0,
+    showQr: true,
+    startedAt: new Date(0).toISOString(),
+  },
   poll_cmd: { action: 'hide', seq: 0, at: new Date(0).toISOString() },
 };
 
@@ -46,8 +56,17 @@ export const SCHEMAS = {
     line2: txt(200),
     news: z.array(z.string().trim().min(1, 'Pusty news').max(300)).max(50),
     speed: z.number().min(10, 'Prędkość min. 10').max(1000, 'Prędkość max. 1000'),
-    marginRight: z.number().int().min(0).max(1920),
+    offsetX: z.number().int().min(-960, 'Przesunięcie min. -960').max(960, 'Przesunięcie max. 960'),
     marginBottom: z.number().int().min(0).max(1080),
+  }),
+  fund: z.object({
+    visible: z.boolean(),
+    line1: txt(80),
+    amount: txt(40),
+    line2: txt(160),
+    percent: z.number().min(0, '% min. 0').max(100, '% max. 100'),
+    everySeconds: z.number().min(0, 'Sekundy min. 0').max(86400, 'Sekundy max. 86400'),
+    showQr: z.boolean(),
   }),
   live_badge: z.object({
     visible: z.boolean(),
@@ -98,9 +117,14 @@ async function dbGet() {
   const v = await redis(['GET', DB_KEY]);
   return v ? JSON.parse(v) : null;
 }
+export const persistent = () => !!DB_URL();
 async function dbSet(obj) {
   const s = JSON.stringify(obj);
-  if (!DB_URL()) { mem[DB_KEY] = s; return; }
+  if (!DB_URL()) {
+    // na Vercelu pamięć funkcji nie jest współdzielona – lepiej zgłosić błąd niż zapisywać „w próżnię”
+    if (process.env.VERCEL) throw new Error('Brak bazy danych: w Vercel → Storage podłącz Upstash Redis do projektu i zrób Redeploy');
+    mem[DB_KEY] = s; return;
+  }
   await redis(['SET', DB_KEY, s]);
 }
 
@@ -122,6 +146,12 @@ export async function readConfig() {
 }
 export async function writeConfig(cfg) {
   await dbSet(cfg);
+}
+
+// aktualny % zbiórki: wartość bazowa + 1% co everySeconds sekund od startedAt (bez górnego zaokrąglania)
+export function effectivePercent(f, now = Date.now()) {
+  const inc = f.everySeconds > 0 ? Math.max(0, now - Date.parse(f.startedAt)) / 1000 / f.everySeconds : 0;
+  return Math.max(0, Math.min(100, (Number(f.percent) || 0) + inc));
 }
 
 export const safeEqual = (a, b) => {
