@@ -38,7 +38,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 .ltxt{color:#fff;font-size:26px;font-weight:800;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.4)}
 
 /* ===== WYNIKI ANKIETY NA ŻYWO – wykres kołowy, lewy górny róg ===== */
-#pollwrap{position:absolute;top:43px;left:53px;width:440px;transition:transform .6s var(--ease)}
+#pollwrap{position:absolute;top:var(--pt,43px);left:53px;width:440px;transition:transform .6s var(--ease),top .4s var(--ease)}
 #pollwrap.off{transform:translateX(calc(-100% - 53px - 30px))}
 #lpbox{background:#0e1c33;border-radius:0 18px 14px 14px;box-shadow:0 8px 22px rgba(0,0,0,.5);overflow:hidden}
 #lphead{background:#d60f08;border-bottom:5px solid #7a0000;padding:10px 20px;display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;letter-spacing:1px;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,.35)}
@@ -69,22 +69,30 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #ltname{box-sizing:border-box;max-width:100%;background:#d60f08;color:#fff;font-size:44px;font-weight:800;text-transform:uppercase;letter-spacing:-.5px;line-height:1.2;padding:10px 40px 10px 28px;border-radius:0 18px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 4px rgba(0,0,0,.35);border-bottom:5px solid #7a0000}
 #ltrole{box-sizing:border-box;max-width:100%;background:#16305c;color:#fff;font-size:26px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;line-height:1.2;padding:9px 40px 9px 28px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem) ===== */
+/* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem; mały format jak w TV) ===== */
 #fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + 214px + 14px);display:flex;align-items:flex-end;transition:transform .6s var(--ease)}
-#fundwrap.off{transform:translateX(calc(100% + 400px))}
-#fcard{position:relative;width:560px;font-family:'Oswald','Roboto Condensed','Arial Narrow',Impact,Arial,sans-serif;text-transform:uppercase;
-  filter:drop-shadow(0 4px 10px rgba(0,0,0,.55))}
-#ftruck{display:block;width:100%;height:auto;margin-bottom:-6px}
-#frow{display:flex;align-items:baseline;justify-content:space-between;white-space:nowrap;line-height:1}
-#fl1,#fam,#fl2{text-shadow:-2px 0 0 #1a1a1a,2px 0 0 #1a1a1a,0 -2px 0 #1a1a1a,0 2px 0 #1a1a1a,2px 2px 0 #1a1a1a,-2px -2px 0 #1a1a1a,2px -2px 0 #1a1a1a,-2px 2px 0 #1a1a1a,0 4px 8px rgba(0,0,0,.6)}
-#fl1{font-size:36px;font-weight:700;color:#f4f4f4;letter-spacing:.5px}
-#fam{font-size:72px;font-weight:700;color:#2bb8e6;letter-spacing:1px}
-#fam small{font-size:46px;text-transform:none}
-#fl2{font-size:56px;font-weight:700;color:#f4f4f4;line-height:1.05;text-align:center;white-space:nowrap;margin-top:2px;letter-spacing:.5px}
-#fstrip{position:relative;margin-top:8px}
-#ftrack{position:relative;height:48px;box-sizing:border-box;background:linear-gradient(180deg,#456072,#2f4a5c);border:3px solid #e6ebf0;outline:2px solid #1d2b36;overflow:hidden}
-#ffill{height:100%;width:0;background:linear-gradient(180deg,#3f9b2a,#2c7a1c);transition:width .8s var(--ease)}
-#fpct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+#fundwrap.off{transform:translateX(calc(100% + 300px))}
+#fcard{position:relative;width:260px;font-family:'Oswald','Roboto Condensed','Arial Narrow',Impact,Arial,sans-serif;text-transform:uppercase;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55))}
+#ftruck{display:block;width:100%;height:auto;margin-bottom:-4px}
+#fdish{transform-origin:420px 62px;animation:fdish 7s ease-in-out infinite}
+@keyframes fdish{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
+#frow{position:relative;display:flex;align-items:baseline;justify-content:space-between;gap:4px;white-space:nowrap;line-height:1}
+#fl1,#fam,#fl2{-webkit-text-stroke:3px #151515;paint-order:stroke fill;text-shadow:0 2px 4px rgba(0,0,0,.6)}
+#fl1{font-size:15px;font-weight:700;color:#f4f4f4;letter-spacing:.3px}
+#fam{font-size:32px;font-weight:700;color:#2bb8e6;letter-spacing:.5px}
+#fam small{font-size:20px;text-transform:none}
+#fl2{font-size:25px;font-weight:700;color:#f4f4f4;line-height:1.05;text-align:center;white-space:nowrap;margin-top:1px;letter-spacing:.3px}
+#fstrip{position:relative;margin-top:4px}
+#ftrack{position:relative;height:28px;box-sizing:border-box;background:linear-gradient(180deg,#4d6a7e,#2f4a5c);border:2px solid #e6ebf0;outline:1px solid #1d2b36;overflow:hidden}
+#ffill{position:relative;height:100%;width:0;background:linear-gradient(180deg,#52b83a 0,#3f9b2a 45%,#2a741b);transition:width .8s var(--ease);overflow:hidden}
+#ffill::after{content:"";position:absolute;top:0;bottom:0;width:40px;left:-60px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:fshine 4s ease-in-out infinite}
+@keyframes fshine{0%{left:-60px}55%,100%{left:120%}}
+#fpct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+
+/* ===== OZNACZENIE WIEKU (lewy górny róg; pliki /assets/wiek_7.png, wiek_12.png, wiek_16.png, wiek_18.png) ===== */
+#agewrap{position:absolute;top:43px;left:53px;height:72px;transition:transform .6s var(--ease)}
+#agewrap.off{transform:translateX(calc(-100% - 53px - 30px))}
+#ageimg{display:block;height:100%;width:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45))}
 
 /* ===== REKLAMY (pełny ekran, pliki public/ads/1.mp4, 2.mp4 …) ===== */
 #adwrap{position:absolute;inset:0;background:#000;opacity:0;visibility:hidden;z-index:50;transition:opacity .5s,visibility 0s .5s}
@@ -187,35 +195,58 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
   <div id="fundwrap" class="off">
     <div id="fcard">
       <svg id="ftruck" viewBox="0 0 560 190" aria-hidden="true">
+        <defs>
+          <linearGradient id="gTr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3159e0"/><stop offset=".55" stop-color="#2347c8"/><stop offset="1" stop-color="#1a37a3"/></linearGradient>
+          <linearGradient id="gCab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9dee4"/></linearGradient>
+          <linearGradient id="gGl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2d4468"/><stop offset="1" stop-color="#121c30"/></linearGradient>
+          <linearGradient id="gDish" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3e7ec"/><stop offset="1" stop-color="#8d949e"/></linearGradient>
+        </defs>
         <!-- antena satelitarna -->
-        <polygon points="412,52 428,52 424,70 416,70" fill="#6b7078"/>
-        <ellipse cx="420" cy="34" rx="36" ry="28" fill="#9ca2ab" stroke="#5b6068" stroke-width="3"/>
-        <ellipse cx="420" cy="34" rx="26" ry="19" fill="#767c85"/>
-        <ellipse cx="420" cy="34" rx="8" ry="6" fill="#c9ced6"/>
-        <!-- naczepa / woz transmisyjny -->
-        <rect x="150" y="66" width="404" height="90" rx="6" fill="#2347c8"/>
-        <rect x="150" y="66" width="404" height="10" rx="4" fill="#1a37a3"/>
-        <rect x="196" y="56" width="46" height="12" fill="#1a37a3"/>
-        <rect x="150" y="132" width="404" height="24" fill="#1d3cae"/>
-        <rect x="296" y="86" width="38" height="36" rx="3" fill="#0f1b46"/>
-        <rect x="350" y="86" width="58" height="36" rx="3" fill="#0f1b46"/>
-        <rect x="418" y="86" width="58" height="36" rx="3" fill="#0f1b46"/>
-        <rect x="486" y="86" width="58" height="36" rx="3" fill="#0f1b46"/>
+        <polygon points="412,56 428,56 425,72 415,72" fill="#6b7078"/>
+        <g id="fdish">
+          <ellipse cx="420" cy="34" rx="37" ry="29" fill="url(#gDish)" stroke="#5b6068" stroke-width="3"/>
+          <ellipse cx="420" cy="34" rx="27" ry="20" fill="#767c85"/>
+          <ellipse cx="420" cy="34" rx="9" ry="6" fill="#d3d8de"/>
+          <line x1="420" y1="34" x2="438" y2="8" stroke="#4a4f56" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="439" cy="7" r="4" fill="#4a4f56"/>
+        </g>
+        <!-- naczepa / wóz transmisyjny -->
+        <rect x="150" y="66" width="404" height="90" rx="7" fill="url(#gTr)"/>
+        <rect x="150" y="66" width="404" height="9" rx="4" fill="#1a37a3"/>
+        <rect x="196" y="56" width="46" height="12" rx="2" fill="#1a37a3"/>
+        <rect x="256" y="58" width="22" height="9" rx="2" fill="#16308c"/>
+        <rect x="150" y="132" width="404" height="24" fill="#1a37a3"/>
+        <rect x="150" y="130" width="404" height="3" fill="#5f84ff" opacity=".55"/>
+        <rect x="296" y="86" width="38" height="36" rx="3" fill="url(#gGl)"/>
+        <rect x="350" y="86" width="58" height="36" rx="3" fill="url(#gGl)"/>
+        <rect x="418" y="86" width="58" height="36" rx="3" fill="url(#gGl)"/>
+        <rect x="486" y="86" width="58" height="36" rx="3" fill="url(#gGl)"/>
+        <path d="M356 88l14 0-12 32h-14z M424 88l14 0-12 32h-14z M492 88l14 0-12 32h-14z M302 88l10 0-9 32h-10z" fill="#fff" opacity=".1"/>
+        <rect x="548" y="80" width="6" height="70" rx="2" fill="#16308c"/>
+        <rect x="548" y="138" width="6" height="8" fill="#ffb12b"/>
         <!-- podwozie -->
-        <rect x="0" y="144" width="560" height="12" fill="#c4c9d1"/>
+        <rect x="0" y="144" width="560" height="12" fill="#bfc5cd"/>
+        <rect x="0" y="154" width="560" height="3" fill="#7d848d"/>
         <!-- kabina -->
-        <path d="M4 146V98L24 58Q28 52 36 52H100Q110 52 110 62V146Z" fill="#f2f4f6" stroke="#8f98a3" stroke-width="2"/>
-        <path d="M16 96L32 64H62V96Z" fill="#1b2a44"/>
-        <rect x="70" y="64" width="30" height="32" rx="2" fill="#1b2a44"/>
+        <path d="M4 146V98L24 58Q28 52 36 52H100Q110 52 110 62V146Z" fill="url(#gCab)" stroke="#8f98a3" stroke-width="2"/>
+        <path d="M16 96L32 64H62V96Z" fill="url(#gGl)"/>
+        <rect x="70" y="64" width="30" height="32" rx="2" fill="url(#gGl)"/>
+        <rect x="104" y="72" width="8" height="26" rx="2" fill="#2a2e34"/>
         <rect x="6" y="120" width="104" height="4" fill="#cfd5dc"/>
-        <!-- kola -->
+        <rect x="5" y="106" width="9" height="8" rx="2" fill="#ffe9a8"/>
+        <rect x="5" y="126" width="12" height="14" rx="2" fill="#9aa1ab"/>
+        <!-- koła -->
         <g fill="#1d1d1d" stroke="#8a8f96" stroke-width="3">
           <circle cx="44" cy="164" r="22"/><circle cx="150" cy="164" r="22"/><circle cx="206" cy="164" r="22"/>
           <circle cx="470" cy="164" r="22"/><circle cx="526" cy="164" r="22"/>
         </g>
         <g fill="#d5d9de">
-          <circle cx="44" cy="164" r="9"/><circle cx="150" cy="164" r="9"/><circle cx="206" cy="164" r="9"/>
-          <circle cx="470" cy="164" r="9"/><circle cx="526" cy="164" r="9"/>
+          <circle cx="44" cy="164" r="10"/><circle cx="150" cy="164" r="10"/><circle cx="206" cy="164" r="10"/>
+          <circle cx="470" cy="164" r="10"/><circle cx="526" cy="164" r="10"/>
+        </g>
+        <g fill="#7b828b">
+          <circle cx="44" cy="164" r="3.5"/><circle cx="150" cy="164" r="3.5"/><circle cx="206" cy="164" r="3.5"/>
+          <circle cx="470" cy="164" r="3.5"/><circle cx="526" cy="164" r="3.5"/>
         </g>
       </svg>
       <div id="frow"><span id="fl1">Potrzebujemy</span><span id="fam">5 500 000<small>zł</small></span></div>
@@ -225,6 +256,8 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
   </div>
 
   <div id="livewrap" class="off"><div class="livebadge"><div class="ldot"></div><div class="ltxt" id="ltxt"></div></div></div>
+
+  <div id="agewrap" class="off"><img id="ageimg" alt=""></div>
 
   <div id="pollwrap" class="off"><div id="lpbox">
     <div id="lphead"><div class="lpdot"></div><span id="lpstat">Wyniki na żywo</span></div>
@@ -427,7 +460,7 @@ const setSeq = s => { lastSeq = s; try { localStorage.setItem('overlay_poll_seq'
 
 let ltPrev = false, ltT = null, ltForceOff = false; // plansza rozmówcy
 function setVis(id, on){ $(id).classList.toggle('off', !on); }
-function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('pollwrap', false); renderBreak(null); }
+function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('pollwrap', false); setAge(AGE_URL || 0); renderBreak(null); }
 
 /* zbiórka: % = wartość bazowa + 1% co N sekund (liczone wg czasu serwera); teksty wpisane na stałe w HTML */
 let fund = null, skew = 0, qrOk = false;
@@ -444,6 +477,18 @@ function fundPct(){
 }
 function renderFund(){ const p = fundPct(); $('fpct').textContent = p + '%'; $('ffill').style.width = p + '%'; }
 setInterval(renderFund, 500);
+
+/* oznaczenie wieku: stan serwera s.age = {visible, rating} albo ?age=12 w adresie overlayu */
+const AGE_OK = [7, 12, 16, 18], AGE_URL = +(new URLSearchParams(location.search).get('age')) || 0;
+const ageImg = $('ageimg'); let ageShown = 0;
+function setAge(r){
+  r = AGE_OK.includes(+r) ? +r : 0;
+  if (r && r !== ageShown) ageImg.src = '/assets/wiek_' + r + '.png';
+  ageShown = r;
+  setVis('agewrap', !!r);
+  $('scene').style.setProperty('--pt', r ? '129px' : '43px');
+}
+ageImg.onerror = () => { ageShown = 0; setVis('agewrap', false); $('scene').style.setProperty('--pt', '43px'); };
 
 function apply(s){
   skew = Date.parse(s.serverNow) - Date.now();
@@ -469,6 +514,8 @@ function apply(s){
     setVis('fundwrap', !!f.visible);
     setVis('qrwrap', !!f.visible);
   } catch (e) { console.error('zbiórka', e); }
+
+  try { const a = s.age; setAge(AGE_URL || (a && a.visible ? a.rating : 0)); } catch (e) { console.error('wiek', e); }
 
   try { renderBreak(s.break_screen); } catch (e) { console.error('przerwa', e); }
 
