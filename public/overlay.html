@@ -420,7 +420,7 @@ function hidePoll(quiet){
 
 
 /* ---------- reklamy: pliki /ads/1.mp4, 2.mp4 … (numerycznie) ---------- */
-const PREVIEW = new URLSearchParams(location.search).get('preview') === '1'; // podgląd w panelu = bez dźwięku
+const PREVIEW = false; // podgląd w panelu też ma dźwięk (panel jest w przeglądarce, nie w OBS)
 let adList = [], adScan = 0, adQueue = [], adCfg = {volume: 100}, adRot = 0, lastAdSeq = null, lastSlot = null;
 try { const v = localStorage.getItem('overlay_ads_seq'); if (v !== null) lastAdSeq = +v; } catch (e) {}
 async function scanAds(force){
@@ -516,7 +516,11 @@ function brkTick(){
     $('bkarc').style.strokeDashoffset = 1602.2 * (1 - Math.max(0, Math.min(1, rem / brkTotal)));
     $('bklab').textContent = s ? 'odliczanie do godziny ' + fmt.format(new Date(end)) : 'już za chwilę';
     $('brk').classList.toggle('zero', !s);
-  } else { $('bkdig').textContent = '···'; $('bkarc').style.strokeDashoffset = 0; $('bklab').textContent = ''; $('brk').classList.remove('zero'); }
+  } else {
+    // bez odliczania: zamiast kropek pokazujemy aktualną godzinę
+    $('bkdig').textContent = fmt.format(new Date()); $('bkdig').style.fontSize = '130px';
+    $('bkarc').style.strokeDashoffset = 0; $('bklab').textContent = 'aktualny czas'; $('brk').classList.remove('zero');
+  }
   const want = brk.music !== false && !$('adwrap').classList.contains('on'), vol = (brk.volume != null ? +brk.volume : 60) / 100, kind = brk.kind === 'brb' ? 'brb' : 'break', sig = want + '|' + vol + '|' + kind;
   if (sig !== bmSig) { bmSig = sig; bmGo(want, vol, kind); }
 }
