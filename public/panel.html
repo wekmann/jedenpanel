@@ -170,12 +170,12 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
   <div class="tab box" id="tBrk" data-sec="break_screen">
     <h3>Przerwa / Zaraz wracamy</h3>
     <label for="bkKind">Rodzaj planszy</label>
-    <select id="bkKind" style="max-width:260px"><option value="break">Przerwa</option><option value="brb">Zaraz wracamy</option></select>
+    <select id="bkKind" style="max-width:260px"><option value="break">Przerwa</option><option value="brb">Zaraz wracamy</option><option value="start">Zaraz zaczynamy</option></select>
     <label for="bkTitle">Tytuł (puste = domyślny)</label><input type="text" id="bkTitle" maxlength="60">
     <label for="bkSub">Podtytuł (puste = domyślny)</label><input type="text" id="bkSub" maxlength="120">
     <label for="bkFoot">Stopka</label><input type="text" id="bkFoot" maxlength="80">
     <div class="grid2">
-      <div><label for="bkMin">Odliczanie (minuty, 0 = bez odliczania)</label><input type="number" id="bkMin" min="0" max="600" step="1" value="5"></div>
+      <div><label for="bkTime">Odliczanie do godziny (puste = bez odliczania)</label><input type="time" id="bkTime"></div>
       <div><label for="bkVol">Głośność muzyki (0–100)</label><input type="number" id="bkVol" min="0" max="100"></div>
     </div>
     <label class="chk"><input type="checkbox" id="bkMusic">Muzyka podczas planszy</label>
@@ -362,13 +362,23 @@ function fillBrk(){
   const k = cfg.break_screen;
   $('bkKind').value = k.kind; $('bkTitle').value = k.title; $('bkSub').value = k.subtitle; $('bkFoot').value = k.footer;
   $('bkMusic').checked = k.music; $('bkVol').value = k.volume;
+  $('bkTime').value = k.endsAt ? new Date(k.endsAt).toLocaleTimeString('pl-PL', {hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw'}) : '';
   $('bkNow').textContent = k.visible ? ('Na antenie' + (k.endsAt ? ' – wracamy o ' + new Date(k.endsAt).toLocaleTimeString('pl-PL', {hour: '2-digit', minute: '2-digit'}) : '')) : 'Plansza ukryta';
 }
+/* godzina odliczania (Warszawa) -> ISO; jeśli godzina już minęła, to jutro */
+function warsawOffset(ms){ const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {timeZone: 'Europe/Warsaw', hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).formatToParts(new Date(ms)).map(x => [x.type, x.value])); return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - Math.floor(ms / 1000) * 1000; }
+function bkTargetIso(now, hhmm){
+  if (!hhmm) return '';
+  const ymd = ms => new Intl.DateTimeFormat('en-CA', {timeZone: 'Europe/Warsaw'}).format(new Date(ms));
+  const at = day => { const naive = Date.parse(day + 'T' + hhmm + ':00Z'); let t = naive - warsawOffset(naive); return naive - warsawOffset(t); };
+  let t = at(ymd(now)); if (t <= now) t = at(ymd(now + 86400000));
+  return new Date(t).toISOString();
+}
 $('bkShow').onclick = async () => {
-  const min = num($('bkMin').value) || 0, now = Date.now() + skew;
+  const now = Date.now() + skew, endsAt = bkTargetIso(now, $('bkTime').value);
   const ok = await save('break_screen', {
     visible: true, kind: $('bkKind').value, title: $('bkTitle').value, subtitle: $('bkSub').value, footer: $('bkFoot').value,
-    startedAt: new Date(now).toISOString(), endsAt: min > 0 ? new Date(now + min * 60000).toISOString() : '',
+    startedAt: new Date(now).toISOString(), endsAt,
     music: $('bkMusic').checked, volume: num($('bkVol').value)}, 'bkMsg');
   if (ok) fillBrk();
 };

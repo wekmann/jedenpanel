@@ -108,7 +108,7 @@ export const SCHEMAS = {
   }),
   break_screen: z.object({
     visible: z.boolean(),
-    kind: z.enum(['break', 'brb']),
+    kind: z.enum(['break', 'brb', 'start']),
     title: z.string().trim().max(60),
     subtitle: z.string().trim().max(120),
     footer: z.string().trim().max(80),
