@@ -222,5 +222,5 @@ export function fail(res, e) {
   const msg = e instanceof z.ZodError
     ? e.issues.map((i) => i.message).join('; ')
     : (e && e.message) || 'Błąd serwera';
-  res.status(e instanceof z.ZodError ? 400 : 500).json({ error: msg });
+  res.status(e instanceof z.ZodError ? 400 : 500).json({ error: msg, err: msg });
 }

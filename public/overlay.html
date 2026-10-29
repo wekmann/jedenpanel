@@ -33,7 +33,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 /* ===== PLAKIETKA NA ŻYWO (live_badge_v2.html) ===== */
 #livewrap{position:absolute;top:var(--lt,43px);right:var(--lr,53px);height:64px;transition:transform .6s var(--ease)}
 #livewrap.off{transform:translateX(calc(100% + var(--lr,53px) + 30px))}
-.livebadge{box-sizing:border-box;width:100%;height:100%;padding:0 30px;display:flex;align-items:center;justify-content:center;gap:12px;background:#d60f08;border-radius:8px;font-family:Arial,Helvetica,sans-serif;box-shadow:0 6px 14px rgba(0,0,0,.45);position:relative;overflow:hidden}
+.livebadge{box-sizing:border-box;width:100%;height:100%;padding:0 30px;display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(90deg,#8d1123,#a3162a 55%,#c21c28);border-radius:8px;font-family:Arial,Helvetica,sans-serif;box-shadow:0 6px 14px rgba(0,0,0,.45);position:relative;overflow:hidden}
 .ldot{width:14px;height:14px;border-radius:50%;background-color:#fff;box-shadow:0 0 8px rgba(255,255,255,.7);flex-shrink:0}
 .ltxt{color:#fff;font-size:26px;font-weight:800;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.4)}
 
@@ -70,9 +70,9 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #ltrole{box-sizing:border-box;max-width:100%;background:#16305c;color:#fff;font-size:26px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;line-height:1.2;padding:9px 40px 9px 28px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem; mały format jak w TV) ===== */
-#fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + 214px + 14px);display:flex;align-items:flex-end;transition:transform .6s var(--ease)}
-#fundwrap.off{transform:translateX(calc(100% + 300px))}
-#fcard{position:relative;width:260px;font-family:'Oswald','Roboto Condensed','Arial Narrow',Impact,Arial,sans-serif;text-transform:uppercase;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55))}
+#fundwrap{--fscale:1.6;position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + 214px + 14px);display:flex;align-items:flex-end;transition:transform .6s var(--ease)}
+#fundwrap.off{transform:translateX(calc(100% + 500px))}
+#fcard{position:relative;width:260px;transform:scale(var(--fscale));transform-origin:100% 100%;font-family:'Oswald','Roboto Condensed','Arial Narrow',Impact,Arial,sans-serif;text-transform:uppercase;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55))}
 #ftruck{display:block;width:100%;height:auto;margin-bottom:-4px}
 #fdish{transform-origin:420px 62px;animation:fdish 7s ease-in-out infinite}
 @keyframes fdish{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
@@ -146,8 +146,9 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #ptitle{font-size:46px;font-weight:900;letter-spacing:-.5px;text-shadow:0 3px 8px rgba(0,0,0,.4)}
 #psub{font-size:20px;opacity:.85;margin-top:6px;font-weight:600}
 #prows{padding:34px 48px 40px;display:flex;flex-direction:column;gap:var(--gap,18px)}
-.row{display:flex;align-items:center;gap:22px;height:var(--rh,96px);opacity:0;transform:translateX(-80px);transition:transform .8s var(--ease) calc(.5s + var(--i)*.18s),opacity .5s calc(.5s + var(--i)*.18s),filter .6s,transform .6s}
+.row{display:flex;align-items:center;gap:22px;height:var(--rh,96px);opacity:0;transform:translateX(-80px);transition:transform .8s var(--ease) calc(.5s + var(--i)*.18s),opacity .5s calc(.5s + var(--i)*.18s),filter .6s}
 #pstage.on .row{opacity:1;transform:none}
+#pstage.win .row{transition:transform .6s,opacity .6s,filter .6s}
 .logo{width:var(--rh,96px);height:var(--rh,96px);flex:none;border-radius:50%;background:#fff;border:5px solid var(--c);display:flex;align-items:center;justify-content:center;overflow:hidden;box-sizing:border-box;box-shadow:0 6px 18px rgba(0,0,0,.5)}
 .logo img{width:100%;height:100%;object-fit:contain;background:#fff}
 .logo span{font-size:calc(var(--rh,96px)*.45);font-weight:900;color:var(--c)}
