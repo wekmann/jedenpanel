@@ -197,11 +197,28 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
     <div id="fcard">
       <svg id="ftruck" viewBox="0 0 560 190" aria-hidden="true">
         <defs>
-          <linearGradient id="gTr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3159e0"/><stop offset=".55" stop-color="#2347c8"/><stop offset="1" stop-color="#1a37a3"/></linearGradient>
-          <linearGradient id="gCab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9dee4"/></linearGradient>
-          <linearGradient id="gGl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2d4468"/><stop offset="1" stop-color="#121c30"/></linearGradient>
-          <linearGradient id="gDish" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3e7ec"/><stop offset="1" stop-color="#8d949e"/></linearGradient>
+          <linearGradient id="gTr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a74ff"/><stop offset=".4" stop-color="#2d52d6"/><stop offset="1" stop-color="#14297a"/></linearGradient>
+          <linearGradient id="gCab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#e6eaef"/><stop offset="1" stop-color="#aeb6c0"/></linearGradient>
+          <linearGradient id="gGl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a5680"/><stop offset=".5" stop-color="#1b2a45"/><stop offset="1" stop-color="#0c1424"/></linearGradient>
+          <linearGradient id="gDish" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3f6f9"/><stop offset="1" stop-color="#8d949e"/></linearGradient>
+          <linearGradient id="gChassis" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b626c"/><stop offset="1" stop-color="#2a2f36"/></linearGradient>
+          <linearGradient id="gRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d1123"/><stop offset=".5" stop-color="#d60f08"/><stop offset="1" stop-color="#8d1123"/></linearGradient>
+          <radialGradient id="gRim" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#b9c0c9"/><stop offset="1" stop-color="#5d646e"/></radialGradient>
+          <radialGradient id="gLamp" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fffbe0"/><stop offset=".6" stop-color="#ffd76a"/><stop offset="1" stop-color="#ffd76a" stop-opacity="0"/></radialGradient>
+          <linearGradient id="gShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient>
+          <g id="wheel">
+            <circle r="23" fill="#0d0d0d"/>
+            <circle r="22" fill="none" stroke="#2c2c2c" stroke-width="2" stroke-dasharray="3 3"/>
+            <circle r="16" fill="url(#gRim)" stroke="#6b727c" stroke-width="1"/>
+            <circle r="9" fill="#cfd5dc"/>
+            <circle r="3.5" fill="#5a6069"/>
+            <g fill="#6b727c"><circle cx="12" cy="0" r="1.6"/><circle cx="3.7" cy="11.4" r="1.6"/><circle cx="-9.7" cy="7.1" r="1.6"/><circle cx="-9.7" cy="-7.1" r="1.6"/><circle cx="3.7" cy="-11.4" r="1.6"/></g>
+          </g>
         </defs>
+
+        <!-- cień na ziemi -->
+        <ellipse cx="282" cy="182" rx="272" ry="7" fill="#000" opacity=".4"/>
+
         <!-- antena satelitarna -->
         <polygon points="412,56 428,56 425,72 415,72" fill="#6b7078"/>
         <g id="fdish">
@@ -211,44 +228,74 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
           <line x1="420" y1="34" x2="438" y2="8" stroke="#4a4f56" stroke-width="3" stroke-linecap="round"/>
           <circle cx="439" cy="7" r="4" fill="#4a4f56"/>
         </g>
-        <!-- naczepa / wóz transmisyjny -->
-        <rect x="150" y="66" width="404" height="90" rx="7" fill="url(#gTr)"/>
-        <rect x="150" y="66" width="404" height="9" rx="4" fill="#1a37a3"/>
-        <rect x="196" y="56" width="46" height="12" rx="2" fill="#1a37a3"/>
+
+        <!-- dach naczepy: kanały i lampy -->
+        <rect x="196" y="56" width="46" height="12" rx="2" fill="#1f3c9e"/>
         <rect x="256" y="58" width="22" height="9" rx="2" fill="#16308c"/>
-        <rect x="150" y="132" width="404" height="24" fill="#1a37a3"/>
-        <rect x="150" y="130" width="404" height="3" fill="#5f84ff" opacity=".55"/>
-        <rect x="296" y="86" width="38" height="36" rx="3" fill="url(#gGl)"/>
-        <rect x="350" y="86" width="58" height="36" rx="3" fill="url(#gGl)"/>
-        <rect x="418" y="86" width="58" height="36" rx="3" fill="url(#gGl)"/>
-        <rect x="486" y="86" width="58" height="36" rx="3" fill="url(#gGl)"/>
-        <path d="M356 88l14 0-12 32h-14z M424 88l14 0-12 32h-14z M492 88l14 0-12 32h-14z M302 88l10 0-9 32h-10z" fill="#fff" opacity=".1"/>
-        <rect x="548" y="80" width="6" height="70" rx="2" fill="#16308c"/>
+        <rect x="160" y="60" width="18" height="6" rx="2" fill="#ffb12b"/>
+        <rect x="186" y="60" width="18" height="6" rx="2" fill="#ffb12b"/>
+
+        <!-- korpus naczepy -->
+        <rect x="150" y="66" width="404" height="90" rx="7" fill="url(#gTr)"/>
+        <rect x="150" y="66" width="404" height="6" rx="3" fill="#7d9bff" opacity=".55"/>
+        <rect x="150" y="66" width="404" height="90" rx="7" fill="url(#gShade)"/>
+        <rect x="150" y="118" width="404" height="4" fill="url(#gRed)"/>
+        <rect x="150" y="132" width="404" height="24" fill="#122a78"/>
+        <rect x="150" y="130" width="404" height="3" fill="#5f84ff" opacity=".5"/>
+
+        <!-- logo na burcie -->
+        <text x="172" y="106" font-family="Oswald,'Arial Narrow',Impact,Arial,sans-serif" font-size="26" font-weight="700" fill="#ffffff" letter-spacing="3" opacity=".92">JEDEN</text>
+        <!-- kratka wentylacyjna -->
+        <g fill="#0f2166" opacity=".7"><rect x="236" y="84" width="4" height="26"/><rect x="244" y="84" width="4" height="26"/><rect x="252" y="84" width="4" height="26"/></g>
+
+        <!-- okna boczne -->
+        <g>
+          <rect x="296" y="86" width="38" height="36" rx="3" fill="url(#gGl)" stroke="#8fa6c8" stroke-width="1.5"/>
+          <rect x="350" y="86" width="58" height="36" rx="3" fill="url(#gGl)" stroke="#8fa6c8" stroke-width="1.5"/>
+          <rect x="418" y="86" width="58" height="36" rx="3" fill="url(#gGl)" stroke="#8fa6c8" stroke-width="1.5"/>
+          <rect x="486" y="86" width="58" height="36" rx="3" fill="url(#gGl)" stroke="#8fa6c8" stroke-width="1.5"/>
+          <path d="M356 88l14 0-12 32h-14z M424 88l14 0-12 32h-14z M492 88l14 0-12 32h-14z M302 88l10 0-9 32h-10z" fill="#fff" opacity=".14"/>
+        </g>
+
+        <!-- tylne drzwi i światła -->
+        <rect x="548" y="80" width="6" height="70" rx="2" fill="#0c1a4f"/>
         <rect x="548" y="138" width="6" height="8" fill="#ffb12b"/>
+        <rect x="150" y="84" width="4" height="12" fill="#ffb12b"/>
+
         <!-- podwozie -->
-        <rect x="0" y="144" width="560" height="12" fill="#bfc5cd"/>
-        <rect x="0" y="154" width="560" height="3" fill="#7d848d"/>
+        <rect x="0" y="144" width="560" height="12" fill="url(#gChassis)"/>
+        <rect x="0" y="154" width="560" height="3" fill="#1a1d22"/>
+
         <!-- kabina -->
-        <path d="M4 146V98L24 58Q28 52 36 52H100Q110 52 110 62V146Z" fill="url(#gCab)" stroke="#8f98a3" stroke-width="2"/>
-        <path d="M16 96L32 64H62V96Z" fill="url(#gGl)"/>
-        <rect x="70" y="64" width="30" height="32" rx="2" fill="url(#gGl)"/>
+        <path d="M4 146V98L24 58Q28 52 36 52H100Q110 52 110 62V146Z" fill="url(#gCab)" stroke="#7f8893" stroke-width="2"/>
+        <path d="M16 96L32 64H62V96Z" fill="url(#gGl)" stroke="#9fb3d1" stroke-width="1"/>
+        <path d="M18 92L30 68" stroke="#fff" stroke-width="2" opacity=".35"/>
+        <rect x="70" y="64" width="30" height="32" rx="2" fill="url(#gGl)" stroke="#9fb3d1" stroke-width="1"/>
         <rect x="104" y="72" width="8" height="26" rx="2" fill="#2a2e34"/>
-        <rect x="6" y="120" width="104" height="4" fill="#cfd5dc"/>
-        <rect x="5" y="106" width="9" height="8" rx="2" fill="#ffe9a8"/>
-        <rect x="5" y="126" width="12" height="14" rx="2" fill="#9aa1ab"/>
+        <!-- linia drzwi -->
+        <path d="M68 100V146" stroke="#8f98a3" stroke-width="1.5"/>
+        <rect x="90" y="108" width="10" height="3" rx="1.5" fill="#6b7480"/>
+        <!-- atrapa chłodnicy -->
+        <rect x="6" y="120" width="104" height="8" fill="#2a2e34"/>
+        <g fill="#5c646e"><rect x="12" y="122" width="3" height="4"/><rect x="22" y="122" width="3" height="4"/><rect x="32" y="122" width="3" height="4"/><rect x="42" y="122" width="3" height="4"/><rect x="52" y="122" width="3" height="4"/><rect x="62" y="122" width="3" height="4"/><rect x="72" y="122" width="3" height="4"/><rect x="82" y="122" width="3" height="4"/><rect x="92" y="122" width="3" height="4"/></g>
+        <!-- reflektory -->
+        <circle cx="10" cy="107" r="16" fill="url(#gLamp)" opacity=".7"/>
+        <rect x="5" y="104" width="10" height="7" rx="2" fill="#fff6cf"/>
+        <rect x="5" y="129" width="12" height="14" rx="2" fill="#7f8792"/>
+        <!-- zderzak -->
+        <rect x="4" y="138" width="110" height="8" rx="3" fill="#3a3f47"/>
+        <!-- lusterko -->
+        <rect x="112" y="78" width="4" height="30" rx="1" fill="#2a2e34"/>
+        <rect x="108" y="74" width="10" height="8" rx="2" fill="#2a2e34"/>
+        <!-- schodek -->
+        <rect x="40" y="148" width="30" height="4" rx="1" fill="#8b929c"/>
+
         <!-- koła -->
-        <g fill="#1d1d1d" stroke="#8a8f96" stroke-width="3">
-          <circle cx="44" cy="164" r="22"/><circle cx="150" cy="164" r="22"/><circle cx="206" cy="164" r="22"/>
-          <circle cx="470" cy="164" r="22"/><circle cx="526" cy="164" r="22"/>
-        </g>
-        <g fill="#d5d9de">
-          <circle cx="44" cy="164" r="10"/><circle cx="150" cy="164" r="10"/><circle cx="206" cy="164" r="10"/>
-          <circle cx="470" cy="164" r="10"/><circle cx="526" cy="164" r="10"/>
-        </g>
-        <g fill="#7b828b">
-          <circle cx="44" cy="164" r="3.5"/><circle cx="150" cy="164" r="3.5"/><circle cx="206" cy="164" r="3.5"/>
-          <circle cx="470" cy="164" r="3.5"/><circle cx="526" cy="164" r="3.5"/>
-        </g>
+        <use href="#wheel" transform="translate(44 164)"/>
+        <use href="#wheel" transform="translate(150 164)"/>
+        <use href="#wheel" transform="translate(206 164)"/>
+        <use href="#wheel" transform="translate(470 164)"/>
+        <use href="#wheel" transform="translate(526 164)"/>
       </svg>
       <div id="frow"><span id="fl1">Potrzebujemy</span><span id="fam">5 500 000<small>zł</small></span></div>
       <div id="fl2">Na wóz transmisyjny</div>
