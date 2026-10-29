@@ -85,6 +85,7 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
   <!-- PASEK -->
   <div class="tab on box" id="tBar" data-sec="bar">
     <label class="chk"><input type="checkbox" id="barVis">Pasek widoczny</label>
+    <label class="chk"><input type="checkbox" id="barHead">Ukryj czerwony pasek tytułu (zbiórka schodzi na poziom paska z newsami)</label>
     <label for="l1">Linia 1 nagłówka</label><input type="text" id="l1" maxlength="200">
     <label for="l2">Linia 2 nagłówka</label><input type="text" id="l2" maxlength="200">
     <label>Newsy w tickerze</label>
@@ -279,7 +280,7 @@ function newsRow(v){
 }
 function fillBar(){
   const b = cfg.bar;
-  $('barVis').checked = b.visible; $('l1').value = b.line1; $('l2').value = b.line2;
+  $('barVis').checked = b.visible; $('barHead').checked = !!b.hideHead; $('l1').value = b.line1; $('l2').value = b.line2;
   $('sp').value = b.speed; $('mr').value = b.offsetX; $('mb').value = b.marginBottom;
   $('newsList').innerHTML = ''; b.news.forEach(newsRow);
 }
@@ -289,7 +290,7 @@ async function save(section, data, msgId, auto){
   catch (e) { say(msgId, e.message, false); return false; }
 }
 $('barSave').onclick = () => save('bar', {
-  visible: $('barVis').checked, line1: $('l1').value, line2: $('l2').value,
+  visible: $('barVis').checked, hideHead: $('barHead').checked, line1: $('l1').value, line2: $('l2').value,
   news: [...document.querySelectorAll('#newsList input')].map(i => i.value.trim()).filter(Boolean),
   speed: num($('sp').value), offsetX: num($('mr').value), marginBottom: num($('mb').value)
 }, 'barMsg');

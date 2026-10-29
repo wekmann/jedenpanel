@@ -16,6 +16,7 @@ export const DEFAULTS = {
     speed: 106,
     offsetX: 0,
     marginBottom: 43,
+    hideHead: false,
   },
   live_badge: { visible: false, text: 'NA ŻYWO', top: 43, right: 53 },
   qr: { visible: false },
@@ -73,6 +74,7 @@ export const SCHEMAS = {
     speed: z.number().min(10, 'Prędkość min. 10').max(1000, 'Prędkość max. 1000'),
     offsetX: z.number().int().min(-960, 'Przesunięcie min. -960').max(960, 'Przesunięcie max. 960'),
     marginBottom: z.number().int().min(0).max(1080),
+    hideHead: z.boolean().default(false),
   }),
   fund: z.object({
     visible: z.boolean(),
