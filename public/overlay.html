@@ -11,7 +11,7 @@
 html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#fff}
 #scene{position:relative;width:1920px;height:1080px;overflow:hidden;background:transparent}
 
-/* ===== PASEK DOLNY (jeden_pasek_calosc.html) ===== */
+/* ===== PASEK DOLNY ===== */
 #barwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:var(--mb,43px);transition:transform .6s var(--ease),opacity .5s ease}
 #barwrap.off{opacity:0;transform:translateY(calc(100% + var(--mb,43px) + 30px))}
 #root{position:relative;width:1662px;height:214px;display:grid;grid-template-columns:155px 1507px;grid-template-rows:157px 57px}
@@ -36,7 +36,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes barin{from{filter:brightness(1.6)}to{filter:none}}
 #barwrap.nohead #root{grid-template-rows:57px;height:57px}
 
-/* ===== PLAKIETKA NA ŻYWO (live_badge_v2.html) ===== */
+/* ===== PLAKIETKA NA ŻYWO ===== */
 #livewrap{position:absolute;top:var(--lt,43px);right:var(--lr,53px);height:64px;transition:transform .6s var(--ease),opacity .5s ease}
 #livewrap.off{opacity:0;transform:translateX(calc(100% + var(--lr,53px) + 30px))}
 .livebadge{box-sizing:border-box;width:100%;height:100%;padding:0 30px;display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(90deg,#8d1123,#a3162a 55%,#c21c28);border-radius:8px;font-family:Arial,Helvetica,sans-serif;box-shadow:0 6px 14px rgba(0,0,0,.45);position:relative;overflow:hidden}
@@ -44,16 +44,16 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes ldp{50%{transform:scale(1.4);opacity:.55}}
 .ltxt{color:#fff;font-size:26px;font-weight:800;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.4)}
 
-/* ===== WYNIKI ANKIETY NA ŻYWO – wykres kołowy z procentami, lewy górny róg ===== */
+/* ===== WYNIKI ANKIETY NA ŻYWO – wykres kołowy, lewy górny róg ===== */
 #pollwrap{position:absolute;top:var(--pt,43px);left:53px;width:460px;transition:transform .6s var(--ease),opacity .5s ease,top .4s var(--ease)}
 #pollwrap.off{opacity:0;transform:translateX(calc(-100% - 53px - 30px))}
-#lpbox{background:linear-gradient(170deg,#13233f,#0a1426 70%);border-radius:0 22px 22px 22px;box-shadow:0 14px 34px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.06);overflow:hidden;color:#fff;font-family:'Roboto Condensed',Arial,sans-serif}
+#lpbox{transform-origin:0 0;background:linear-gradient(170deg,#13233f,#0a1426 70%);border-radius:0 22px 22px 22px;box-shadow:0 14px 34px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.06);overflow:hidden;color:#fff;font-family:'Roboto Condensed',Arial,sans-serif}
 #lphead{background:linear-gradient(90deg,#8d1123,#a3162a 55%,#c21c28);padding:12px 22px;display:flex;align-items:center;gap:12px;font-size:21px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,.35);position:relative}
 #lphead::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:#fff;opacity:.85}
 .lpdot{width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.8);animation:lpp 1.4s ease-in-out infinite}
 #lphead.end .lpdot{animation:none}
 @keyframes lpp{50%{transform:scale(1.35);opacity:.45}}
-#lptitle{padding:16px 22px 0;font-size:26px;font-weight:700;line-height:1.2;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#lptitle{padding:16px 22px 0;font-size:26px;font-weight:700;line-height:1.2;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 #lpchart{position:relative;width:250px;height:250px;margin:12px auto 6px}
 #lppie{display:block;width:100%;height:100%;overflow:visible}
 #lpslices circle{fill:none;stroke-width:100;transition:stroke-dasharray 1s var(--ease),stroke-dashoffset 1s var(--ease),stroke .4s}
@@ -78,7 +78,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #fqrbox.hide{opacity:0;transform:translateY(18px) scale(.9);pointer-events:none}
 #fqr{display:block;width:100%;height:auto}
 
-/* ===== PLANSZA ROZMÓWCY / LOWER THIRD (nad paskiem, od lewej; omija QR gdy ten jest widoczny) ===== */
+/* ===== PLANSZA ROZMÓWCY (nad paskiem, od lewej; omija QR gdy ten jest widoczny) ===== */
 #ltwrap{position:absolute;left:calc(129px + var(--ox,0px) + var(--lx,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + 14px);max-width:940px;transition:transform .6s var(--ease),opacity .5s ease,left .4s var(--ease)}
 #ltwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - var(--lx,0px) - 60px))}
 #ltbox{display:flex;flex-direction:column;align-items:flex-start;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
@@ -89,7 +89,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes ltshine{0%{left:-90px}50%,100%{left:110%}}
 #ltrole{box-sizing:border-box;max-width:100%;background:linear-gradient(90deg,#0e2347,#16305c);color:#e8eef9;font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;line-height:1.2;padding:9px 40px 9px 30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:6px solid #d60f08;font-family:'Roboto Condensed',Arial,sans-serif}
 
-/* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem; rozmiary w px, bez zoom/transform – ostry tekst w OBS) ===== */
+/* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem) ===== */
 #fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + var(--fbh,var(--bh,214px)) + 14px);display:flex;align-items:flex-end;transition:transform .6s var(--ease),opacity .5s ease,bottom .6s var(--ease)}
 #fundwrap.off{opacity:0;transform:translateX(calc(100% + 500px))}
 #fundwrap:not(.off) #fcard{animation:fin .7s var(--ease)}
@@ -112,12 +112,12 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes fshine{0%{left:-60px}55%,100%{left:120%}}
 #fpct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:29px;font-weight:700;color:#fff;text-shadow:0 0 3px #000,0 1px 3px rgba(0,0,0,.9)}
 
-/* ===== OZNACZENIE WIEKU (lewy górny róg; pliki /assets/wiek_7.png, wiek_12.png, wiek_16.png, wiek_18.png) ===== */
+/* ===== OZNACZENIE WIEKU ===== */
 #agewrap{position:absolute;top:43px;left:53px;height:72px;transition:transform .6s var(--ease),opacity .5s ease}
 #agewrap.off{opacity:0;transform:translateX(calc(-100% - 53px - 30px))}
 #ageimg{display:block;height:100%;width:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45))}
 
-/* ===== REKLAMY (pełny ekran, pliki public/ads/1.mp4, 2.mp4 …) ===== */
+/* ===== REKLAMY ===== */
 #adwrap{position:absolute;inset:0;background:#000;opacity:0;visibility:hidden;z-index:50;transition:opacity .5s,visibility 0s .5s}
 #adwrap.on{opacity:1;visibility:visible;transition:opacity .5s}
 #adv{width:100%;height:100%;object-fit:contain;background:#000;display:block}
@@ -244,10 +244,8 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
           </g>
         </defs>
 
-        <!-- cień na ziemi -->
         <ellipse cx="282" cy="182" rx="272" ry="7" fill="#000" opacity=".4"/>
 
-        <!-- antena satelitarna z falami sygnału -->
         <polygon points="412,56 428,56 425,72 415,72" fill="#6b7078"/>
         <g id="fsig" fill="none" stroke="#7fd8ff" stroke-width="2.5" stroke-linecap="round" opacity=".6">
           <path d="M452 22 Q462 34 452 46"/>
@@ -262,44 +260,34 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
           <circle cx="439" cy="7" r="4" fill="#4a4f56"/>
         </g>
 
-        <!-- maszt kamery z migającą lampką -->
         <rect x="236" y="54" width="6" height="12" fill="#4a4f56"/>
         <rect x="226" y="44" width="26" height="12" rx="2" fill="#2a2e34"/>
         <circle cx="232" cy="50" r="3" fill="#ff3b3b"/>
 
-        <!-- korpus naczepy -->
         <rect x="150" y="66" width="404" height="90" rx="7" fill="url(#gTr)"/>
         <g clip-path="url(#clTr)">
-          <!-- ukośne pasy w stylu wyścigowym -->
           <g fill="#ffffff" opacity=".07"><polygon points="170,66 200,66 170,156 150,156 150,116"/><polygon points="210,66 226,66 196,156 180,156"/><polygon points="236,66 244,66 214,156 206,156"/></g>
           <rect x="150" y="66" width="404" height="90" fill="url(#gSheen)"/>
           <rect x="150" y="66" width="404" height="90" fill="url(#gShade)"/>
         </g>
-        <!-- pionowe żebra -->
         <g fill="#0b1a4d" opacity=".5"><rect x="176" y="72" width="2" height="48"/><rect x="216" y="72" width="2" height="48"/><rect x="256" y="72" width="2" height="48"/><rect x="296" y="72" width="2" height="48"/><rect x="336" y="72" width="2" height="48"/><rect x="376" y="72" width="2" height="48"/><rect x="416" y="72" width="2" height="48"/><rect x="456" y="72" width="2" height="48"/><rect x="496" y="72" width="2" height="48"/></g>
-        <!-- listwa LED na górze -->
         <rect x="150" y="66" width="404" height="5" rx="2" fill="#0a1638"/>
         <g fill="#ffb12b" opacity=".9">
           <rect x="158" y="67" width="8" height="3" rx="1"/><rect x="172" y="67" width="8" height="3" rx="1"/><rect x="186" y="67" width="8" height="3" rx="1"/><rect x="200" y="67" width="8" height="3" rx="1"/><rect x="214" y="67" width="8" height="3" rx="1"/><rect x="228" y="67" width="8" height="3" rx="1"/><rect x="242" y="67" width="8" height="3" rx="1"/><rect x="256" y="67" width="8" height="3" rx="1"/><rect x="270" y="67" width="8" height="3" rx="1"/><rect x="284" y="67" width="8" height="3" rx="1"/><rect x="298" y="67" width="8" height="3" rx="1"/><rect x="312" y="67" width="8" height="3" rx="1"/><rect x="326" y="67" width="8" height="3" rx="1"/><rect x="340" y="67" width="8" height="3" rx="1"/><rect x="354" y="67" width="8" height="3" rx="1"/><rect x="368" y="67" width="8" height="3" rx="1"/><rect x="382" y="67" width="8" height="3" rx="1"/><rect x="396" y="67" width="8" height="3" rx="1"/><rect x="410" y="67" width="8" height="3" rx="1"/><rect x="424" y="67" width="8" height="3" rx="1"/><rect x="438" y="67" width="8" height="3" rx="1"/><rect x="452" y="67" width="8" height="3" rx="1"/><rect x="466" y="67" width="8" height="3" rx="1"/><rect x="480" y="67" width="8" height="3" rx="1"/><rect x="494" y="67" width="8" height="3" rx="1"/><rect x="508" y="67" width="8" height="3" rx="1"/><rect x="522" y="67" width="8" height="3" rx="1"/>
         </g>
         <rect x="150" y="71" width="404" height="2" fill="#dfe6f0" opacity=".55"/>
-        <!-- czerwony pas dolny i biała linia -->
         <rect x="150" y="118" width="404" height="4" fill="url(#gRed)"/>
         <rect x="150" y="132" width="404" height="24" fill="#122a78"/>
         <rect x="150" y="130" width="404" height="3" fill="#7d9bff" opacity=".5"/>
-        <!-- skrzynka generatora pod naczepą -->
         <rect x="170" y="156" width="70" height="8" rx="2" fill="#2a2e34"/>
         <rect x="446" y="156" width="70" height="8" rx="2" fill="#2a2e34"/>
-        <!-- tylne światła -->
         <rect x="548" y="80" width="6" height="70" rx="2" fill="#0c1a4f"/>
         <rect x="548" y="138" width="6" height="8" fill="#ff3b3b"/>
         <rect x="150" y="84" width="4" height="12" fill="#ff3b3b"/>
 
-        <!-- podwozie -->
         <rect x="0" y="144" width="560" height="12" fill="url(#gChassis)"/>
         <rect x="0" y="154" width="560" height="3" fill="#1a1d22"/>
 
-        <!-- kabina (bez szyb) -->
         <path d="M4 146V98L24 58Q28 52 36 52H100Q110 52 110 62V146Z" fill="url(#gCab)" stroke="#7f8893" stroke-width="2"/>
         <path d="M16 96L32 64H62V96Z" fill="url(#gGl)" stroke="#9fb3d1" stroke-width="1"/>
         <path d="M18 92L30 68" stroke="#fff" stroke-width="2" opacity=".35"/>
@@ -308,21 +296,17 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
         <rect x="90" y="108" width="10" height="3" rx="1.5" fill="#6b7480"/>
         <rect x="104" y="72" width="8" height="26" rx="2" fill="#2a2e34"/>
         <rect x="6" y="110" width="104" height="2" fill="#c9d0d8"/>
-        <!-- zderzak z chromem -->
         <rect x="6" y="120" width="104" height="8" fill="#2a2e34"/>
         <rect x="4" y="128" width="110" height="3" fill="#c9d0d8"/>
         <g fill="#5c646e"><rect x="12" y="122" width="3" height="4"/><rect x="22" y="122" width="3" height="4"/><rect x="32" y="122" width="3" height="4"/><rect x="42" y="122" width="3" height="4"/><rect x="52" y="122" width="3" height="4"/><rect x="62" y="122" width="3" height="4"/><rect x="72" y="122" width="3" height="4"/><rect x="82" y="122" width="3" height="4"/><rect x="92" y="122" width="3" height="4"/></g>
-        <!-- reflektory -->
         <circle cx="10" cy="107" r="16" fill="url(#gLamp)" opacity=".7"/>
         <rect x="5" y="104" width="10" height="7" rx="2" fill="#fff6cf"/>
         <rect x="5" y="129" width="12" height="14" rx="2" fill="#7f8792"/>
         <rect x="4" y="138" width="110" height="8" rx="3" fill="#3a3f47"/>
-        <!-- lusterko -->
         <rect x="112" y="78" width="4" height="30" rx="1" fill="#2a2e34"/>
         <rect x="108" y="74" width="10" height="8" rx="2" fill="#2a2e34"/>
         <rect x="40" y="148" width="30" height="4" rx="1" fill="#8b929c"/>
 
-        <!-- koła -->
         <use href="#wheel" transform="translate(44 164)"/>
         <use href="#wheel" transform="translate(150 164)"/>
         <use href="#wheel" transform="translate(206 164)"/>
@@ -409,7 +393,7 @@ function renderBar(c){
   track.style.animation = 'sc ' + dur + 's linear infinite';
 }
 
-/* ---------- sondaż (logika 1:1 z sondaz_tv.html) ---------- */
+/* ---------- sondaż pełnoekranowy ---------- */
 let timers = [], ht;
 function shade(h){const m=/^#?([0-9a-f]{6})$/i.exec(h||'');if(!m)return h;const n=parseInt(m[1],16);
   return 'rgb('+Math.round((n>>16&255)*.7)+','+Math.round((n>>8&255)*.7)+','+Math.round((n&255)*.7)+')'}
@@ -450,7 +434,6 @@ function hidePoll(quiet){
   if ($('pstage').classList.contains('on')) { $('pstage').className = 'off'; timers = [setTimeout(() => {$('pstage').className = ''}, 800)]; }
 }
 
-
 /* ---------- reklamy: pliki /ads/1.mp4, 2.mp4 … (numerycznie) ---------- */
 const PREVIEW = false; // podgląd w panelu też ma dźwięk (panel jest w przeglądarce, nie w OBS)
 let adList = [], adScan = 0, adQueue = [], adCfg = {volume: 100}, adRot = 0, lastAdSeq = null, lastSlot = null;
@@ -490,10 +473,10 @@ async function autoAd(slot){
 
 /* ---------- przerwa / zaraz wracamy (+ podgląd: ?demo=break lub ?demo=brb) ---------- */
 const DEMO = new URLSearchParams(location.search).get('demo');
+let skew = 0; // różnica zegara serwera i przeglądarki (ms)
 let brk = null, brkTotal = 1, brkKey = '', bmVol = 0, bmT = null, bmKind = '', bmSig = '';
 const bm = new Audio(); bm.loop = true; bm.muted = PREVIEW;
 let useGen = false, gen = null;
-// brak plików mp3 w /assets -> muzyka generowana w przeglądarce (działa też w OBS)
 function setVol(v){ bm.volume = v; if (gen) gen.gain.value = v * 0.35; }
 function ensureGen(){
   if (gen || PREVIEW) return;
@@ -513,7 +496,7 @@ function ensureGen(){
 }
 bm.onerror = () => {
   if (!bm.src.endsWith('/assets/muzyka.mp3')) return;
-  useGen = true; ensureGen(); // brak muzyka.mp3 -> generowane tło
+  useGen = true; ensureGen();
 };
 for (let i = 0; i < 20; i++) { const p = document.createElement('i'), z = 4 + Math.random()*8; p.style.cssText = 'left:'+Math.random()*100+'%;width:'+z+'px;height:'+z+'px;animation-duration:'+(10+Math.random()*14)+'s;animation-delay:-'+Math.random()*20+'s;opacity:'+(.2+Math.random()*.5); $('bkp').appendChild(p); }
 function bmGo(want, vol, kind){
@@ -549,7 +532,6 @@ function brkTick(){
     $('bklab').textContent = s ? 'odliczanie do godziny ' + fmt.format(new Date(end)) : 'już za chwilę';
     $('brk').classList.toggle('zero', !s);
   } else {
-    // bez odliczania: zamiast kropek pokazujemy aktualną godzinę
     $('bkdig').textContent = fmt.format(new Date()); $('bkdig').style.fontSize = '130px';
     $('bkarc').style.strokeDashoffset = 0; $('bklab').textContent = 'aktualny czas'; $('brk').classList.remove('zero');
   }
@@ -564,20 +546,42 @@ let barSig = '', lastSeq = null;
 try { const v = localStorage.getItem('overlay_poll_seq'); if (v !== null) lastSeq = +v; } catch (e) {}
 const setSeq = s => { lastSeq = s; try { localStorage.setItem('overlay_poll_seq', String(s)); } catch (e) {} };
 
-let ltPrev = false, ltT = null, ltForceOff = false; // plansza rozmówcy
+let ltPrev = false, ltT = null, ltForceOff = false;
 function setVis(id, on){ $(id).classList.toggle('off', !on); }
 function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('pollwrap', false); setAge(AGE_URL || 0); renderBreak(null); }
 
-/* zbiórka: % = wartość bazowa + 1% co N sekund (liczone wg czasu serwera); teksty wpisane na stałe w HTML */
-let fund = null, skew = 0, qrOk = false;
+/* ---------- QR: działa niezależnie od zbiórki (s.qr.visible) ---------- */
+let fund = null, qrOk = false, qrCfg = {visible: false}, fundSig = '';
 const qr = $('fqr'); let qrTries = 0;
-qr.onload = () => { qrOk = true; showQr(); };
+qr.onload = () => { qrOk = true; showQr(); fitPoll(); };
 qr.onerror = () => { qrOk = false; showQr(); if (qrTries++ < 4) setTimeout(() => { qr.src = '/assets/kodqr.png?r=' + Date.now(); }, 1500); };
 qr.src = '/assets/kodqr.png';
 function showQr(){
-  const on = !!(fund && fund.showQr && qrOk);
+  const on = !!(qrCfg && qrCfg.visible && qrOk);
   $('fqrbox').classList.toggle('hide', !on);
-  $('scene').style.setProperty('--lx', (on && fund.visible) ? '169px' : '0px'); // plansza rozmówcy omija QR
+  $('scene').style.setProperty('--lx', on ? '169px' : '0px'); // plansza rozmówcy omija QR
+}
+
+/* ---------- zbiórka: teksty z panelu, dopasowane do szerokości karty ---------- */
+function fitFund(){
+  const W = $('fcard').clientWidth || 416;
+  const l1 = $('fl1'), l2 = $('fl2'), am = $('fam'), sm = am.querySelector('small'), row = $('frow');
+  l1.style.fontSize = ''; l2.style.fontSize = ''; am.style.fontSize = ''; if (sm) sm.style.fontSize = '';
+  if (l2.scrollWidth > W) l2.style.fontSize = Math.max(12, 40 * W / l2.scrollWidth) + 'px';
+  if (row.scrollWidth > W) {
+    const k = W / row.scrollWidth;
+    l1.style.fontSize = (24 * k) + 'px'; am.style.fontSize = (51 * k) + 'px'; if (sm) sm.style.fontSize = (32 * k) + 'px';
+  }
+}
+function applyFundText(f){
+  const sig = [f.line1, f.amount, f.line2].join('|');
+  if (sig === fundSig) return; fundSig = sig;
+  $('fl1').textContent = f.line1 || '';
+  const a = String(f.amount || '').trim(), m = /^(.*?)\s*(zł)$/i.exec(a), am = $('fam');
+  am.textContent = m ? m[1] : a;
+  if (m) { const s = document.createElement('small'); s.textContent = 'zł'; am.appendChild(s); }
+  $('fl2').textContent = f.line2 || ''; $('fl2').style.display = f.line2 ? '' : 'none';
+  fitFund();
 }
 function fundPct(){
   if (!fund) return 0;
@@ -590,7 +594,7 @@ function renderFund(){ const p = fundPct(); $('fpct').textContent = p + '%'; $('
   lastFundP = p; }
 setInterval(renderFund, 500);
 
-/* oznaczenie wieku: stan serwera s.age = {visible, rating} albo ?age=12 w adresie overlayu */
+/* ---------- oznaczenie wieku: s.age = {visible, rating} albo ?age=12 w adresie ---------- */
 const AGE_OK = [7, 12, 16, 18], AGE_URL = +(new URLSearchParams(location.search).get('age')) || 0;
 const ageImg = $('ageimg'); let ageShown = 0;
 function setAge(r){
@@ -602,15 +606,29 @@ function setAge(r){
 }
 ageImg.onerror = () => { ageShown = 0; setVis('agewrap', false); $('scene').style.setProperty('--pt', '43px'); };
 
-let barHide = false; // czy pasek działa w wersji bez czerwonego tytułu
+/* ---------- ankieta na żywo: skalowanie, żeby nie wchodziła na QR / planszę / pasek ---------- */
+let barMb = 43, barBh = 214;
+function fitPoll(){
+  const box = $('lpbox'), h = box.offsetHeight; if (!h) return;
+  const top = ageShown ? 129 : 43;
+  const qrOn = !$('qrwrap').classList.contains('off') && !$('fqrbox').classList.contains('hide');
+  const ltOn = !$('ltwrap').classList.contains('off');
+  const extra = Math.max(qrOn ? $('fqrbox').offsetHeight : 0, ltOn ? $('ltwrap').offsetHeight : 0);
+  const reserve = barMb + barBh + (extra ? 14 + extra : 0) + 14;
+  const k = Math.max(.5, Math.min(1, (1080 - top - reserve) / h));
+  box.style.transform = k < 1 ? 'scale(' + k.toFixed(3) + ')' : '';
+}
+
+let barHide = false;
 function apply(s){
   skew = Date.parse(s.serverNow) - Date.now();
   // każdy moduł osobno, żeby błąd w jednym nie blokował pozostałych
   try {
     const b = s.bar, sig = JSON.stringify([b.line1, b.line2, b.news, b.speed]);
     const sc = $('scene');
+    barMb = +b.marginBottom || 0; barBh = !b.visible ? 0 : b.hideHead ? 57 : 214;
     sc.style.setProperty('--ox', b.offsetX + 'px'); sc.style.setProperty('--mb', b.marginBottom + 'px');
-    sc.style.setProperty('--bh', (!b.visible ? 0 : b.hideHead ? 57 : 214) + 'px');
+    sc.style.setProperty('--bh', barBh + 'px');
     $('barwrap').classList.toggle('nohead', !!b.hideHead);
     barHide = !!(b.visible && b.hideHead);
     if (sig !== barSig) { barSig = sig; renderBar(b); }
@@ -626,10 +644,15 @@ function apply(s){
 
   try {
     const f = s.fund; fund = f;
-    showQr(); renderFund();
+    applyFundText(f); renderFund();
     setVis('fundwrap', !!f.visible);
-    setVis('qrwrap', !!f.visible);
   } catch (e) { console.error('zbiórka', e); }
+
+  try {
+    qrCfg = s.qr || {visible: false};
+    setVis('qrwrap', !!qrCfg.visible);
+    showQr();
+  } catch (e) { console.error('qr', e); }
 
   try { const a = s.age; setAge(AGE_URL || (a && a.visible ? a.rating : 0)); } catch (e) { console.error('wiek', e); }
 
@@ -644,7 +667,7 @@ function apply(s){
       const on = !!l.visible;
       if (on && !ltPrev) {
         ltForceOff = false; clearTimeout(ltT);
-        if (+l.hideAfter > 0) ltT = setTimeout(() => { ltForceOff = true; setVis('ltwrap', false); }, l.hideAfter * 1000);
+        if (+l.hideAfter > 0) ltT = setTimeout(() => { ltForceOff = true; setVis('ltwrap', false); fitPoll(); }, l.hideAfter * 1000);
       }
       if (!on) { clearTimeout(ltT); ltForceOff = false; }
       ltPrev = on;
@@ -677,6 +700,8 @@ function apply(s){
       lastSlot = slot;
     } else lastSlot = null;
   } catch (e) { console.error('reklamy', e); }
+
+  try { fitPoll(); } catch (e) { console.error('dopasowanie ankiety', e); }
 }
 async function poll(){
   if (DEMO) { if (!brk) renderBreak({visible: true, kind: DEMO === 'brb' ? 'brb' : 'break', endsAt: new Date(Date.now() + 300000).toISOString(), footer: 'jeden.tv'}); return; }
@@ -687,7 +712,7 @@ async function poll(){
     apply(await r.json());
   } catch (e) { /* chwilowy brak sieci – zostawiamy stan jak jest */ }
 }
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { barSig = ''; });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { barSig = ''; fundSig = ''; });
 poll(); setInterval(poll, 2000);
 
 /* ---------- wykres kołowy: wyniki ankiety na żywo (odświeżanie co 12 s) ---------- */
@@ -716,7 +741,6 @@ function lpRender(d){
     c.style.stroke = tot ? col : '#2a3b5c';
     c.style.strokeDasharray = Math.max(0, frac * LP_C - (slices.length > 1 ? 1.5 : 0)) + ' ' + LP_C;
     c.style.strokeDashoffset = -cum * LP_C;
-    // etykieta procentowa w środku wycinka (tylko duże wycinki)
     const mid = (cum + frac / 2) * 2 * Math.PI, pct = Math.round(frac * 100);
     t.setAttribute('x', (100 + 72 * Math.cos(mid)).toFixed(2));
     t.setAttribute('y', (100 + 72 * Math.sin(mid)).toFixed(2));
@@ -734,6 +758,7 @@ function lpRender(d){
   }).join('');
   $('lptot').textContent = 'Oddano głosów: ' + tot;
   $('lpurl').textContent = 'Głosuj: ' + location.host + '/glosuj';
+  fitPoll();
 }
 async function livePoll(){
   if (DEMO || !KEY) return;
