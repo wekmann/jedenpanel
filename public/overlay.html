@@ -212,7 +212,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
   </div>
 
   <div id="qrwrap" class="off">
-    <div id="fqrbox"><img id="fqr" alt=""></div>
+    <div id="fqrbox" class="hide"><img id="fqr" alt=""></div>
   </div>
 
   <div id="ltwrap" class="off">
@@ -570,7 +570,10 @@ function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis
 
 /* zbiórka: % = wartość bazowa + 1% co N sekund (liczone wg czasu serwera); teksty wpisane na stałe w HTML */
 let fund = null, skew = 0, qrOk = false;
-const qr = $('fqr'); qr.onload = () => { qrOk = true; showQr(); }; qr.onerror = () => { qrOk = false; showQr(); }; qr.src = '/assets/kodqr.png';
+const qr = $('fqr'); let qrTries = 0;
+qr.onload = () => { qrOk = true; showQr(); };
+qr.onerror = () => { qrOk = false; showQr(); if (qrTries++ < 4) setTimeout(() => { qr.src = '/assets/kodqr.png?r=' + Date.now(); }, 1500); };
+qr.src = '/assets/kodqr.png';
 function showQr(){
   const on = !!(fund && fund.showQr && qrOk);
   $('fqrbox').classList.toggle('hide', !on);
@@ -599,6 +602,7 @@ function setAge(r){
 }
 ageImg.onerror = () => { ageShown = 0; setVis('agewrap', false); $('scene').style.setProperty('--pt', '43px'); };
 
+let barHide = false; // czy pasek działa w wersji bez czerwonego tytułu
 function apply(s){
   skew = Date.parse(s.serverNow) - Date.now();
   // każdy moduł osobno, żeby błąd w jednym nie blokował pozostałych
@@ -608,6 +612,7 @@ function apply(s){
     sc.style.setProperty('--ox', b.offsetX + 'px'); sc.style.setProperty('--mb', b.marginBottom + 'px');
     sc.style.setProperty('--bh', (!b.visible ? 0 : b.hideHead ? 57 : 214) + 'px');
     $('barwrap').classList.toggle('nohead', !!b.hideHead);
+    barHide = !!(b.visible && b.hideHead);
     if (sig !== barSig) { barSig = sig; renderBar(b); }
     setVis('barwrap', !!b.visible);
   } catch (e) { console.error('pasek', e); }
@@ -643,7 +648,7 @@ function apply(s){
       }
       if (!on) { clearTimeout(ltT); ltForceOff = false; }
       ltPrev = on;
-      setVis('ltwrap', on && !ltForceOff); $('scene').style.setProperty('--fbh', on && !ltForceOff ? '57px' : '');
+      setVis('ltwrap', on && !ltForceOff); $('scene').style.setProperty('--fbh', on && !ltForceOff && barHide ? '57px' : '');
     } else { ltPrev = false; setVis('ltwrap', false); $('scene').style.setProperty('--fbh', ''); }
   } catch (e) { console.error('plansza', e); }
 
