@@ -12,8 +12,8 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #scene{position:relative;width:1920px;height:1080px;overflow:hidden;background:transparent}
 
 /* ===== PASEK DOLNY (jeden_pasek_calosc.html) ===== */
-#barwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:var(--mb,43px);transition:transform .6s var(--ease)}
-#barwrap.off{transform:translateY(calc(100% + var(--mb,43px) + 30px))}
+#barwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:var(--mb,43px);transition:transform .6s var(--ease),opacity .5s ease}
+#barwrap.off{opacity:0;transform:translateY(calc(100% + var(--mb,43px) + 30px))}
 #root{position:relative;width:1662px;height:214px;display:grid;grid-template-columns:155px 1507px;grid-template-rows:157px 57px}
 #logo{background:#0a1a2e url(/assets/jeden_logo.png) center/cover no-repeat}
 #clock{background:#081742;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
@@ -32,55 +32,78 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes sc{to{transform:translateX(-50%)}}
 
 #barwrap.nohead #logo,#barwrap.nohead #head{display:none}
+#barwrap:not(.off) #root{animation:barin .7s var(--ease)}
+@keyframes barin{from{filter:brightness(1.6)}to{filter:none}}
 #barwrap.nohead #root{grid-template-rows:57px;height:57px}
 
 /* ===== PLAKIETKA NA ŻYWO (live_badge_v2.html) ===== */
-#livewrap{position:absolute;top:var(--lt,43px);right:var(--lr,53px);height:64px;transition:transform .6s var(--ease)}
-#livewrap.off{transform:translateX(calc(100% + var(--lr,53px) + 30px))}
+#livewrap{position:absolute;top:var(--lt,43px);right:var(--lr,53px);height:64px;transition:transform .6s var(--ease),opacity .5s ease}
+#livewrap.off{opacity:0;transform:translateX(calc(100% + var(--lr,53px) + 30px))}
 .livebadge{box-sizing:border-box;width:100%;height:100%;padding:0 30px;display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(90deg,#8d1123,#a3162a 55%,#c21c28);border-radius:8px;font-family:Arial,Helvetica,sans-serif;box-shadow:0 6px 14px rgba(0,0,0,.45);position:relative;overflow:hidden}
 .ldot{width:14px;height:14px;border-radius:50%;background-color:#fff;box-shadow:0 0 8px rgba(255,255,255,.7);flex-shrink:0;animation:ldp 1.2s ease-in-out infinite}
 @keyframes ldp{50%{transform:scale(1.4);opacity:.55}}
 .ltxt{color:#fff;font-size:26px;font-weight:800;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.4)}
 
-/* ===== WYNIKI ANKIETY NA ŻYWO – wykres kołowy, lewy górny róg ===== */
-#pollwrap{position:absolute;top:var(--pt,43px);left:53px;width:440px;transition:transform .6s var(--ease),top .4s var(--ease)}
-#pollwrap.off{transform:translateX(calc(-100% - 53px - 30px))}
-#lpbox{background:#0e1c33;border-radius:0 18px 14px 14px;box-shadow:0 8px 22px rgba(0,0,0,.5);overflow:hidden}
-#lphead{background:#d60f08;border-bottom:5px solid #7a0000;padding:10px 20px;display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;letter-spacing:1px;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,.35)}
-.lpdot{width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.7);animation:lpp 1.4s ease-in-out infinite}
+/* ===== WYNIKI ANKIETY NA ŻYWO – wykres kołowy z procentami, lewy górny róg ===== */
+#pollwrap{position:absolute;top:var(--pt,43px);left:53px;width:460px;transition:transform .6s var(--ease),opacity .5s ease,top .4s var(--ease)}
+#pollwrap.off{opacity:0;transform:translateX(calc(-100% - 53px - 30px))}
+#lpbox{background:linear-gradient(170deg,#13233f,#0a1426 70%);border-radius:0 22px 22px 22px;box-shadow:0 14px 34px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.06);overflow:hidden;color:#fff;font-family:'Roboto Condensed',Arial,sans-serif}
+#lphead{background:linear-gradient(90deg,#8d1123,#a3162a 55%,#c21c28);padding:12px 22px;display:flex;align-items:center;gap:12px;font-size:21px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,.35);position:relative}
+#lphead::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:#fff;opacity:.85}
+.lpdot{width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.8);animation:lpp 1.4s ease-in-out infinite}
 #lphead.end .lpdot{animation:none}
-@keyframes lpp{50%{opacity:.3}}
-#lptitle{padding:14px 20px 0;font-size:25px;font-weight:800;line-height:1.2;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-#lppie{display:block;width:230px;height:230px;margin:10px auto 4px}
+@keyframes lpp{50%{transform:scale(1.35);opacity:.45}}
+#lptitle{padding:16px 22px 0;font-size:26px;font-weight:700;line-height:1.2;text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#lpchart{position:relative;width:250px;height:250px;margin:12px auto 6px}
+#lppie{display:block;width:100%;height:100%;overflow:visible}
 #lpslices circle{fill:none;stroke-width:100;transition:stroke-dasharray 1s var(--ease),stroke-dashoffset 1s var(--ease),stroke .4s}
-#lplegend{padding:4px 20px 8px}
-.lpr{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:22px;font-weight:700}
-.lpc{width:16px;height:16px;border-radius:4px;flex-shrink:0}
+#lplabels text{font-family:'Roboto Condensed',Arial,sans-serif;font-size:19px;font-weight:700;fill:#fff;text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:rgba(0,0,0,.45);stroke-width:4px;letter-spacing:.3px;transition:opacity .5s}
+#lpcenter{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+#lpcenter b{font-size:14px;letter-spacing:2px;color:#9fb2d4;text-transform:uppercase;font-weight:700}
+#lpcenter span{font-size:30px;font-weight:700;text-transform:uppercase;line-height:1.05;text-align:center;max-width:130px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#lplegend{padding:6px 22px 4px}
+.lpr{padding:7px 0}
+.lpl{display:flex;align-items:center;gap:10px;font-size:23px;font-weight:700}
+.lpc{width:14px;height:14px;border-radius:4px;flex-shrink:0;box-shadow:0 0 8px currentColor}
 .lpn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lpp{font-variant-numeric:tabular-nums}
-.lpv{color:#9fb2d4;font-size:18px;font-weight:400;min-width:44px;text-align:right;font-variant-numeric:tabular-nums}
-#lpfoot{display:flex;justify-content:space-between;gap:10px;padding:10px 20px 14px;font-size:18px;color:#9fb2d4;border-top:1px solid #2a3b5c}
+.lpp{font-variant-numeric:tabular-nums;font-size:26px;font-weight:700}
+.lpbar{height:6px;border-radius:4px;background:rgba(255,255,255,.08);margin-top:6px;overflow:hidden}
+.lpbar i{display:block;height:100%;width:0;border-radius:4px;transition:width 1s var(--ease)}
+#lpfoot{display:flex;justify-content:space-between;gap:10px;padding:12px 22px 14px;font-size:17px;color:#9fb2d4;border-top:1px solid rgba(255,255,255,.08);margin-top:8px;letter-spacing:.5px}
 
 /* ===== QR (nad logiem JEDEN, lewa krawędź i szerokość równo z logiem) ===== */
-#qrwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + 14px);transition:transform .6s var(--ease)}
-#qrwrap.off{transform:translateX(calc(-100% - 129px - 60px))}
-#fqrbox{box-sizing:border-box;width:155px;background:#fff;padding:8px;box-shadow:0 6px 14px rgba(0,0,0,.45);display:none}
+#qrwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + 14px);transition:transform .6s var(--ease),opacity .5s ease}
+#qrwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - 60px))}
+#fqrbox{box-sizing:border-box;width:155px;background:#fff;padding:8px;box-shadow:0 6px 14px rgba(0,0,0,.45);transition:opacity .45s ease,transform .6s var(--ease);transform-origin:50% 100%}
+#fqrbox.hide{opacity:0;transform:translateY(18px) scale(.9);pointer-events:none}
 #fqr{display:block;width:100%;height:auto}
 
 /* ===== PLANSZA ROZMÓWCY / LOWER THIRD (nad paskiem, od lewej; omija QR gdy ten jest widoczny) ===== */
-#ltwrap{position:absolute;left:calc(129px + var(--ox,0px) + var(--lx,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + 14px);max-width:940px;transition:transform .6s var(--ease),left .4s var(--ease)}
-#ltwrap.off{transform:translateX(calc(-100% - 129px - var(--lx,0px) - 60px))}
-#ltbox{display:flex;flex-direction:column;align-items:flex-start;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
-#ltname{position:relative;box-sizing:border-box;max-width:100%;background:#d60f08;color:#fff;font-size:44px;font-weight:800;text-transform:uppercase;letter-spacing:-.5px;line-height:1.2;padding:10px 40px 10px 28px;border-radius:0 18px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 4px rgba(0,0,0,.35);border-bottom:5px solid #7a0000}
+#ltwrap{position:absolute;left:calc(129px + var(--ox,0px) + var(--lx,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + 14px);max-width:940px;transition:transform .6s var(--ease),opacity .5s ease,left .4s var(--ease)}
+#ltwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - var(--lx,0px) - 60px))}
+#ltbox{display:flex;flex-direction:column;align-items:flex-start;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
+#ltwrap:not(.off) #ltbox{animation:ltin .7s var(--ease)}
+@keyframes ltin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+#ltname{position:relative;box-sizing:border-box;max-width:100%;background:linear-gradient(90deg,#9e0c05,#d60f08 60%,#ea3f26);color:#fff;font-size:46px;font-weight:800;text-transform:uppercase;letter-spacing:-.3px;line-height:1.15;padding:12px 44px 12px 30px;border-radius:0 20px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 6px rgba(0,0,0,.4);border-bottom:5px solid #5e0000;font-family:'Roboto Condensed',Arial,sans-serif}
 #ltname::after{content:"";position:absolute;top:0;bottom:0;width:70px;left:-90px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:ltshine 3.5s ease-in-out infinite}
 @keyframes ltshine{0%{left:-90px}50%,100%{left:110%}}
-#ltrole{box-sizing:border-box;max-width:100%;background:#16305c;color:#fff;font-size:26px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;line-height:1.2;padding:9px 40px 9px 28px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ltrole{box-sizing:border-box;max-width:100%;background:linear-gradient(90deg,#0e2347,#16305c);color:#e8eef9;font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;line-height:1.2;padding:9px 40px 9px 30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:6px solid #d60f08;font-family:'Roboto Condensed',Arial,sans-serif}
 
 /* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem; rozmiary w px, bez zoom/transform – ostry tekst w OBS) ===== */
-#fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + 14px);display:flex;align-items:flex-end;transition:transform .6s var(--ease)}
-#fundwrap.off{transform:translateX(calc(100% + 500px))}
+#fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + var(--fbh,var(--bh,214px)) + 14px);display:flex;align-items:flex-end;transition:transform .6s var(--ease),opacity .5s ease,bottom .6s var(--ease)}
+#fundwrap.off{opacity:0;transform:translateX(calc(100% + 500px))}
+#fundwrap:not(.off) #fcard{animation:fin .7s var(--ease)}
+@keyframes fin{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
 #fcard{position:relative;width:416px;font-family:'Oswald','Bahnschrift','Roboto Condensed','Arial Narrow',Impact,Arial,sans-serif;text-transform:uppercase;filter:drop-shadow(0 4px 8px rgba(0,0,0,.55))}
 #ftruck{display:block;width:100%;height:auto;margin-bottom:-6px}
+#fsig path{opacity:0;animation:fsig 1.8s ease-out infinite}
+#fsig path:nth-child(2){animation-delay:.3s}#fsig path:nth-child(3){animation-delay:.6s}
+@keyframes fsig{0%{opacity:0}30%{opacity:.9}100%{opacity:0}}
+#frec{animation:frec 1s steps(2,jump-none) infinite}
+@keyframes frec{50%{opacity:.15}}
+#fled rect{animation:fled 1.2s linear infinite}
+#fled rect:nth-child(3n+1){animation-delay:-.4s}#fled rect:nth-child(3n+2){animation-delay:-.8s}
+@keyframes fled{0%,100%{opacity:.25}50%{opacity:1}}
 #fdish{transform-origin:420px 62px;animation:fdish 7s ease-in-out infinite}
 @keyframes fdish{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
 #frow{position:relative;display:flex;align-items:baseline;justify-content:space-between;gap:6px;white-space:nowrap;line-height:1}
@@ -99,8 +122,8 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #fpct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:29px;font-weight:700;color:#fff;text-shadow:0 0 3px #000,0 1px 3px rgba(0,0,0,.9)}
 
 /* ===== OZNACZENIE WIEKU (lewy górny róg; pliki /assets/wiek_7.png, wiek_12.png, wiek_16.png, wiek_18.png) ===== */
-#agewrap{position:absolute;top:43px;left:53px;height:72px;transition:transform .6s var(--ease)}
-#agewrap.off{transform:translateX(calc(-100% - 53px - 30px))}
+#agewrap{position:absolute;top:43px;left:53px;height:72px;transition:transform .6s var(--ease),opacity .5s ease}
+#agewrap.off{opacity:0;transform:translateX(calc(-100% - 53px - 30px))}
 #ageimg{display:block;height:100%;width:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45))}
 
 /* ===== REKLAMY (pełny ekran, pliki public/ads/1.mp4, 2.mp4 …) ===== */
@@ -206,15 +229,16 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
     <div id="fcard">
       <svg id="ftruck" viewBox="0 0 560 190" aria-hidden="true">
         <defs>
-          <linearGradient id="gTr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a74ff"/><stop offset=".4" stop-color="#2d52d6"/><stop offset="1" stop-color="#14297a"/></linearGradient>
-          <linearGradient id="gCab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#e6eaef"/><stop offset="1" stop-color="#aeb6c0"/></linearGradient>
-          <linearGradient id="gGl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a5680"/><stop offset=".5" stop-color="#1b2a45"/><stop offset="1" stop-color="#0c1424"/></linearGradient>
+          <linearGradient id="gTr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f6bff"/><stop offset=".45" stop-color="#2447c9"/><stop offset="1" stop-color="#101f63"/></linearGradient>
+          <linearGradient id="gCab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#e3e8ee"/><stop offset="1" stop-color="#9aa3ae"/></linearGradient>
           <linearGradient id="gDish" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3f6f9"/><stop offset="1" stop-color="#8d949e"/></linearGradient>
-          <linearGradient id="gChassis" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b626c"/><stop offset="1" stop-color="#2a2f36"/></linearGradient>
-          <linearGradient id="gRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d1123"/><stop offset=".5" stop-color="#d60f08"/><stop offset="1" stop-color="#8d1123"/></linearGradient>
+          <linearGradient id="gChassis" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b626c"/><stop offset="1" stop-color="#262a31"/></linearGradient>
+          <linearGradient id="gRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d1123"/><stop offset=".5" stop-color="#ff3b3b"/><stop offset="1" stop-color="#8d1123"/></linearGradient>
+          <linearGradient id="gShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".4"/></linearGradient>
+          <linearGradient id="gSheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
           <radialGradient id="gRim" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#b9c0c9"/><stop offset="1" stop-color="#5d646e"/></radialGradient>
           <radialGradient id="gLamp" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fffbe0"/><stop offset=".6" stop-color="#ffd76a"/><stop offset="1" stop-color="#ffd76a" stop-opacity="0"/></radialGradient>
-          <linearGradient id="gShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient>
+          <clipPath id="clTr"><rect x="150" y="66" width="404" height="90" rx="7"/></clipPath>
           <g id="wheel">
             <circle r="23" fill="#0d0d0d"/>
             <circle r="22" fill="none" stroke="#2c2c2c" stroke-width="2" stroke-dasharray="3 3"/>
@@ -228,8 +252,13 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
         <!-- cień na ziemi -->
         <ellipse cx="282" cy="182" rx="272" ry="7" fill="#000" opacity=".4"/>
 
-        <!-- antena satelitarna -->
+        <!-- antena satelitarna z falami sygnału -->
         <polygon points="412,56 428,56 425,72 415,72" fill="#6b7078"/>
+        <g id="fsig" fill="none" stroke="#7fd8ff" stroke-width="2.5" stroke-linecap="round">
+          <path d="M452 22 Q462 34 452 46"/>
+          <path d="M458 14 Q474 34 458 54"/>
+          <path d="M464 6 Q486 34 464 62"/>
+        </g>
         <g id="fdish">
           <ellipse cx="420" cy="34" rx="37" ry="29" fill="url(#gDish)" stroke="#5b6068" stroke-width="3"/>
           <ellipse cx="420" cy="34" rx="27" ry="20" fill="#767c85"/>
@@ -238,65 +267,58 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
           <circle cx="439" cy="7" r="4" fill="#4a4f56"/>
         </g>
 
-        <!-- dach naczepy: kanały i lampy -->
-        <rect x="196" y="56" width="46" height="12" rx="2" fill="#1f3c9e"/>
-        <rect x="256" y="58" width="22" height="9" rx="2" fill="#16308c"/>
-        <rect x="160" y="60" width="18" height="6" rx="2" fill="#ffb12b"/>
-        <rect x="186" y="60" width="18" height="6" rx="2" fill="#ffb12b"/>
+        <!-- maszt kamery z migającą lampką -->
+        <rect x="236" y="54" width="6" height="12" fill="#4a4f56"/>
+        <rect x="226" y="44" width="26" height="12" rx="2" fill="#2a2e34"/>
+        <circle id="frec" cx="232" cy="50" r="3" fill="#ff3b3b"/>
 
         <!-- korpus naczepy -->
         <rect x="150" y="66" width="404" height="90" rx="7" fill="url(#gTr)"/>
-        <rect x="150" y="66" width="404" height="6" rx="3" fill="#7d9bff" opacity=".55"/>
-        <rect x="150" y="66" width="404" height="90" rx="7" fill="url(#gShade)"/>
+        <g clip-path="url(#clTr)">
+          <!-- ukośne pasy w stylu wyścigowym -->
+          <g fill="#ffffff" opacity=".07"><polygon points="170,66 200,66 170,156 150,156 150,116"/><polygon points="210,66 226,66 196,156 180,156"/><polygon points="236,66 244,66 214,156 206,156"/></g>
+          <rect x="150" y="66" width="404" height="90" fill="url(#gSheen)"/>
+          <rect x="150" y="66" width="404" height="90" fill="url(#gShade)"/>
+        </g>
+        <!-- pionowe żebra -->
+        <g fill="#0b1a4d" opacity=".5"><rect x="176" y="72" width="2" height="48"/><rect x="216" y="72" width="2" height="48"/><rect x="256" y="72" width="2" height="48"/><rect x="296" y="72" width="2" height="48"/><rect x="336" y="72" width="2" height="48"/><rect x="376" y="72" width="2" height="48"/><rect x="416" y="72" width="2" height="48"/><rect x="456" y="72" width="2" height="48"/><rect x="496" y="72" width="2" height="48"/></g>
+        <!-- listwa LED na górze -->
+        <rect x="150" y="66" width="404" height="5" rx="2" fill="#0a1638"/>
+        <g id="fled" fill="#ffb12b">
+          <rect x="158" y="67" width="8" height="3" rx="1"/><rect x="172" y="67" width="8" height="3" rx="1"/><rect x="186" y="67" width="8" height="3" rx="1"/><rect x="200" y="67" width="8" height="3" rx="1"/><rect x="214" y="67" width="8" height="3" rx="1"/><rect x="228" y="67" width="8" height="3" rx="1"/><rect x="242" y="67" width="8" height="3" rx="1"/><rect x="256" y="67" width="8" height="3" rx="1"/><rect x="270" y="67" width="8" height="3" rx="1"/><rect x="284" y="67" width="8" height="3" rx="1"/><rect x="298" y="67" width="8" height="3" rx="1"/><rect x="312" y="67" width="8" height="3" rx="1"/><rect x="326" y="67" width="8" height="3" rx="1"/><rect x="340" y="67" width="8" height="3" rx="1"/><rect x="354" y="67" width="8" height="3" rx="1"/><rect x="368" y="67" width="8" height="3" rx="1"/><rect x="382" y="67" width="8" height="3" rx="1"/><rect x="396" y="67" width="8" height="3" rx="1"/><rect x="410" y="67" width="8" height="3" rx="1"/><rect x="424" y="67" width="8" height="3" rx="1"/><rect x="438" y="67" width="8" height="3" rx="1"/><rect x="452" y="67" width="8" height="3" rx="1"/><rect x="466" y="67" width="8" height="3" rx="1"/><rect x="480" y="67" width="8" height="3" rx="1"/><rect x="494" y="67" width="8" height="3" rx="1"/><rect x="508" y="67" width="8" height="3" rx="1"/><rect x="522" y="67" width="8" height="3" rx="1"/>
+        </g>
+        <!-- czerwony pas dolny i biała linia -->
         <rect x="150" y="118" width="404" height="4" fill="url(#gRed)"/>
         <rect x="150" y="132" width="404" height="24" fill="#122a78"/>
-        <rect x="150" y="130" width="404" height="3" fill="#5f84ff" opacity=".5"/>
-
-        <!-- logo na burcie -->
-        <text x="172" y="106" font-family="Oswald,'Arial Narrow',Impact,Arial,sans-serif" font-size="26" font-weight="700" fill="#ffffff" letter-spacing="3" opacity=".92">JEDEN</text>
-        <!-- kratka wentylacyjna -->
-        <g fill="#0f2166" opacity=".7"><rect x="236" y="84" width="4" height="26"/><rect x="244" y="84" width="4" height="26"/><rect x="252" y="84" width="4" height="26"/></g>
-
-        <!-- okna boczne -->
-        <g>
-          <rect x="296" y="86" width="38" height="36" rx="3" fill="url(#gGl)" stroke="#8fa6c8" stroke-width="1.5"/>
-          <rect x="350" y="86" width="58" height="36" rx="3" fill="url(#gGl)" stroke="#8fa6c8" stroke-width="1.5"/>
-          <rect x="418" y="86" width="58" height="36" rx="3" fill="url(#gGl)" stroke="#8fa6c8" stroke-width="1.5"/>
-          <rect x="486" y="86" width="58" height="36" rx="3" fill="url(#gGl)" stroke="#8fa6c8" stroke-width="1.5"/>
-          <path d="M356 88l14 0-12 32h-14z M424 88l14 0-12 32h-14z M492 88l14 0-12 32h-14z M302 88l10 0-9 32h-10z" fill="#fff" opacity=".14"/>
-        </g>
-
-        <!-- tylne drzwi i światła -->
+        <rect x="150" y="130" width="404" height="3" fill="#7d9bff" opacity=".5"/>
+        <!-- skrzynka generatora pod naczepą -->
+        <rect x="170" y="156" width="70" height="8" rx="2" fill="#2a2e34"/>
+        <rect x="446" y="156" width="70" height="8" rx="2" fill="#2a2e34"/>
+        <!-- tylne światła -->
         <rect x="548" y="80" width="6" height="70" rx="2" fill="#0c1a4f"/>
-        <rect x="548" y="138" width="6" height="8" fill="#ffb12b"/>
-        <rect x="150" y="84" width="4" height="12" fill="#ffb12b"/>
+        <rect x="548" y="138" width="6" height="8" fill="#ff3b3b"/>
+        <rect x="150" y="84" width="4" height="12" fill="#ff3b3b"/>
 
         <!-- podwozie -->
         <rect x="0" y="144" width="560" height="12" fill="url(#gChassis)"/>
         <rect x="0" y="154" width="560" height="3" fill="#1a1d22"/>
 
-        <!-- kabina -->
+        <!-- kabina (bez szyb) -->
         <path d="M4 146V98L24 58Q28 52 36 52H100Q110 52 110 62V146Z" fill="url(#gCab)" stroke="#7f8893" stroke-width="2"/>
-        <path d="M16 96L32 64H62V96Z" fill="url(#gGl)" stroke="#9fb3d1" stroke-width="1"/>
-        <path d="M18 92L30 68" stroke="#fff" stroke-width="2" opacity=".35"/>
-        <rect x="70" y="64" width="30" height="32" rx="2" fill="url(#gGl)" stroke="#9fb3d1" stroke-width="1"/>
-        <rect x="104" y="72" width="8" height="26" rx="2" fill="#2a2e34"/>
-        <!-- linia drzwi -->
-        <path d="M68 100V146" stroke="#8f98a3" stroke-width="1.5"/>
-        <rect x="90" y="108" width="10" height="3" rx="1.5" fill="#6b7480"/>
-        <!-- atrapa chłodnicy -->
+        <path d="M8 60Q24 56 36 56" stroke="#ffffff" stroke-width="2" fill="none" opacity=".8"/>
+        <rect x="6" y="110" width="104" height="2" fill="#c9d0d8"/>
+        <!-- zderzak z chromem -->
         <rect x="6" y="120" width="104" height="8" fill="#2a2e34"/>
+        <rect x="4" y="128" width="110" height="3" fill="#c9d0d8"/>
         <g fill="#5c646e"><rect x="12" y="122" width="3" height="4"/><rect x="22" y="122" width="3" height="4"/><rect x="32" y="122" width="3" height="4"/><rect x="42" y="122" width="3" height="4"/><rect x="52" y="122" width="3" height="4"/><rect x="62" y="122" width="3" height="4"/><rect x="72" y="122" width="3" height="4"/><rect x="82" y="122" width="3" height="4"/><rect x="92" y="122" width="3" height="4"/></g>
         <!-- reflektory -->
         <circle cx="10" cy="107" r="16" fill="url(#gLamp)" opacity=".7"/>
         <rect x="5" y="104" width="10" height="7" rx="2" fill="#fff6cf"/>
         <rect x="5" y="129" width="12" height="14" rx="2" fill="#7f8792"/>
-        <!-- zderzak -->
         <rect x="4" y="138" width="110" height="8" rx="3" fill="#3a3f47"/>
         <!-- lusterko -->
         <rect x="112" y="78" width="4" height="30" rx="1" fill="#2a2e34"/>
         <rect x="108" y="74" width="10" height="8" rx="2" fill="#2a2e34"/>
-        <!-- schodek -->
         <rect x="40" y="148" width="30" height="4" rx="1" fill="#8b929c"/>
 
         <!-- koła -->
@@ -319,7 +341,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
   <div id="pollwrap" class="off"><div id="lpbox">
     <div id="lphead"><div class="lpdot"></div><span id="lpstat">Wyniki na żywo</span></div>
     <div id="lptitle"></div>
-    <svg id="lppie" viewBox="-4 -4 208 208" aria-hidden="true"><g transform="rotate(-90 100 100)" id="lpslices"></g><circle cx="100" cy="100" r="100" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"/></svg>
+    <div id="lpchart"><svg id="lppie" viewBox="-4 -4 208 208" aria-hidden="true"><g transform="rotate(-90 100 100)" id="lpslices"></g><g transform="rotate(-90 100 100)" id="lplabels"></g><circle cx="100" cy="100" r="100" fill="#0a1426" stroke="rgba(255,255,255,.18)" stroke-width="2"/></svg></div>
     <div id="lplegend"></div>
     <div id="lpfoot"><span id="lptot"></span><span id="lpurl"></span></div>
   </div></div>
@@ -550,7 +572,7 @@ let fund = null, skew = 0, qrOk = false;
 const qr = $('fqr'); qr.onload = () => { qrOk = true; showQr(); }; qr.onerror = () => { qrOk = false; showQr(); }; qr.src = '/assets/kodqr.png';
 function showQr(){
   const on = !!(fund && fund.showQr && qrOk);
-  $('fqrbox').style.display = on ? 'block' : 'none';
+  $('fqrbox').classList.toggle('hide', !on);
   $('scene').style.setProperty('--lx', (on && fund.visible) ? '169px' : '0px'); // plansza rozmówcy omija QR
 }
 function fundPct(){
@@ -620,8 +642,8 @@ function apply(s){
       }
       if (!on) { clearTimeout(ltT); ltForceOff = false; }
       ltPrev = on;
-      setVis('ltwrap', on && !ltForceOff);
-    } else { ltPrev = false; setVis('ltwrap', false); }
+      setVis('ltwrap', on && !ltForceOff); $('scene').style.setProperty('--fbh', on && !ltForceOff ? '57px' : '');
+    } else { ltPrev = false; setVis('ltwrap', false); $('scene').style.setProperty('--fbh', ''); }
   } catch (e) { console.error('plansza', e); }
 
   try {
@@ -663,35 +685,47 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { ba
 poll(); setInterval(poll, 2000);
 
 /* ---------- wykres kołowy: wyniki ankiety na żywo (odświeżanie co 12 s) ---------- */
-const LP_COL = ['#dc2626', '#2563eb', '#16a34a', '#f59e0b', '#7c3aed', '#0891b2', '#db2777', '#64748b'];
+const LP_COL = ['#ff4d5a', '#3b82f6', '#22c55e', '#f59e0b', '#a855f7', '#06b6d4', '#ec4899', '#94a3b8'];
 const LP_C = 2 * Math.PI * 50;
 const lpEsc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const SVGNS = 'http://www.w3.org/2000/svg';
 function lpRender(d){
   let rows = d.rows.slice().sort((a, b) => b.n - a.n);
   if (rows.length > 8) rows = rows.slice(0, 7).concat({name: 'Pozostałe', n: rows.slice(7).reduce((s, x) => s + x.n, 0)});
-  const tot = rows.reduce((s, x) => s + x.n, 0), g = $('lpslices');
+  const tot = rows.reduce((s, x) => s + x.n, 0), g = $('lpslices'), lab = $('lplabels');
   const slices = tot ? rows : [{name: '', n: 1}];
   while (g.children.length < slices.length) {
-    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    const c = document.createElementNS(SVGNS, 'circle');
     c.setAttribute('cx', 100); c.setAttribute('cy', 100); c.setAttribute('r', 50);
     c.style.strokeDasharray = '0 ' + LP_C; c.style.strokeDashoffset = '0';
     g.appendChild(c);
   }
   while (g.children.length > slices.length) g.removeChild(g.lastChild);
+  while (lab.children.length < slices.length) lab.appendChild(document.createElementNS(SVGNS, 'text'));
+  while (lab.children.length > slices.length) lab.removeChild(lab.lastChild);
   let cum = 0;
   slices.forEach((x, i) => {
-    const frac = x.n / (tot || 1), c = g.children[i];
-    c.style.stroke = tot ? LP_COL[i % 8] : '#2a3b5c';
+    const frac = x.n / (tot || 1), c = g.children[i], t = lab.children[i];
+    const col = LP_COL[i % 8];
+    c.style.stroke = tot ? col : '#2a3b5c';
     c.style.strokeDasharray = Math.max(0, frac * LP_C - (slices.length > 1 ? 1.5 : 0)) + ' ' + LP_C;
     c.style.strokeDashoffset = -cum * LP_C;
+    // etykieta procentowa w środku wycinka (tylko duże wycinki)
+    const mid = (cum + frac / 2) * 2 * Math.PI, pct = Math.round(frac * 100);
+    t.setAttribute('x', (100 + 72 * Math.cos(mid)).toFixed(2));
+    t.setAttribute('y', (100 + 72 * Math.sin(mid)).toFixed(2));
+    t.textContent = tot && frac >= 0.06 ? pct + '%' : '';
     cum += frac;
   });
   $('lptitle').textContent = d.title;
   $('lpstat').textContent = d.status === 'closed' ? 'Wyniki końcowe' : 'Wyniki na żywo';
   $('lphead').classList.toggle('end', d.status === 'closed');
-  $('lplegend').innerHTML = rows.map((x, i) =>
-    '<div class="lpr"><div class="lpc" style="background:' + LP_COL[i % 8] + '"></div><div class="lpn">' + lpEsc(x.name) + '</div>' +
-    '<div class="lpp">' + (tot ? Math.round(x.n / tot * 100) : 0) + '%</div><div class="lpv">' + x.n + '</div></div>').join('');
+  $('lplegend').innerHTML = rows.map((x, i) => {
+    const pc = tot ? Math.round(x.n / tot * 100) : 0, col = LP_COL[i % 8];
+    return '<div class="lpr"><div class="lpl" style="color:' + col + '"><div class="lpc" style="background:' + col + '"></div>' +
+      '<div class="lpn" style="color:#fff">' + lpEsc(x.name) + '</div><div class="lpp" style="color:#fff">' + pc + '%</div></div>' +
+      '<div class="lpbar"><i style="background:' + col + ';width:' + pc + '%"></i></div></div>';
+  }).join('');
   $('lptot').textContent = 'Oddano głosów: ' + tot;
   $('lpurl').textContent = 'Głosuj: ' + location.host + '/glosuj';
 }
