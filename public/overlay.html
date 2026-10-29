@@ -72,20 +72,19 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 /* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem) ===== */
 #fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + 214px + 14px);display:flex;align-items:flex-end;transition:transform .6s var(--ease)}
 #fundwrap.off{transform:translateX(calc(100% + 400px))}
-#fcard{position:relative;width:520px;background:#050d1c;border-top:6px solid #dc2626;box-shadow:0 6px 14px rgba(0,0,0,.45);overflow:hidden;font-family:'Oswald','Arial Narrow',Impact,Arial,sans-serif}
-#fbg{position:absolute;left:0;right:0;top:0;height:240px;background:#1a2438 center/cover no-repeat}
-#fbg svg{position:absolute;inset:0;width:100%;height:100%}
-#fbg.photo svg{display:none}
-#fshade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,13,28,.2) 0,rgba(5,13,28,.55) 130px,#050d1c 245px)}
-#ftext{position:relative;padding:112px 20px 4px;text-align:center;text-transform:uppercase;text-shadow:0 2px 0 rgba(0,0,0,.55),0 3px 12px rgba(0,0,0,.85)}
-#frow{display:flex;align-items:baseline;justify-content:center;gap:14px;white-space:nowrap}
-#fl1{font-size:28px;font-weight:700;letter-spacing:.5px;color:#fff}
-#fam{font-size:58px;font-weight:700;line-height:1.1;color:#4fc3ff}
-#fl2{font-size:36px;font-weight:700;line-height:1.12;color:#fff;margin-top:2px;text-wrap:balance}
-#fstrip{position:relative;padding:12px 20px 20px}
-#ftrack{position:relative;height:44px;background:#07142a;border:2px solid #c9d1dc;border-radius:3px;overflow:hidden}
-#ffill{height:100%;width:0;background:#2fb344;transition:width .8s var(--ease)}
-#fpct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+#fcard{position:relative;width:560px;font-family:'Oswald','Roboto Condensed','Arial Narrow',Impact,Arial,sans-serif;text-transform:uppercase;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.55))}
+#ftruck{display:block;width:100%;height:auto;margin-bottom:-6px}
+#frow{display:flex;align-items:baseline;justify-content:space-between;white-space:nowrap;line-height:1}
+#fl1,#fam,#fl2{text-shadow:-2px 0 0 #1a1a1a,2px 0 0 #1a1a1a,0 -2px 0 #1a1a1a,0 2px 0 #1a1a1a,2px 2px 0 #1a1a1a,-2px -2px 0 #1a1a1a,2px -2px 0 #1a1a1a,-2px 2px 0 #1a1a1a,0 4px 8px rgba(0,0,0,.6)}
+#fl1{font-size:36px;font-weight:700;color:#f4f4f4;letter-spacing:.5px}
+#fam{font-size:72px;font-weight:700;color:#2bb8e6;letter-spacing:1px}
+#fam small{font-size:46px;text-transform:none}
+#fl2{font-size:56px;font-weight:700;color:#f4f4f4;line-height:1.05;text-align:center;white-space:nowrap;margin-top:2px;letter-spacing:.5px}
+#fstrip{position:relative;margin-top:8px}
+#ftrack{position:relative;height:48px;box-sizing:border-box;background:linear-gradient(180deg,#456072,#2f4a5c);border:3px solid #e6ebf0;outline:2px solid #1d2b36;overflow:hidden}
+#ffill{height:100%;width:0;background:linear-gradient(180deg,#3f9b2a,#2c7a1c);transition:width .8s var(--ease)}
+#fpct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
 
 /* ===== REKLAMY (pełny ekran, pliki public/ads/1.mp4, 2.mp4 …) ===== */
 #adwrap{position:absolute;inset:0;background:#000;opacity:0;visibility:hidden;z-index:50;transition:opacity .5s,visibility 0s .5s}
@@ -187,25 +186,40 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 
   <div id="fundwrap" class="off">
     <div id="fcard">
-      <div id="fbg"><svg viewBox="0 0 520 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <defs>
-          <clipPath id="fcl"><path d="M0 6C30-8 60 20 90 6S150-6 180 8V88C150 74 120 100 90 86S30 100 0 88Z"/></clipPath>
-          <linearGradient id="fsh" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset=".25" stop-color="#000" stop-opacity="0"/><stop offset=".5" stop-color="#000" stop-opacity=".16"/><stop offset=".75" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></linearGradient>
-          <g id="flg"><g clip-path="url(#fcl)"><rect width="180" height="48" fill="#fff"/><rect y="48" width="180" height="60" fill="#d4213d"/><rect width="180" height="110" fill="url(#fsh)"/></g></g>
-        </defs>
-        <rect width="520" height="240" fill="#2a1d22"/>
-        <g opacity=".95">
-          <use href="#flg" transform="translate(-40 40) rotate(-8) scale(1.1)"/>
-          <line x1="-22" y1="30" x2="-6" y2="240" stroke="#222" stroke-width="5"/>
-          <use href="#flg" transform="translate(120 -6) rotate(3) scale(1.45)"/>
-          <line x1="124" y1="-6" x2="118" y2="240" stroke="#222" stroke-width="5"/>
-          <use href="#flg" transform="translate(330 24) rotate(-4) scale(1.15)"/>
-          <line x1="334" y1="20" x2="330" y2="240" stroke="#222" stroke-width="5"/>
-          <use href="#flg" transform="translate(430 70) rotate(6) scale(.85)"/>
+      <svg id="ftruck" viewBox="0 0 560 190" aria-hidden="true">
+        <!-- antena satelitarna -->
+        <polygon points="412,52 428,52 424,70 416,70" fill="#6b7078"/>
+        <ellipse cx="420" cy="34" rx="36" ry="28" fill="#9ca2ab" stroke="#5b6068" stroke-width="3"/>
+        <ellipse cx="420" cy="34" rx="26" ry="19" fill="#767c85"/>
+        <ellipse cx="420" cy="34" rx="8" ry="6" fill="#c9ced6"/>
+        <!-- naczepa / woz transmisyjny -->
+        <rect x="150" y="66" width="404" height="90" rx="6" fill="#2347c8"/>
+        <rect x="150" y="66" width="404" height="10" rx="4" fill="#1a37a3"/>
+        <rect x="196" y="56" width="46" height="12" fill="#1a37a3"/>
+        <rect x="150" y="132" width="404" height="24" fill="#1d3cae"/>
+        <rect x="296" y="86" width="38" height="36" rx="3" fill="#0f1b46"/>
+        <rect x="350" y="86" width="58" height="36" rx="3" fill="#0f1b46"/>
+        <rect x="418" y="86" width="58" height="36" rx="3" fill="#0f1b46"/>
+        <rect x="486" y="86" width="58" height="36" rx="3" fill="#0f1b46"/>
+        <!-- podwozie -->
+        <rect x="0" y="144" width="560" height="12" fill="#c4c9d1"/>
+        <!-- kabina -->
+        <path d="M4 146V98L24 58Q28 52 36 52H100Q110 52 110 62V146Z" fill="#f2f4f6" stroke="#8f98a3" stroke-width="2"/>
+        <path d="M16 96L32 64H62V96Z" fill="#1b2a44"/>
+        <rect x="70" y="64" width="30" height="32" rx="2" fill="#1b2a44"/>
+        <rect x="6" y="120" width="104" height="4" fill="#cfd5dc"/>
+        <!-- kola -->
+        <g fill="#1d1d1d" stroke="#8a8f96" stroke-width="3">
+          <circle cx="44" cy="164" r="22"/><circle cx="150" cy="164" r="22"/><circle cx="206" cy="164" r="22"/>
+          <circle cx="470" cy="164" r="22"/><circle cx="526" cy="164" r="22"/>
         </g>
-      </svg></div>
-      <div id="fshade"></div>
-      <div id="ftext"><div id="frow"><span id="fl1"></span><span id="fam"></span></div><div id="fl2"></div></div>
+        <g fill="#d5d9de">
+          <circle cx="44" cy="164" r="9"/><circle cx="150" cy="164" r="9"/><circle cx="206" cy="164" r="9"/>
+          <circle cx="470" cy="164" r="9"/><circle cx="526" cy="164" r="9"/>
+        </g>
+      </svg>
+      <div id="frow"><span id="fl1">Potrzebujemy</span><span id="fam">5 500 000<small>zł</small></span></div>
+      <div id="fl2">Na wóz transmisyjny</div>
       <div id="fstrip"><div id="ftrack"><div id="ffill"></div><div id="fpct">0%</div></div></div>
     </div>
   </div>
@@ -415,10 +429,9 @@ let ltPrev = false, ltT = null, ltForceOff = false; // plansza rozmówcy
 function setVis(id, on){ $(id).classList.toggle('off', !on); }
 function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('pollwrap', false); renderBreak(null); }
 
-/* zbiórka: % = wartość bazowa + 1% co N sekund (liczone wg czasu serwera) */
+/* zbiórka: % = wartość bazowa + 1% co N sekund (liczone wg czasu serwera); teksty wpisane na stałe w HTML */
 let fund = null, skew = 0, qrOk = false;
 const qr = $('fqr'); qr.onload = () => { qrOk = true; showQr(); }; qr.onerror = () => { qrOk = false; showQr(); }; qr.src = '/assets/kodqr.png';
-const bgImg = new Image(); bgImg.onload = () => { $('fbg').style.backgroundImage = 'url(/assets/zbiorka_bg.jpg)'; $('fbg').classList.add('photo'); }; bgImg.src = '/assets/zbiorka_bg.jpg';
 function showQr(){
   const on = !!(fund && fund.showQr && qrOk);
   $('fqrbox').style.display = on ? 'block' : 'none';
@@ -452,8 +465,6 @@ function apply(s){
 
   try {
     const f = s.fund; fund = f;
-    $('fl1').textContent = f.line1; $('fam').textContent = f.amount; $('fl2').textContent = f.line2;
-    $('fl1').style.display = f.line1 ? '' : 'none'; $('frow').style.display = (f.line1 || f.amount) ? '' : 'none'; $('fam').style.display = f.amount ? '' : 'none'; $('fl2').style.display = f.line2 ? '' : 'none';
     showQr(); renderFund();
     setVis('fundwrap', !!f.visible);
     setVis('qrwrap', !!f.visible);
