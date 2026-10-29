@@ -96,16 +96,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes fin{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
 #fcard{position:relative;width:416px;font-family:'Oswald','Bahnschrift','Roboto Condensed','Arial Narrow',Impact,Arial,sans-serif;text-transform:uppercase;filter:drop-shadow(0 4px 8px rgba(0,0,0,.55))}
 #ftruck{display:block;width:100%;height:auto;margin-bottom:-6px}
-#fsig path{opacity:0;animation:fsig 1.8s ease-out infinite}
-#fsig path:nth-child(2){animation-delay:.3s}#fsig path:nth-child(3){animation-delay:.6s}
-@keyframes fsig{0%{opacity:0}30%{opacity:.9}100%{opacity:0}}
-#frec{animation:frec 1s steps(2,jump-none) infinite}
-@keyframes frec{50%{opacity:.15}}
-#fled rect{animation:fled 1.2s linear infinite}
-#fled rect:nth-child(3n+1){animation-delay:-.4s}#fled rect:nth-child(3n+2){animation-delay:-.8s}
-@keyframes fled{0%,100%{opacity:.25}50%{opacity:1}}
-#fdish{transform-origin:420px 62px;animation:fdish 7s ease-in-out infinite}
-@keyframes fdish{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
+#fdish{transform-origin:420px 62px}
 #frow{position:relative;display:flex;align-items:baseline;justify-content:space-between;gap:6px;white-space:nowrap;line-height:1}
 #fl1{font-size:24px;font-weight:700;color:#f4f4f4;letter-spacing:.5px;text-shadow:0 0 3px #000,0 2px 4px rgba(0,0,0,.9)}
 #fam{font-size:51px;font-weight:700;color:#2bb8e6;letter-spacing:.5px;text-shadow:0 0 3px #000,0 2px 5px rgba(0,0,0,.9)}
@@ -231,6 +222,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
         <defs>
           <linearGradient id="gTr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f6bff"/><stop offset=".45" stop-color="#2447c9"/><stop offset="1" stop-color="#101f63"/></linearGradient>
           <linearGradient id="gCab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#e3e8ee"/><stop offset="1" stop-color="#9aa3ae"/></linearGradient>
+          <linearGradient id="gGl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a5680"/><stop offset=".5" stop-color="#1b2a45"/><stop offset="1" stop-color="#0c1424"/></linearGradient>
           <linearGradient id="gDish" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3f6f9"/><stop offset="1" stop-color="#8d949e"/></linearGradient>
           <linearGradient id="gChassis" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b626c"/><stop offset="1" stop-color="#262a31"/></linearGradient>
           <linearGradient id="gRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d1123"/><stop offset=".5" stop-color="#ff3b3b"/><stop offset="1" stop-color="#8d1123"/></linearGradient>
@@ -254,7 +246,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 
         <!-- antena satelitarna z falami sygnału -->
         <polygon points="412,56 428,56 425,72 415,72" fill="#6b7078"/>
-        <g id="fsig" fill="none" stroke="#7fd8ff" stroke-width="2.5" stroke-linecap="round">
+        <g id="fsig" fill="none" stroke="#7fd8ff" stroke-width="2.5" stroke-linecap="round" opacity=".6">
           <path d="M452 22 Q462 34 452 46"/>
           <path d="M458 14 Q474 34 458 54"/>
           <path d="M464 6 Q486 34 464 62"/>
@@ -270,7 +262,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
         <!-- maszt kamery z migającą lampką -->
         <rect x="236" y="54" width="6" height="12" fill="#4a4f56"/>
         <rect x="226" y="44" width="26" height="12" rx="2" fill="#2a2e34"/>
-        <circle id="frec" cx="232" cy="50" r="3" fill="#ff3b3b"/>
+        <circle cx="232" cy="50" r="3" fill="#ff3b3b"/>
 
         <!-- korpus naczepy -->
         <rect x="150" y="66" width="404" height="90" rx="7" fill="url(#gTr)"/>
@@ -284,9 +276,10 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
         <g fill="#0b1a4d" opacity=".5"><rect x="176" y="72" width="2" height="48"/><rect x="216" y="72" width="2" height="48"/><rect x="256" y="72" width="2" height="48"/><rect x="296" y="72" width="2" height="48"/><rect x="336" y="72" width="2" height="48"/><rect x="376" y="72" width="2" height="48"/><rect x="416" y="72" width="2" height="48"/><rect x="456" y="72" width="2" height="48"/><rect x="496" y="72" width="2" height="48"/></g>
         <!-- listwa LED na górze -->
         <rect x="150" y="66" width="404" height="5" rx="2" fill="#0a1638"/>
-        <g id="fled" fill="#ffb12b">
+        <g fill="#ffb12b" opacity=".9">
           <rect x="158" y="67" width="8" height="3" rx="1"/><rect x="172" y="67" width="8" height="3" rx="1"/><rect x="186" y="67" width="8" height="3" rx="1"/><rect x="200" y="67" width="8" height="3" rx="1"/><rect x="214" y="67" width="8" height="3" rx="1"/><rect x="228" y="67" width="8" height="3" rx="1"/><rect x="242" y="67" width="8" height="3" rx="1"/><rect x="256" y="67" width="8" height="3" rx="1"/><rect x="270" y="67" width="8" height="3" rx="1"/><rect x="284" y="67" width="8" height="3" rx="1"/><rect x="298" y="67" width="8" height="3" rx="1"/><rect x="312" y="67" width="8" height="3" rx="1"/><rect x="326" y="67" width="8" height="3" rx="1"/><rect x="340" y="67" width="8" height="3" rx="1"/><rect x="354" y="67" width="8" height="3" rx="1"/><rect x="368" y="67" width="8" height="3" rx="1"/><rect x="382" y="67" width="8" height="3" rx="1"/><rect x="396" y="67" width="8" height="3" rx="1"/><rect x="410" y="67" width="8" height="3" rx="1"/><rect x="424" y="67" width="8" height="3" rx="1"/><rect x="438" y="67" width="8" height="3" rx="1"/><rect x="452" y="67" width="8" height="3" rx="1"/><rect x="466" y="67" width="8" height="3" rx="1"/><rect x="480" y="67" width="8" height="3" rx="1"/><rect x="494" y="67" width="8" height="3" rx="1"/><rect x="508" y="67" width="8" height="3" rx="1"/><rect x="522" y="67" width="8" height="3" rx="1"/>
         </g>
+        <rect x="150" y="71" width="404" height="2" fill="#dfe6f0" opacity=".55"/>
         <!-- czerwony pas dolny i biała linia -->
         <rect x="150" y="118" width="404" height="4" fill="url(#gRed)"/>
         <rect x="150" y="132" width="404" height="24" fill="#122a78"/>
@@ -305,7 +298,12 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 
         <!-- kabina (bez szyb) -->
         <path d="M4 146V98L24 58Q28 52 36 52H100Q110 52 110 62V146Z" fill="url(#gCab)" stroke="#7f8893" stroke-width="2"/>
-        <path d="M8 60Q24 56 36 56" stroke="#ffffff" stroke-width="2" fill="none" opacity=".8"/>
+        <path d="M16 96L32 64H62V96Z" fill="url(#gGl)" stroke="#9fb3d1" stroke-width="1"/>
+        <path d="M18 92L30 68" stroke="#fff" stroke-width="2" opacity=".35"/>
+        <rect x="70" y="64" width="30" height="32" rx="2" fill="url(#gGl)" stroke="#9fb3d1" stroke-width="1"/>
+        <path d="M68 100V146" stroke="#8f98a3" stroke-width="1.5"/>
+        <rect x="90" y="108" width="10" height="3" rx="1.5" fill="#6b7480"/>
+        <rect x="104" y="72" width="8" height="26" rx="2" fill="#2a2e34"/>
         <rect x="6" y="110" width="104" height="2" fill="#c9d0d8"/>
         <!-- zderzak z chromem -->
         <rect x="6" y="120" width="104" height="8" fill="#2a2e34"/>
