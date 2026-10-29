@@ -16,9 +16,10 @@ h1{margin:0;font-size:19px;letter-spacing:.5px}h3{margin:0 0 10px;font-size:13px
 .brand{display:flex;align-items:center;gap:12px}.brand img{height:38px;width:38px;object-fit:cover;border-radius:6px;background:#0a1a2e}
 .brand small{display:block;font-size:11px;opacity:.8;font-weight:600;letter-spacing:1px;text-transform:uppercase}
 .box{background:linear-gradient(180deg,#112340,var(--card));border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.sub{padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid var(--line)}.sub:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
 label{display:block;color:var(--mut);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin:14px 0 5px}
-input[type=text],input[type=number],input[type=password],input[type=url]{padding:10px 12px;border-radius:9px;border:1px solid var(--line);background:#081529;color:#fff;font:inherit;width:100%;transition:border-color .15s,box-shadow .15s}
-input:focus{outline:0;border-color:var(--red2);box-shadow:0 0 0 3px #c21c2833}
+input[type=text],input[type=number],input[type=password],input[type=url],select{padding:10px 12px;border-radius:9px;border:1px solid var(--line);background:#081529;color:#fff;font:inherit;width:100%;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus{outline:0;border-color:var(--red2);box-shadow:0 0 0 3px #c21c2833}
 .chk{display:flex;align-items:center;gap:12px;color:#fff;font-size:14px;text-transform:none;letter-spacing:0;font-weight:600;margin:10px 0;cursor:pointer}
 input[type=checkbox]{appearance:none;-webkit-appearance:none;flex:none;width:44px;height:25px;border-radius:13px;background:#2a3f5f;position:relative;cursor:pointer;transition:background .2s;margin:0}
 input[type=checkbox]::after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 2px 4px rgba(0,0,0,.4)}
@@ -36,6 +37,7 @@ button:hover{filter:brightness(1.12);transform:translateY(-1px)}button:active{tr
 .prow .lg{grid-column:1/4}
 .prow input[type=color]{width:44px;height:40px;padding:2px;border:1px solid var(--line);border-radius:8px;background:#081529;cursor:pointer}
 .msg{margin-top:10px;font-weight:700;min-height:18px}.ok{color:var(--ok)}.er{color:var(--er)}
+.hint{color:var(--mut);font-size:12px;margin-top:6px}
 #prevWrap{width:960px;max-width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.4);background:repeating-conic-gradient(#2b2f38 0 25%,#1d2027 0 50%) 0 0/24px 24px}
 #prevFrame{position:absolute;left:0;top:0;width:1920px;height:1080px;border:0;transform-origin:0 0;background:transparent}
 #login{max-width:360px;margin:14vh auto;text-align:center}#login h1{margin-bottom:6px}
@@ -75,12 +77,13 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
     <button data-t="tPoll">📊 Sondaż</button>
     <button data-t="tFund">💰 Zbiórka</button>
     <button data-t="tWidg">🔴 Widżety</button>
+    <button data-t="tBrk">⏸ Przerwa</button>
     <button data-t="tAds">📺 Reklamy</button>
     <button data-t="tOver">🔗 Overlay</button>
   </div>
 
   <!-- PASEK -->
-  <div class="tab on box" id="tBar">
+  <div class="tab on box" id="tBar" data-sec="bar">
     <label class="chk"><input type="checkbox" id="barVis">Pasek widoczny</label>
     <label for="l1">Linia 1 nagłówka</label><input type="text" id="l1" maxlength="200">
     <label for="l2">Linia 2 nagłówka</label><input type="text" id="l2" maxlength="200">
@@ -97,7 +100,7 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
   </div>
 
   <!-- SONDAŻ -->
-  <div class="tab box" id="tPoll">
+  <div class="tab box" id="tPoll" data-sec="poll">
     <label for="pT">Pytanie</label><input type="text" id="pT" maxlength="200">
     <label for="pS">Podpis (źródło)</label><input type="text" id="pS" maxlength="200">
     <label for="pH">Chowaj po (sekundy, 0 = nie chowaj)</label><input type="number" id="pH" min="0" max="3600" style="max-width:160px">
@@ -111,9 +114,8 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
   </div>
 
   <!-- ZBIÓRKA -->
-  <div class="tab box" id="tFund">
-    <label class="chk"><input type="checkbox" id="fVis">Widżet zbiórki widoczny (nad paskiem, prawa krawędź równo z paskiem)</label>
-    <label class="chk"><input type="checkbox" id="fQr">Pokaż kod QR (plik <code>public/assets/kodqr.png</code>)</label>
+  <div class="tab box" id="tFund" data-sec="fund">
+    <label class="chk"><input type="checkbox" id="fVis">Widżet zbiórki widoczny</label>
     <label for="fL1">Górna linia</label><input type="text" id="fL1" maxlength="80">
     <label for="fAm">Kwota</label><input type="text" id="fAm" maxlength="40">
     <label for="fL2">Dolna linia</label><input type="text" id="fL2" maxlength="160">
@@ -127,20 +129,66 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
 
   <!-- WIDŻETY -->
   <div class="tab box" id="tWidg">
-    <h3>Plakietka „NA ŻYWO”</h3>
-    <label class="chk"><input type="checkbox" id="lbVis">Widoczna</label>
-    <label for="lbText">Tekst</label><input type="text" id="lbText" maxlength="40">
-    <div class="grid2">
-      <div><label for="lbTop">Od góry (px)</label><input type="number" id="lbTop" min="0" max="1080"></div>
-      <div><label for="lbRight">Od prawej (px)</label><input type="number" id="lbRight" min="0" max="1920"></div>
+    <div class="sub" data-sec="live_badge">
+      <h3>Plakietka „NA ŻYWO”</h3>
+      <label class="chk"><input type="checkbox" id="lbVis">Widoczna</label>
+      <label for="lbText">Tekst</label><input type="text" id="lbText" maxlength="40">
+      <div class="grid2">
+        <div><label for="lbTop">Od góry (px)</label><input type="number" id="lbTop" min="0" max="1080"></div>
+        <div><label for="lbRight">Od prawej (px)</label><input type="number" id="lbRight" min="0" max="1920"></div>
+      </div>
+      <button class="b1" id="lbSave">Zapisz</button><div class="msg" id="lbMsg"></div>
     </div>
-    <button class="b1" id="lbSave">Zapisz</button><div class="msg" id="lbMsg"></div>
+
+    <div class="sub" data-sec="qr">
+      <h3>Kod QR</h3>
+      <label class="chk"><input type="checkbox" id="qrVis">Kod QR widoczny</label>
+      <div class="hint">Działa niezależnie od zbiórki. Plansza rozmówcy sama przesuwa się obok QR.</div>
+      <button class="b1" id="qrSave">Zapisz</button><div class="msg" id="qrMsg"></div>
+    </div>
+
+    <div class="sub" data-sec="age">
+      <h3>Ograniczenie wiekowe</h3>
+      <label class="chk"><input type="checkbox" id="ageVis">Oznaczenie widoczne</label>
+      <label for="ageRat">Kategoria wiekowa</label>
+      <select id="ageRat" style="max-width:200px"><option value="7">7+</option><option value="12">12+</option><option value="16">16+</option></select>
+      <div class="hint">Pojawia się w lewym górnym rogu. Ankieta na żywo schodzi niżej, żeby nie zasłaniać oznaczenia.</div>
+      <button class="b1" id="ageSave">Zapisz</button><div class="msg" id="ageMsg"></div>
+    </div>
+
+    <div class="sub" data-sec="lower_third">
+      <h3>Plansza rozmówcy</h3>
+      <label class="chk"><input type="checkbox" id="ltVis">Widoczna</label>
+      <label for="ltName">Imię i nazwisko</label><input type="text" id="ltName" maxlength="80">
+      <label for="ltRole">Funkcja / opis (opcjonalnie)</label><input type="text" id="ltRole" maxlength="120">
+      <label for="ltHide">Chowaj po (sekundy, 0 = nie chowaj)</label><input type="number" id="ltHide" min="0" max="3600" style="max-width:160px">
+      <button class="b1" id="ltSave">Zapisz</button><div class="msg" id="ltMsg"></div>
+    </div>
+  </div>
+
+  <!-- PRZERWA -->
+  <div class="tab box" id="tBrk" data-sec="break_screen">
+    <h3>Przerwa / Zaraz wracamy</h3>
+    <label for="bkKind">Rodzaj planszy</label>
+    <select id="bkKind" style="max-width:260px"><option value="break">Przerwa</option><option value="brb">Zaraz wracamy</option></select>
+    <label for="bkTitle">Tytuł (puste = domyślny)</label><input type="text" id="bkTitle" maxlength="60">
+    <label for="bkSub">Podtytuł (puste = domyślny)</label><input type="text" id="bkSub" maxlength="120">
+    <label for="bkFoot">Stopka</label><input type="text" id="bkFoot" maxlength="80">
+    <div class="grid2">
+      <div><label for="bkMin">Odliczanie (minuty, 0 = bez odliczania)</label><input type="number" id="bkMin" min="0" max="600" step="1" value="5"></div>
+      <div><label for="bkVol">Głośność muzyki (0–100)</label><input type="number" id="bkVol" min="0" max="100"></div>
+    </div>
+    <label class="chk"><input type="checkbox" id="bkMusic">Muzyka podczas planszy</label>
+    <div id="bkNow" class="hint"></div>
+    <button class="b1" id="bkShow">▶ POKAŻ</button>
+    <button class="b3" id="bkHide">■ UKRYJ</button>
+    <div class="msg" id="bkMsg"></div>
   </div>
 
   <!-- REKLAMY -->
-  <div class="tab box" id="tAds">
+  <div class="tab box" id="tAds" data-sec="ads">
     <h3>Odtwarzanie</h3>
-    <div>Pliki z folderu <code>public/ads/</code> (<code>1.mp4</code>, <code>2.mp4</code>, …) – wykryto: <b id="adCount">…</b></div>
+    <div>Wykryte reklamy: <b id="adCount">…</b></div>
     <div class="adbtns" id="adList"></div>
     <div class="adbtns">
       <button class="b1" id="adNext">▶ Następna reklama</button>
@@ -203,7 +251,7 @@ async function start(){
   let r; try { r = await api('/api/config'); } catch (e) { return; }
   cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); $('dbWarn').hidden = !!r.persistent;
   $('login').hidden = true; $('app').hidden = false;
-  fillBar(); fillPoll(); fillFund(); fillBadge(); fillAds(); fillOverlay(); renderChips(); scanAds();
+  fillBar(); fillPoll(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
 }
 
 /* ---------- zakładki ---------- */
@@ -281,21 +329,53 @@ function fundNow(){
 }
 function fillFund(){
   const f = cfg.fund;
-  $('fVis').checked = f.visible; $('fQr').checked = f.showQr; $('fL1').value = f.line1; $('fAm').value = f.amount; $('fL2').value = f.line2;
+  $('fVis').checked = f.visible; $('fL1').value = f.line1; $('fAm').value = f.amount; $('fL2').value = f.line2;
   $('fPct').value = fundNow(); $('fEv').value = f.everySeconds; fTouched = false;
 }
 let fTouched = false;
 $('fPct').addEventListener('input', () => { fTouched = true; });
 setInterval(() => { if (!cfg) return; $('fNow').textContent = fundNow() + '%'; if (!fTouched && document.activeElement !== $('fPct')) $('fPct').value = fundNow(); }, 500);
 $('fSave').onclick = async () => {
-  const ok = await save('fund', {visible: $('fVis').checked, showQr: $('fQr').checked, line1: $('fL1').value, amount: $('fAm').value, line2: $('fL2').value,
+  const ok = await save('fund', {visible: $('fVis').checked, line1: $('fL1').value, amount: $('fAm').value, line2: $('fL2').value,
     percent: fTouched ? num($('fPct').value) : fundNow(), everySeconds: num($('fEv').value)}, 'fMsg', !fTouched);
   if (ok) fillFund();
 };
 
-/* ---------- plakietka ---------- */
+/* ---------- widżety: plakietka NA ŻYWO ---------- */
 function fillBadge(){ const l = cfg.live_badge; $('lbVis').checked = l.visible; $('lbText').value = l.text; $('lbTop').value = l.top; $('lbRight').value = l.right; }
 $('lbSave').onclick = () => save('live_badge', {visible: $('lbVis').checked, text: $('lbText').value, top: num($('lbTop').value), right: num($('lbRight').value)}, 'lbMsg');
+
+/* ---------- widżety: kod QR ---------- */
+function fillQr(){ $('qrVis').checked = cfg.qr.visible; }
+$('qrSave').onclick = () => save('qr', {visible: $('qrVis').checked}, 'qrMsg');
+
+/* ---------- widżety: ograniczenie wiekowe ---------- */
+function fillAge(){ const a = cfg.age; $('ageVis').checked = a.visible; $('ageRat').value = String(a.rating); }
+$('ageSave').onclick = () => save('age', {visible: $('ageVis').checked, rating: num($('ageRat').value)}, 'ageMsg');
+
+/* ---------- widżety: plansza rozmówcy ---------- */
+function fillLt(){ const l = cfg.lower_third; $('ltVis').checked = l.visible; $('ltName').value = l.name; $('ltRole').value = l.role; $('ltHide').value = l.hideAfter; }
+$('ltSave').onclick = () => save('lower_third', {visible: $('ltVis').checked, name: $('ltName').value, role: $('ltRole').value, hideAfter: num($('ltHide').value)}, 'ltMsg');
+
+/* ---------- przerwa / zaraz wracamy ---------- */
+function fillBrk(){
+  const k = cfg.break_screen;
+  $('bkKind').value = k.kind; $('bkTitle').value = k.title; $('bkSub').value = k.subtitle; $('bkFoot').value = k.footer;
+  $('bkMusic').checked = k.music; $('bkVol').value = k.volume;
+  $('bkNow').textContent = k.visible ? ('Na antenie' + (k.endsAt ? ' – wracamy o ' + new Date(k.endsAt).toLocaleTimeString('pl-PL', {hour: '2-digit', minute: '2-digit'}) : '')) : 'Plansza ukryta';
+}
+$('bkShow').onclick = async () => {
+  const min = num($('bkMin').value) || 0, now = Date.now() + skew;
+  const ok = await save('break_screen', {
+    visible: true, kind: $('bkKind').value, title: $('bkTitle').value, subtitle: $('bkSub').value, footer: $('bkFoot').value,
+    startedAt: new Date(now).toISOString(), endsAt: min > 0 ? new Date(now + min * 60000).toISOString() : '',
+    music: $('bkMusic').checked, volume: num($('bkVol').value)}, 'bkMsg');
+  if (ok) fillBrk();
+};
+$('bkHide').onclick = async () => {
+  try { const r = await api('/api/config', 'POST', {section: 'break_screen', patch: {visible: false}}); cfg = r.config; dirty.break_screen = false; fillBrk(); say('bkMsg', 'Plansza ukryta ✔', true); }
+  catch (e) { say('bkMsg', e.message, false); }
+};
 
 /* ---------- reklamy ---------- */
 function fillAds(){ const a = cfg.ads; $('adVol').value = a.volume; $('adEv').value = a.everyMinutes; $('adLabel').checked = a.label; }
@@ -317,12 +397,11 @@ async function scanAds(){
 $('adScan').onclick = scanAds;
 
 /* ---------- żywa synchronizacja z innymi osobami ---------- */
-const SEC = {tBar: 'bar', tPoll: 'poll', tFund: 'fund', tWidg: 'live_badge', tAds: 'ads'};
-const FILL = {bar: fillBar, poll: fillPoll, fund: fillFund, live_badge: fillBadge, ads: fillAds};
-const MSG = {bar: 'barMsg', poll: 'pMsg', fund: 'fMsg', live_badge: 'lbMsg', ads: 'adMsg'};
-const NAME = {bar: 'Pasek', fund: 'Zbiórka', live_badge: 'Na żywo'};
+const FILL = {bar: fillBar, poll: fillPoll, fund: fillFund, live_badge: fillBadge, qr: fillQr, age: fillAge, lower_third: fillLt, break_screen: fillBrk, ads: fillAds};
+const MSG = {bar: 'barMsg', poll: 'pMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', age: 'ageMsg', lower_third: 'ltMsg', break_screen: 'bkMsg', ads: 'adMsg'};
+const NAME = {bar: 'Pasek', fund: 'Zbiórka', live_badge: 'Na żywo', qr: 'QR', age: 'Wiek', lower_third: 'Rozmówca'};
 const dirty = {};
-const markDirty = e => { const t = e.target.closest && e.target.closest('.tab'); if (t && SEC[t.id]) dirty[SEC[t.id]] = true; };
+const markDirty = e => { const t = e.target.closest && e.target.closest('[data-sec]'); if (t) dirty[t.dataset.sec] = true; };
 document.addEventListener('input', markDirty);
 document.addEventListener('click', e => { if (e.target.matches && e.target.matches('.nrow button,#newsAdd,.prow button,#pAdd')) markDirty(e); });
 
