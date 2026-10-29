@@ -1,40 +1,180 @@
-<!DOCTYPE html><html lang="pl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Głosowanie — JEDEN</title>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#a3162a">
+<meta name="robots" content="noindex,nofollow">
+<title>Głosowanie — JEDEN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(900px 500px at 10% 0,#16305c,transparent 60%),#050d1c;color:#fff;font:16px Arial,sans-serif;display:flex;justify-content:center;padding:20px}
-main{width:100%;max-width:560px}.top{background:#d60f08;border-radius:0 18px 0 0;padding:14px 20px;font:800 26px Arial;letter-spacing:1px;border-bottom:5px solid #7a0000}
-.card{background:#0e1c33;padding:22px;border-radius:0 0 14px 14px;box-shadow:0 14px 40px rgba(0,0,0,.5)}h1{font-size:26px;margin:0 0 16px}
-input[type=text]{width:100%;padding:13px;border-radius:10px;border:2px solid #2a3b5c;background:#07142a;color:#fff;font:17px Arial;margin:6px 0}
-button{padding:14px 18px;border:0;border-radius:10px;background:#d60f08;color:#fff;font:800 16px Arial;cursor:pointer}button:disabled{opacity:.5}
-.err{color:#ff8a8a;min-height:20px;margin:6px 0}.bar{height:12px;background:#07142a;border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:#d60f08;transition:width .5s}.res{margin:12px 0}
-.opt{display:block;padding:14px 16px;margin:8px 0;border:2px solid #2a3b5c;border-radius:10px;cursor:pointer;font-weight:700}.opt:has(input:checked){border-color:#ff3b3b;background:#1b2a48}.opt input{margin-right:10px;accent-color:#d60f08}
-.msg{text-align:center;padding:26px 0;font-size:20px}#go{width:100%;font-size:18px;padding:16px}
+:root{--red:#a3162a;--red2:#c21c28;--redd:#8d1123;--live:#d60f08;--bg:#050d1c;--card:#0e1c33;--card2:#112340;--line:#22365a;--mut:#8fa5c9;--ok:#4ade80;--er:#ff8a8a;--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+body{margin:0;min-height:100vh;min-height:100dvh;color:#fff;font:16px/1.45 "Roboto Condensed",Arial,sans-serif;display:flex;justify-content:center;align-items:flex-start;padding:max(18px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom));
+background:radial-gradient(900px 520px at 0 0,#16305c88,transparent 60%),radial-gradient(800px 560px at 100% 100%,#a3162a44,transparent 60%),linear-gradient(160deg,#08142a,#050d1c 60%,#12060a);position:relative;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:-200px;background:repeating-linear-gradient(115deg,rgba(255,255,255,.03) 0 2px,transparent 2px 54px);animation:stripes 14s linear infinite;pointer-events:none}
+@keyframes stripes{to{transform:translateX(59.6px)}}
+main{position:relative;width:100%;max-width:580px;animation:rise .8s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+
+.top{display:flex;align-items:center;gap:14px;background:linear-gradient(90deg,var(--redd),var(--red) 55%,var(--red2));border-radius:0 20px 0 0;padding:14px 20px;border-bottom:5px solid #fff;box-shadow:0 10px 30px rgba(0,0,0,.5);position:relative;overflow:hidden}
+.top::after{content:"";position:absolute;top:0;bottom:0;width:120px;left:-180px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-20deg);animation:shine 5s ease-in-out infinite 1s}
+@keyframes shine{0%{left:-180px}45%,100%{left:120%}}
+.logo{width:46px;height:46px;flex:none;border-radius:8px;background:#0a1a2e url(/assets/jeden_logo.png) center/cover no-repeat;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+.brand{flex:1;min-width:0;font:700 24px/1.05 Oswald,"Roboto Condensed",Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,.35)}
+.brand small{display:block;font:600 11px "Roboto Condensed",Arial,sans-serif;letter-spacing:2px;opacity:.85;margin-top:3px}
+.pill{flex:none;display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:20px;background:rgba(0,0,0,.28);font:700 12px Oswald,sans-serif;letter-spacing:1.5px;text-transform:uppercase}
+.pill::before{content:"";width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.8);animation:pulse 1.4s ease-in-out infinite}
+.pill.end::before{animation:none;background:#9fb2d4;box-shadow:none}
+@keyframes pulse{50%{opacity:.25}}
+
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-top:0;border-radius:0 0 18px 18px;padding:26px 22px 24px;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+h1{margin:0 0 6px;font:700 30px/1.15 Oswald,"Roboto Condensed",Arial,sans-serif;letter-spacing:.3px}
+.lead{color:var(--mut);font-size:14px;margin:0 0 18px}
+
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{position:relative;display:flex;align-items:center;gap:14px;padding:15px 16px;border:2px solid var(--line);border-radius:12px;background:#0a1730;cursor:pointer;font-weight:700;font-size:18px;transition:border-color .2s,background .2s,transform .2s var(--ease),box-shadow .2s;animation:rise .6s var(--ease) both;animation-delay:calc(var(--i)*70ms + 150ms)}
+.opt:hover{border-color:#3a5688;transform:translateY(-2px)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.dot{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid #4a6290;display:grid;place-items:center;transition:.2s}
+.dot::after{content:"";width:12px;height:12px;border-radius:50%;background:#fff;transform:scale(0);transition:transform .25s cubic-bezier(.34,1.8,.5,1)}
+.opt:has(input:checked){border-color:#ff4a4a;background:linear-gradient(90deg,#2a1530,#1b2a48);box-shadow:0 0 0 3px rgba(255,59,59,.18),0 8px 22px rgba(0,0,0,.4);transform:translateY(-2px)}
+.opt:has(input:checked) .dot{border-color:#ff4a4a;background:var(--live)}
+.opt:has(input:checked) .dot::after{transform:scale(1)}
+.opt:has(input:focus-visible){outline:3px solid #fff;outline-offset:2px}
+.otxt{flex:1;min-width:0;overflow-wrap:anywhere}
+
+.fld{margin-top:20px}
+.fld label{display:block;font:600 12px Oswald,sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut);margin:0 0 6px}
+input[type=text]{width:100%;padding:14px 14px;border-radius:12px;border:2px solid var(--line);background:#07142a;color:#fff;font:700 18px "Roboto Condensed",Arial,sans-serif;transition:border-color .2s,box-shadow .2s}
+input[type=text]::placeholder{color:#5f77a0;font-weight:400}
+input[type=text]:focus{outline:0;border-color:#ff4a4a;box-shadow:0 0 0 4px rgba(255,59,59,.18)}
+.err{min-height:22px;margin:8px 0 0;color:var(--er);font-weight:700;font-size:15px}
+.err:empty{min-height:8px}
+.err.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+#go{position:relative;width:100%;margin-top:6px;padding:17px 18px;border:0;border-radius:12px;background:linear-gradient(90deg,var(--redd),var(--live) 60%,#ff3b3b);color:#fff;font:700 20px Oswald,sans-serif;letter-spacing:2px;text-transform:uppercase;cursor:pointer;box-shadow:0 10px 24px rgba(214,15,8,.4);transition:transform .15s,filter .15s,box-shadow .15s;overflow:hidden}
+#go:hover{filter:brightness(1.1);transform:translateY(-2px)}
+#go:active{transform:none}
+#go:disabled{opacity:.7;cursor:progress;filter:none;transform:none}
+#go:disabled::after{content:"";position:absolute;right:18px;top:50%;width:20px;height:20px;margin-top:-10px;border-radius:50%;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.state{text-align:center;padding:26px 6px 10px}
+.state .ic{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-size:42px}
+.state.ok .ic{background:radial-gradient(circle,#1f9d4a,#146c33);box-shadow:0 0 0 8px rgba(34,169,84,.18),0 10px 30px rgba(34,169,84,.35);animation:pop .7s cubic-bezier(.34,1.8,.5,1)}
+.state.wait .ic{background:#16305c;box-shadow:0 0 0 8px rgba(74,143,231,.14)}
+@keyframes pop{from{transform:scale(.3);opacity:0}}
+.state h2{margin:0 0 6px;font:700 26px Oswald,sans-serif;letter-spacing:.5px}
+.state p{margin:0;color:var(--mut);font-size:16px}
+
+.results{margin-top:6px}
+.res{margin:16px 0;animation:rise .6s var(--ease) both;animation-delay:calc(var(--i)*90ms)}
+.rh{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}
+.rn{flex:1;min-width:0;font-weight:700;font-size:19px;overflow-wrap:anywhere}
+.rp{font:700 28px Oswald,sans-serif;font-variant-numeric:tabular-nums}
+.rv{color:var(--mut);font-size:14px;min-width:50px;text-align:right}
+.track{height:16px;background:#07142a;border-radius:10px;overflow:hidden;box-shadow:inset 0 2px 6px rgba(0,0,0,.6)}
+.track i{display:block;height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,var(--c2),var(--c));transition:width 1.4s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden}
+.track i::after{content:"";position:absolute;top:0;bottom:0;width:60px;left:-80px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:shine 4s ease-in-out infinite 1.5s}
+.res.win .rn::after{content:"WYGRYWA";margin-left:10px;padding:3px 9px;border-radius:12px;background:#ffd23a;color:#111;font:700 11px Oswald,sans-serif;letter-spacing:1.2px;vertical-align:middle;transform:rotate(-3deg);display:inline-block}
+.res.win .track i{box-shadow:0 0 18px var(--c)}
+.total{margin-top:20px;padding-top:14px;border-top:1px solid var(--line);color:var(--mut);font-size:15px;display:flex;justify-content:space-between}
+
+.foot{margin:16px 0 0;text-align:center;color:#5f77a0;font:600 12px Oswald,sans-serif;letter-spacing:3px;text-transform:uppercase}
+.skel{height:56px;border-radius:12px;margin:10px 0;background:linear-gradient(90deg,#0a1730,#16305c,#0a1730);background-size:200% 100%;animation:sk 1.2s linear infinite}
+@keyframes sk{to{background-position:-200% 0}}
+@media(max-width:420px){h1{font-size:25px}.brand{font-size:20px}.pill{display:none}.opt{font-size:17px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
-<main><div class="top">JEDEN · GŁOSOWANIE</div><div class="card" id="c">Ładowanie…</div></main>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div class="logo"></div>
+    <div class="brand">JEDEN<small>GŁOSOWANIE</small></div>
+    <div class="pill" id="pill" hidden>Na żywo</div>
+  </div>
+  <div class="card" id="c"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  <div class="foot">jeden.tv</div>
+</main>
+
 <script>
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));const $=s=>document.querySelector(s);
-let did=localStorage.getItem('jd');if(!did){did=Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem('jd',did)}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $=s=>document.querySelector(s);
+const COL=['#dc2626','#2563eb','#16a34a','#f59e0b','#7c3aed','#0891b2','#db2777','#64748b'];
+const shade=h=>{const n=parseInt(h.slice(1),16);return 'rgb('+Math.round((n>>16&255)*.65)+','+Math.round((n>>8&255)*.65)+','+Math.round((n&255)*.65)+')'};
+
+let did=null;
+try{did=localStorage.getItem('jd')}catch(e){}
+if(!did){did=Math.random().toString(36).slice(2)+Date.now().toString(36);try{localStorage.setItem('jd',did)}catch(e){}}
 let cur='';
+
+function setPill(status){
+  const p=$('#pill');
+  if(status==='open'){p.hidden=false;p.textContent='Trwa';p.className='pill'}
+  else if(status==='closed'){p.hidden=false;p.textContent='Zakończone';p.className='pill end'}
+  else p.hidden=true;
+}
+
 function draw(r){
-  const k=[r.status,r.id,r.voted,r.results?r.total:''].join();if(k===cur)return;cur=k;const c=$('#c');
-  if(r.status==='none'||r.status==='draft'){c.innerHTML='<div class="msg">Brak aktywnej ankiety.<br><small>Ta strona odświeży się sama.</small></div>';return}
+  const k=[r.status,r.id,r.voted,r.results?r.total:''].join();
+  if(k===cur)return;cur=k;
+  const c=$('#c');setPill(r.status);
+
+  if(r.status==='none'||r.status==='draft'){
+    c.innerHTML='<div class="state wait"><div class="ic">⏳</div><h2>Brak aktywnej ankiety</h2><p>Ta strona odświeży się sama, gdy ruszy głosowanie.</p></div>';
+    return;
+  }
+
   let h='<h1>'+esc(r.title)+'</h1>';
+
   if(r.status==='open'&&!r.voted){
-    h+=r.options.map(o=>'<label class="opt"><input type="radio" name="o" value="'+o.id+'">'+esc(o.text)+'</label>').join('')
-      +'<input type="text" id="n" placeholder="Imię i nazwisko" autocomplete="name" maxlength="60"><div class="err" id="e"></div><button id="go">Oddaj głos</button>';
-    c.innerHTML=h;$('#go').onclick=send;return}
-  if(r.status==='open')h+='<div class="msg">✅ Dziękujemy! Twój głos został zapisany.</div>';
-  else{h+='<div class="msg">Głosowanie zakończone.</div>';
-    if(r.results){const t=r.results.reduce((s,x)=>s+x.n,0)||1;
-      h+=r.results.map(x=>'<div class="res"><b>'+esc(x.text)+'</b> — '+x.n+' ('+Math.round(x.n/t*100)+'%)<div class="bar"><i style="width:'+x.n/t*100+'%"></i></div></div>').join('')}}
-  c.innerHTML=h}
+    h+='<p class="lead">Wybierz jedną odpowiedź i podaj imię i nazwisko.</p><div class="opts">'
+      +r.options.map((o,i)=>'<label class="opt" style="--i:'+i+'"><input type="radio" name="o" value="'+o.id+'"><span class="dot"></span><span class="otxt">'+esc(o.text)+'</span></label>').join('')
+      +'</div><div class="fld"><label for="n">Imię i nazwisko</label><input type="text" id="n" placeholder="np. Jan Kowalski" autocomplete="name" maxlength="60"></div>'
+      +'<div class="err" id="e" role="alert"></div><button id="go">Oddaj głos</button>';
+    c.innerHTML=h;
+    $('#go').onclick=send;
+    $('#n').onkeydown=e=>{if(e.key==='Enter')send()};
+    return;
+  }
+
+  if(r.status==='open'){
+    h+='<div class="state ok"><div class="ic">✓</div><h2>Dziękujemy!</h2><p>Twój głos został zapisany.</p></div>';
+  }else{
+    h+='<p class="lead">Głosowanie zakończone. Wyniki końcowe:</p>';
+    if(r.results){
+      const sum=r.results.reduce((s,x)=>s+x.n,0),t=sum||1,max=Math.max(0,...r.results.map(x=>x.n));
+      h+='<div class="results">'+r.results.map((x,i)=>{
+        const col=COL[i%COL.length],win=x.n===max&&max>0;
+        return '<div class="res'+(win?' win':'')+'" style="--i:'+i+';--c:'+col+';--c2:'+shade(col)+'"><div class="rh"><div class="rn">'+esc(x.text)+'</div><div class="rp">'+Math.round(x.n/t*100)+'%</div><div class="rv">'+x.n+'</div></div><div class="track"><i data-w="'+(x.n/t*100)+'"></i></div></div>';
+      }).join('')+'<div class="total"><span>Oddano głosów</span><b>'+sum+'</b></div></div>';
+    }else h+='<div class="state wait"><div class="ic">🔒</div><h2>Wyniki niedostępne</h2></div>';
+  }
+  c.innerHTML=h;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll('.track i').forEach(i=>i.style.width=i.dataset.w+'%')));
+}
+
+function showErr(m){const e=$('#e');if(!e)return;e.textContent=m;e.classList.remove('shake');void e.offsetWidth;e.classList.add('shake')}
+
 async function send(){
-  const o=document.querySelector('input[name=o]:checked'),b=$('#go');$('#e').textContent='';
-  if(!o){$('#e').textContent='Wybierz odpowiedź.';return}
+  const o=document.querySelector('input[name=o]:checked'),b=$('#go');
+  $('#e').textContent='';
+  if(!o){showErr('Wybierz odpowiedź.');return}
   b.disabled=true;
-  try{const r=await fetch('/api/ankieta/glos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({option:o.value,name:$('#n').value,d:did})});
-    const j=await r.json();
-    if(r.ok){cur='';load()}else{$('#e').textContent=j.err||'Błąd.';b.disabled=false}
-  }catch(e){$('#e').textContent='Brak połączenia.';b.disabled=false}}
+  try{
+    const r=await fetch('/api/ankieta/glos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({option:o.value,name:$('#n').value,d:did})});
+    const j=await r.json().catch(()=>({}));
+    if(r.ok){cur='';load()}else{showErr(j.err||'Błąd.');b.disabled=false}
+  }catch(e){showErr('Brak połączenia.');b.disabled=false}
+}
+
 async function load(){try{draw(await(await fetch('/api/ankieta?d='+did,{cache:'no-store'})).json())}catch(e){}}
 load();setInterval(load,8000);
-</script></html>
+</script>
+</body>
+</html>
