@@ -36,13 +36,17 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes barin{from{filter:brightness(1.6)}to{filter:none}}
 #barwrap.nohead #root{grid-template-rows:57px;height:57px}
 
-/* ===== PLAKIETKA NA ŻYWO ===== */
-#livewrap{position:absolute;top:var(--lt,43px);right:var(--lr,53px);height:64px;transition:transform .6s var(--ease),opacity .5s ease}
+/* ===== PLAKIETKA NA ŻYWO (+ biała plakietka z tekstem po lewej) ===== */
+#livewrap{position:absolute;top:var(--lt,43px);right:var(--lr,53px);height:64px;display:flex;transition:transform .6s var(--ease),opacity .5s ease}
 #livewrap.off{opacity:0;transform:translateX(calc(100% + var(--lr,53px) + 30px))}
-.livebadge{box-sizing:border-box;width:100%;height:100%;padding:0 30px;display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(90deg,#8d1123,#a3162a 55%,#c21c28);border-radius:8px;font-family:Arial,Helvetica,sans-serif;box-shadow:0 6px 14px rgba(0,0,0,.45);position:relative;overflow:hidden}
+.livebadge{box-sizing:border-box;flex:none;height:100%;padding:0 30px;display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(90deg,#8d1123,#a3162a 55%,#c21c28);border-radius:8px;font-family:Arial,Helvetica,sans-serif;box-shadow:0 6px 14px rgba(0,0,0,.45);position:relative;overflow:hidden}
 .ldot{width:14px;height:14px;border-radius:50%;background-color:#fff;box-shadow:0 0 8px rgba(255,255,255,.7);flex-shrink:0;animation:ldp 1.2s ease-in-out infinite}
 @keyframes ldp{50%{transform:scale(1.4);opacity:.55}}
 .ltxt{color:#fff;font-size:26px;font-weight:800;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.4)}
+#livelabel{display:none;box-sizing:border-box;height:100%;align-items:center;padding:0 24px;background:#fff;border-radius:8px 0 0 8px;box-shadow:0 6px 14px rgba(0,0,0,.45);max-width:600px}
+#livewrap.has #livelabel{display:flex}
+#livewrap.has .livebadge{border-radius:0 8px 8px 0}
+#lbltxt{display:block;color:#0b1d4a;font-family:'Roboto Condensed',Arial,sans-serif;font-weight:900;text-transform:uppercase;line-height:1.05;letter-spacing:.3px;text-align:left;text-wrap:balance}
 
 /* ===== WYNIKI ANKIETY NA ŻYWO – wykres kołowy, lewy górny róg ===== */
 #pollwrap{position:absolute;top:var(--pt,43px);left:53px;width:460px;transition:transform .6s var(--ease),opacity .5s ease,top .4s var(--ease)}
@@ -319,7 +323,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
     </div>
   </div>
 
-  <div id="livewrap" class="off"><div class="livebadge"><div class="ldot"></div><div class="ltxt" id="ltxt"></div></div></div>
+  <div id="livewrap" class="off"><div id="livelabel"><span id="lbltxt"></span></div><div class="livebadge"><div class="ldot"></div><div class="ltxt" id="ltxt"></div></div></div>
 
   <div id="agewrap" class="off"><img id="ageimg" alt=""></div>
 
@@ -619,6 +623,20 @@ function fitPoll(){
   box.style.transform = k < 1 ? 'scale(' + k.toFixed(3) + ')' : '';
 }
 
+/* biała plakietka obok „NA ŻYWO”: s.live_badge.label albo ?label=... w adresie */
+const LABEL_URL = (new URLSearchParams(location.search).get('label') || '').trim();
+let lblSig = '';
+function fitLabel(){
+  const t = $('lbltxt'); if (!t.textContent) return;
+  t.style.whiteSpace = 'nowrap'; t.style.width = ''; t.style.fontSize = '32px';
+  if (t.scrollWidth <= 540) return;
+  t.style.whiteSpace = 'normal'; t.style.width = '540px';
+  for (const fs of [27, 25, 23, 21, 19]) {
+    t.style.fontSize = fs + 'px';
+    if (t.scrollHeight <= fs * 1.05 * 2 + 2) break;
+  }
+}
+
 let barHide = false;
 function apply(s){
   skew = Date.parse(s.serverNow) - Date.now();
@@ -640,6 +658,9 @@ function apply(s){
     $('ltxt').textContent = l.text;
     $('livewrap').style.setProperty('--lt', l.top + 'px'); $('livewrap').style.setProperty('--lr', l.right + 'px');
     setVis('livewrap', !!l.visible);
+    const lab = (LABEL_URL || l.label || '').trim();
+    $('livewrap').classList.toggle('has', !!lab);
+    if (lab !== lblSig) { lblSig = lab; $('lbltxt').textContent = lab; fitLabel(); }
   } catch (e) { console.error('plakietka', e); }
 
   try {
@@ -712,7 +733,7 @@ async function poll(){
     apply(await r.json());
   } catch (e) { /* chwilowy brak sieci – zostawiamy stan jak jest */ }
 }
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { barSig = ''; fundSig = ''; });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { barSig = ''; fundSig = ''; lblSig = ''; });
 poll(); setInterval(poll, 2000);
 
 /* ---------- wykres kołowy: wyniki ankiety na żywo (odświeżanie co 12 s) ---------- */
