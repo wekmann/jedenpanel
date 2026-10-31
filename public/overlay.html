@@ -92,6 +92,19 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes ltshine{0%{left:-90px}50%,100%{left:110%}}
 #ltrole{box-sizing:border-box;max-width:100%;background:linear-gradient(90deg,#0e2347,#16305c);color:#e8eef9;font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;line-height:1.2;padding:9px 40px 9px 30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:6px solid #d60f08;font-family:'Roboto Condensed',Arial,sans-serif}
 
+/* ===== PILNE (pasek newsa u góry) ===== */
+#flashwrap{position:absolute;left:calc(129px + var(--ox,0px));right:calc(129px - var(--ox,0px));top:var(--ft,125px);transition:transform .6s var(--ease),opacity .45s ease}
+#flashwrap.off{opacity:0;transform:translateY(-160%)}
+#flbox{display:flex;align-items:stretch;height:62px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))}
+#flashwrap:not(.off) #flbox{animation:flin .6s var(--ease)}
+@keyframes flin{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:none}}
+#fllabel{flex:none;display:flex;align-items:center;padding:0 26px;background:linear-gradient(180deg,#e8141f,#a50d16);color:#fff;font:900 34px/1 'Roboto Condensed',Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;border-left:6px solid #fff;text-shadow:0 2px 4px rgba(0,0,0,.35);position:relative;overflow:hidden}
+#fllabel::after{content:"";position:absolute;top:0;bottom:0;width:50px;left:-80px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-20deg);animation:ltshine 3s ease-in-out infinite}
+#fltxtwrap{flex:1;min-width:0;display:flex;align-items:center;overflow:hidden;background:#fff;border-bottom:5px solid #a50d16;padding:0 26px}
+#fltxt{display:inline-block;white-space:nowrap;color:#0b1d4a;font:800 36px/1 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:.2px}
+#fltxt.mq{animation:flmq var(--dur,10s) linear 1.2s infinite alternate}
+@keyframes flmq{from{transform:translateX(0)}to{transform:translateX(var(--dist,0px))}}
+
 /* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem) ===== */
 #fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + var(--fbh,var(--bh,214px)) + 14px);display:flex;align-items:flex-end;transition:transform .6s var(--ease),opacity .5s ease,bottom .6s var(--ease)}
 #fundwrap.off{opacity:0;transform:translateX(calc(100% + 500px))}
@@ -257,6 +270,10 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 
   <div id="ltwrap" class="off">
     <div id="ltbox"><div id="ltname"></div><div id="ltrole"></div></div>
+  </div>
+
+  <div id="flashwrap" class="off">
+    <div id="flbox"><div id="fllabel"></div><div id="fltxtwrap"><span id="fltxt"></span></div></div>
   </div>
 
   <div id="fundwrap" class="off">
@@ -680,8 +697,16 @@ try { const v = localStorage.getItem('overlay_poll_seq'); if (v !== null) lastSe
 const setSeq = s => { lastSeq = s; try { localStorage.setItem('overlay_poll_seq', String(s)); } catch (e) {} };
 
 let ltPrev = false, ltT = null, ltForceOff = false;
+let flSig = '', flPrev = false, flForceOff = false, flT = null;
+function fitFlash(){
+  const t = $('fltxt'), w = $('fltxtwrap'); t.classList.remove('mq'); t.style.removeProperty('--dist');
+  requestAnimationFrame(() => {
+    const over = t.scrollWidth - (w.clientWidth - 52);
+    if (over > 4) { t.style.setProperty('--dist', -(over + 10) + 'px'); t.style.setProperty('--dur', Math.max(4, over / 70) + 's'); t.classList.add('mq'); }
+  });
+}
 function setVis(id, on){ $(id).classList.toggle('off', !on); }
-function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('pollwrap', false); setVis('mapwrap', false); mapOn = false; setAge(AGE_URL || 0); renderBreak(null); }
+function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('flashwrap', false); setVis('pollwrap', false); setVis('mapwrap', false); mapOn = false; setAge(AGE_URL || 0); renderBreak(null); }
 
 /* ---------- QR: działa niezależnie od zbiórki (s.qr.visible) ---------- */
 let fund = null, qrOk = false, qrCfg = {visible: false}, fundSig = '';
@@ -828,6 +853,24 @@ function apply(s){
     } else { ltPrev = false; setVis('ltwrap', false); $('scene').style.setProperty('--fbh', ''); }
   } catch (e) { console.error('plansza', e); }
 
+
+  try {
+    const f = s.flash;
+    if (f && f.text) {
+      $('fllabel').textContent = f.label || ''; $('fllabel').style.display = f.label ? '' : 'none';
+      $('scene').style.setProperty('--ft', (+f.top || 0) + 'px');
+      const sig = f.label + '|' + f.text;
+      if (sig !== flSig) { flSig = sig; $('fltxt').textContent = f.text; fitFlash(); }
+      const on = !!f.visible;
+      if (on && !flPrev) {
+        flForceOff = false; clearTimeout(flT); fitFlash();
+        if (+f.hideAfter > 0) flT = setTimeout(() => { flForceOff = true; setVis('flashwrap', false); }, f.hideAfter * 1000);
+      }
+      if (!on) { clearTimeout(flT); flForceOff = false; }
+      flPrev = on; setVis('flashwrap', on && !flForceOff);
+    } else { flPrev = false; setVis('flashwrap', false); }
+  } catch (e) { console.error('pilne', e); }
+
   try {
     const c = s.poll_cmd;
     if (c && c.seq !== lastSeq) {
@@ -865,7 +908,7 @@ async function poll(){
     apply(await r.json());
   } catch (e) { /* chwilowy brak sieci – zostawiamy stan jak jest */ }
 }
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { barSig = ''; fundSig = ''; lblSig = ''; });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { barSig = ''; fundSig = ''; lblSig = ''; flSig = ''; });
 poll(); setInterval(poll, 2000);
 
 /* po nowym wdrożeniu na Vercelu overlay sam się przeładowuje (OBS i podgląd w panelu nie zostają na starej wersji) */

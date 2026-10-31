@@ -132,7 +132,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <button class="b3" id="capStop" disabled>■ Zatrzymaj</button>
     <button class="b2" id="capSwap">⇄ Zamień monitory</button>
     <button class="b2" id="capFs" title="Pełny ekran czystego okna">⛶ Pełny ekran</button>
-    <span class="hint" id="capMsg">Skróty: 1–7 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)</span>
+    <span class="hint" id="capMsg">Skróty: 1–8 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)</span>
   </div>
 
   <div class="chips" id="chips"><div style="grid-column:1/-1;color:var(--mut);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase">Na antenie – kliknij lub użyj klawiszy</div></div>
@@ -143,6 +143,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <button data-t="tMap">🗺 Mapa</button>
     <button data-t="tFund">💰 Zbiórka</button>
     <button data-t="tWidg">🔴 Widżety</button>
+    <button data-t="tFlash">🚨 Pilne</button>
     <button data-t="tBrk">⏸ Przerwa</button>
     <button data-t="tAds">📺 Reklamy</button>
     <button data-t="tOver">🔗 Overlay</button>
@@ -275,6 +276,23 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     </div>
   </div>
 
+  <!-- PILNE -->
+  <div class="tab box" id="tFlash" data-sec="flash">
+    <label class="chk"><input type="checkbox" id="flVis">Pasek PILNE widoczny</label>
+    <label for="flLabel">Etykieta (czerwone pole)</label><input type="text" id="flLabel" maxlength="20" list="flLabels" placeholder="PILNE">
+    <datalist id="flLabels"><option value="PILNE"><option value="WAŻNE"><option value="NEWS"><option value="OSTATNIE"></datalist>
+    <label for="flText">Treść</label><input type="text" id="flText" maxlength="220" placeholder="Np. SZEF BBN BĘDZIE GOŚCIEM W PROGRAMIE „W PUNKT”">
+    <div class="grid2">
+      <div><label for="flTop">Odstęp od góry (px)</label><input type="number" id="flTop" min="0" max="1080"></div>
+      <div><label for="flHide">Chowaj po (sekundy, 0 = nie chowaj)</label><input type="number" id="flHide" min="0" max="3600"></div>
+    </div>
+    <button class="b1" id="flSave">Zapisz</button>
+    <button class="b1" id="flShow">▶ POKAŻ</button>
+    <button class="b3" id="flHideBtn">■ UKRYJ</button>
+    <div class="msg" id="flMsg"></div>
+    <div class="hint">Za długi tekst sam się przewija. Pasek można też włączyć i wyłączyć kafelkiem „Pilne” nad zakładkami.</div>
+  </div>
+
   <!-- PRZERWA -->
   <div class="tab box" id="tBrk" data-sec="break_screen">
     <h3>Przerwa / Zaraz wracamy</h3>
@@ -338,7 +356,7 @@ const $ = id => document.getElementById(id);
 let cfg = null, skew = 0;
 
 /* przyciski akcji (Zapisz / Pokaż / Ukryj + komunikat) zawsze na górze sekcji */
-['barSave','pSave','mpSave','fSave','lbSave','qrSave','ageSave','ltSave','bkShow','adSave'].forEach(id => {
+['barSave','flSave','pSave','mpSave','fSave','lbSave','qrSave','ageSave','ltSave','bkShow','adSave'].forEach(id => {
   const first = $(id); if (!first) return;
   const box = first.closest('.sub') || first.closest('.tab'); if (!box) return;
   const bar = document.createElement('div'); bar.className = 'actbar';
@@ -376,7 +394,7 @@ async function start(){
   let r; try { r = await api('/api/config'); } catch (e) { return; }
   cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); $('dbWarn').hidden = !!r.persistent;
   $('login').hidden = true; $('app').hidden = false;
-  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
+  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillFlash(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
 }
 
 /* ---------- zakładki ---------- */
@@ -505,6 +523,14 @@ $('ltGDel').onclick = () => {
 $('ltSave').onclick = () => save('lower_third', {visible: $('ltVis').checked, name: $('ltName').value, role: $('ltRole').value, hideAfter: num($('ltHide').value),
   guests: ltGuests}, 'ltMsg');
 
+
+/* ---------- pilne ---------- */
+function fillFlash(){ const f = cfg.flash; $('flVis').checked = f.visible; $('flLabel').value = f.label; $('flText').value = f.text; $('flTop').value = f.top; $('flHide').value = f.hideAfter; }
+const flData = vis => ({visible: vis, label: $('flLabel').value, text: $('flText').value, top: num($('flTop').value), hideAfter: num($('flHide').value)});
+$('flSave').onclick = () => save('flash', flData($('flVis').checked), 'flMsg');
+$('flShow').onclick = async () => { $('flVis').checked = true; await save('flash', flData(true), 'flMsg'); };
+$('flHideBtn').onclick = async () => { $('flVis').checked = false; await save('flash', flData(false), 'flMsg'); };
+
 /* ---------- mapa wyników ---------- */
 const uid = () => 'x' + Math.random().toString(36).slice(2, 8);
 function partyOpts(sel, want){
@@ -612,9 +638,9 @@ async function scanAds(){
 $('adScan').onclick = scanAds;
 
 /* ---------- żywa synchronizacja z innymi osobami ---------- */
-const FILL = {bar: fillBar, poll: fillPoll, map: fillMap, fund: fillFund, live_badge: fillBadge, qr: fillQr, age: fillAge, lower_third: fillLt, break_screen: fillBrk, ads: fillAds};
-const MSG = {bar: 'barMsg', poll: 'pMsg', map: 'mpMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', age: 'ageMsg', lower_third: 'ltMsg', break_screen: 'bkMsg', ads: 'adMsg'};
-const NAME = {bar: 'Pasek', map: 'Mapa', fund: 'Zbiórka', live_badge: 'Na żywo', qr: 'QR', age: 'Wiek', lower_third: 'Rozmówca'};
+const FILL = {bar: fillBar, poll: fillPoll, map: fillMap, fund: fillFund, live_badge: fillBadge, qr: fillQr, age: fillAge, lower_third: fillLt, flash: fillFlash, break_screen: fillBrk, ads: fillAds};
+const MSG = {bar: 'barMsg', poll: 'pMsg', map: 'mpMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', age: 'ageMsg', lower_third: 'ltMsg', flash: 'flMsg', break_screen: 'bkMsg', ads: 'adMsg'};
+const NAME = {bar: 'Pasek', map: 'Mapa', fund: 'Zbiórka', live_badge: 'Na żywo', qr: 'QR', age: 'Wiek', lower_third: 'Rozmówca', flash: 'Pilne'};
 const dirty = {};
 const markDirty = e => { const t = e.target.closest && e.target.closest('[data-sec]'); if (t) dirty[t.dataset.sec] = true; };
 document.addEventListener('input', markDirty);
@@ -699,7 +725,7 @@ function capStop(){
   if (capStream) { capStream.getTracks().forEach(t => { t.onended = null; t.stop(); }); capStream = null; }
   ['capA', 'capB'].forEach(id => { $(id).srcObject = null; });
   $('prevWrap').classList.remove('live'); $('capWrap').classList.remove('live'); $('capStop').disabled = true;
-  capSay('Skróty: 1–7 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)', false);
+  capSay('Skróty: 1–8 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)', false);
 }
 $('capStart').onclick = capStart; $('capPh').onclick = capStart; $('capStop').onclick = capStop;
 $('monOv').onchange = () => $('prevWrap').classList.toggle('noov', !$('monOv').checked);

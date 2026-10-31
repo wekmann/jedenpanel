@@ -13,6 +13,7 @@ export default async function handler(req, res) {
       bar: cfg.bar,
       live_badge: cfg.live_badge,
       qr: cfg.qr,
+      flash: cfg.flash,
       age: cfg.age,
       lower_third: cfg.lower_third,
       map: cfg.map,

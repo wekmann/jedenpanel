@@ -20,6 +20,7 @@ export const DEFAULTS = {
   },
   live_badge: { visible: false, text: 'NA ŻYWO', top: 43, right: 53 },
   qr: { visible: false },
+  flash: { visible: false, label: 'PILNE', text: '', top: 125, hideAfter: 0 },
   age: { visible: false, rating: 12 },
   lower_third: { visible: false, name: '', role: '', hideAfter: 0, guests: [] },
   map: {
@@ -130,6 +131,13 @@ export const SCHEMAS = {
     text: z.string().trim().min(1, 'Podaj tekst plakietki').max(40),
     top: z.number().int().min(0).max(1080),
     right: z.number().int().min(0).max(1920),
+  }),
+  flash: z.object({
+    visible: z.boolean(),
+    label: z.string().trim().max(20),
+    text: z.string().trim().max(220),
+    top: z.number().int().min(0, 'Odstęp od góry min. 0').max(1080, 'Odstęp od góry max. 1080'),
+    hideAfter: z.number().min(0, 'Sekundy min. 0').max(3600, 'Sekundy max. 3600'),
   }),
   qr: z.object({
     visible: z.boolean(),
