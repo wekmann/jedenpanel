@@ -20,7 +20,24 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   try {
     const e = env();
-    if (!e.url || !e.key || !e.secret) return res.status(503).json({ error: 'Brak LIVEKIT_URL / LIVEKIT_API_KEY / LIVEKIT_API_SECRET w zmiennych środowiskowych Vercela' });
+    const hasLk = !!(e.url && e.key && e.secret);
+
+    // ZATRZYMAJ / WZNÓW nie potrzebuje LiveKita (działa też na lokalnym oknie PGM i podglądzie) – obsługa przed sprawdzeniem zmiennych
+    if (req.method === 'POST' && req.body && req.body.action === 'pause') {
+      if (!requireAdmin(req, res)) return;
+      const on = !!req.body.paused;
+      const c = await readConfig();
+      c.game_pause = { paused: on, at: new Date().toISOString() };
+      await writeConfig(c);
+      return res.status(200).json({ ok: true, paused: on });
+    }
+    if (req.method === 'POST' && req.body && req.body.action === 'status' && !hasLk) {
+      if (!requireAdmin(req, res)) return;
+      const c = await readConfig();
+      return res.status(200).json({ status: 'off', paused: !!(c.game_pause && c.game_pause.paused) });
+    }
+
+    if (!hasLk) return res.status(503).json({ error: 'Brak LIVEKIT_URL / LIVEKIT_API_KEY / LIVEKIT_API_SECRET w zmiennych środowiskowych Vercela' });
 
     // widz (overlay): tylko oglądanie, wymaga klucza overlayu
     if (req.method === 'GET') {
@@ -105,9 +122,10 @@ export default async function handler(req, res) {
       // 0 STARTING, 1 ACTIVE, 2 ENDING, 3 COMPLETE, 4 FAILED, 5 ABORTED, 6 LIMIT_REACHED
       if (!info || info.status >= 3) {
         const err = info && info.error ? String(info.error) : '';
-        cfg.stream_state = { egressId: '', startedAt: '', operator: '' };
-        await writeConfig(cfg);
-        return res.status(200).json({ status: 'off', error: err, paused });
+        const fresh = await readConfig();   // świeży odczyt, żeby nie nadpisać np. świeżo zapisanej pauzy
+        fresh.stream_state = { egressId: '', startedAt: '', operator: '' };
+        await writeConfig(fresh);
+        return res.status(200).json({ status: 'off', error: err, paused: !!(fresh.game_pause && fresh.game_pause.paused) });
       }
       return res.status(200).json({ paused, status: info.status === 1 ? 'live' : info.status === 2 ? 'ending' : 'starting', startedAt: cfg.stream_state.startedAt, operator: cfg.stream_state.operator || '' });
     }
