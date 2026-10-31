@@ -92,6 +92,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
 .chips .chip.on small,.chips .chip.on kbd{color:#fff;border-color:#ffffff66}
 .tabs{padding:6px}.tabs button{font-weight:800;letter-spacing:.5px;text-transform:uppercase;font-size:12px}
 @media(max-width:800px){.mons{grid-template-columns:1fr}.top{grid-template-columns:1fr auto}.clock{display:none}}
+.actbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:0 0 14px;margin-bottom:4px;border-bottom:1px solid var(--line)}.actbar button{margin:0}.actbar .msg{margin:0 0 0 6px;min-height:0}
 </style>
 </head>
 <body>
@@ -105,12 +106,6 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
 </div>
 
 <div class="wrap" id="app" hidden>
-  <div class="top">
-    <div class="brand"><img src="/assets/jeden_logo.png" alt=""><div><h1>Reżyserka</h1><small>JEDEN · sterowanie transmisją</small></div></div>
-    <div class="tally" id="tally"><i></i><b id="tallyTxt">OFF AIR</b></div>
-    <div class="clock"><span id="clk">--:--:--</span><small>Na antenie: <b id="upt">00:00:00</b></small></div>
-    <button class="b3 sm" id="bLogout">Wyloguj</button>
-  </div>
 
   <div class="box" id="dbWarn" hidden style="border-color:#ff6b6b"><b style="color:#ff6b6b">⚠ Brak bazy danych.</b> Ustawienia się nie zapiszą i overlay ich nie zobaczy. W Vercelu: <b>Storage → Upstash Redis</b> → podłącz do projektu, potem <b>Redeploy</b>.</div>
 
@@ -325,6 +320,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <input type="text" id="ovUrl" readonly>
     <button class="b2" id="ovCopy">Kopiuj</button>
     <button class="b3" id="ovRegen">Wygeneruj nowy klucz</button>
+    <button class="b3" id="bLogout">Wyloguj</button>
     <div class="msg" id="ovMsg"></div>
     <h3 style="margin-top:18px">Instrukcja OBS</h3>
     <ol>
@@ -340,6 +336,21 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
 <script>
 const $ = id => document.getElementById(id);
 let cfg = null, skew = 0;
+
+/* przyciski akcji (Zapisz / Pokaż / Ukryj + komunikat) zawsze na górze sekcji */
+['barSave','pSave','mpSave','fSave','lbSave','qrSave','ageSave','ltSave','bkShow','adSave'].forEach(id => {
+  const first = $(id); if (!first) return;
+  const box = first.closest('.sub') || first.closest('.tab'); if (!box) return;
+  const bar = document.createElement('div'); bar.className = 'actbar';
+  let el = first;
+  while (el) {
+    const nx = el.nextElementSibling, isMsg = el.classList.contains('msg');
+    if (el.tagName === 'BUTTON' || isMsg) bar.appendChild(el); else if (el.tagName !== 'BR') break;
+    if (isMsg) break; el = nx;
+  }
+  const h = box.firstElementChild && box.firstElementChild.tagName === 'H3' ? box.firstElementChild : null;
+  if (h) h.after(bar); else box.prepend(bar);
+});
 
 async function api(path, method, body){
   const r = await fetch(path, {method: method || 'GET', credentials: 'same-origin',
@@ -365,7 +376,7 @@ async function start(){
   let r; try { r = await api('/api/config'); } catch (e) { return; }
   cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); $('dbWarn').hidden = !!r.persistent;
   $('login').hidden = true; $('app').hidden = false;
-  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillBrk(); fillAds(); fillOverlay(); renderChips(); updTally(); scanAds();
+  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
 }
 
 /* ---------- zakładki ---------- */
@@ -615,7 +626,7 @@ function renderChips(){
     const on = !!cfg[k].visible, b = document.createElement('button'); b.dataset.k = k;
     b.className = 'chip' + (on ? ' on' : ''); b.innerHTML = '<kbd>' + (n + 1) + '</kbd><span>' + NAME[k] + '</span><small>' + (on ? 'NA ANTENIE' : 'wyłączone') + '</small>';
     b.onclick = async () => {
-      try { const r = await api('/api/config', 'POST', {section: k, patch: {visible: !cfg[k].visible}}); cfg = r.config; if (!dirty[k]) FILL[k](); renderChips(); updTally(); }
+      try { const r = await api('/api/config', 'POST', {section: k, patch: {visible: !cfg[k].visible}}); cfg = r.config; if (!dirty[k]) FILL[k](); renderChips(); }
       catch (e) { say(MSG[k], e.message, false); }
     };
     box.appendChild(b);
@@ -640,7 +651,7 @@ async function sync(){
       dirty[k] ? conflict(k) : FILL[k]();
     }
     if (old.overlayKey !== cfg.overlayKey) fillOverlay();
-    renderChips(); updTally();
+    renderChips();
   } catch (e) { /* chwilowy brak sieci – spróbujemy za chwilę */ }
   finally { syncing = false; }
 }
@@ -661,20 +672,7 @@ $('ovRegen').onclick = async () => {
 };
 
 
-/* ---------- reżyserka: ON AIR, zegar, skróty ---------- */
-let onSince = 0;
-function updTally(){
-  if (!cfg) return;
-  const on = Object.keys(NAME).some(k => cfg[k] && cfg[k].visible);
-  $('tally').classList.toggle('on', on); $('tallyTxt').textContent = on ? 'ON AIR' : 'OFF AIR';
-  if (on && !onSince) onSince = Date.now(); if (!on) onSince = 0;
-}
-const p2 = n => String(n).padStart(2, '0');
-setInterval(() => {
-  const d = new Date(); $('clk').textContent = p2(d.getHours()) + ':' + p2(d.getMinutes()) + ':' + p2(d.getSeconds());
-  const t = onSince ? Math.floor((Date.now() - onSince) / 1000) : 0;
-  $('upt').textContent = p2(Math.floor(t / 3600)) + ':' + p2(Math.floor(t / 60) % 60) + ':' + p2(t % 60);
-}, 500);
+/* ---------- skróty ---------- */
 document.addEventListener('keydown', e => {
   if (!cfg || e.ctrlKey || e.metaKey || e.altKey) return;
   const t = e.target; if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
