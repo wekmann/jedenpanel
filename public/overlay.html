@@ -269,6 +269,12 @@ html.pgm,html.pgm body{background:#000 !important;width:100%;height:100%;cursor:
 html.pgm #scene{position:absolute;left:50%;top:50%;margin:-540px 0 0 -960px;transform:scale(var(--sc,1));transform-origin:50% 50%;background:#000}
 #pgmv{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
 html.pgm #pgmv{display:block}
+/* kolejność warstw: wideo zawsze pod wszystkim; filtr wyłącza sprzętową nakładkę wideo (przez nią znikały elementy) */
+#scene{isolation:isolate}
+#pgmv{z-index:0;filter:brightness(1.001)}
+:where(#scene>*:not(#pgmv)){z-index:1}
+#pgmwait{z-index:0}
+#barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity}
 #pgmwait{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;color:#9fb3d1;font:700 40px/1.2 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:2px}
 #pgmwait small{font-size:24px;font-weight:700;color:#6f84a8;letter-spacing:1px}
 html.pgm #pgmwait.on{display:flex}
@@ -1063,10 +1069,14 @@ async function pgmConnect(){
     });
     room.on(L.RoomEvent.AudioPlaybackStatusChanged, sndHint);
     room.on(L.RoomEvent.Disconnected, () => { if (pgmRoom === room) { pgmRoom = null; pgmv.srcObject = null; sndHint(); pgmMsg('Czekam na obraz z gry…', ''); setTimeout(pgmConnect, 3000); } });
-    await room.connect(j.url, j.token);
+    await Promise.race([room.connect(j.url, j.token), new Promise((_, no) => setTimeout(() => no(new Error('Przekroczono czas łączenia z LiveKit')), 15000))]);
     pgmRoom = room; pgmTry = 0; sndHint();
     if (![...room.remoteParticipants.values()].length) pgmMsg('Czekam na obraz z gry…', 'W panelu: wybierz okno gry i kliknij „Publikuj okno gry”');
-  } catch (e) { console.error('pgm', e); pgmRoom = null; setTimeout(pgmConnect, retry); }
+  } catch (e) {
+    console.error('pgm', e); pgmRoom = null;
+    pgmMsg('Nie mogę połączyć z obrazem z gry', String((e && e.message) || e).slice(0, 120) + ' · ponawiam…');
+    setTimeout(pgmConnect, retry);
+  }
 }
 function unlockAudio(){ if (pgmRoom) pgmRoom.startAudio().then(sndHint).catch(() => {}); }
 snd.onclick = unlockAudio; document.addEventListener('pointerdown', unlockAudio);
