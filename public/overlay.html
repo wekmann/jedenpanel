@@ -7,10 +7,12 @@
 /* tryb PGM = obraz z gry + overlay, wyskalowane do okna. Przezroczysty overlay (OBS): dopisz &clean=1 do adresu */
 (function(){var q=new URLSearchParams(location.search),f=false;try{f=window.top!==window.self}catch(e){f=true}
 window.EGRESS=q.has('egress');
-window.LITE=q.get('lite')==='1'||(window.EGRESS&&q.get('lite')!=='0');
-if(window.LITE)document.documentElement.classList.add('lite');
-window.PGM=window.EGRESS||!(q.get('clean')==='1'||q.has('transparent')||q.has('preview')||q.has('demo')||f);
-if(window.PGM)document.documentElement.className='pgm'})();
+/* PGM (obraz z gry w chmurze) tylko dla wysyłki na platformy (&egress=1) albo po dopisaniu &pgm=1; zwykły link to przezroczysty overlay (OBS) */
+window.PGM=window.EGRESS||(q.get('pgm')==='1'&&!f);
+/* lite (bez dekoracyjnych pętli animacji) domyślnie w PGM i wysyłce z chmury – płynniejszy obraz; &lite=0 wyłącza */
+window.LITE=q.get('lite')==='1'||((window.EGRESS||window.PGM)&&q.get('lite')!=='0');
+if(window.PGM)document.documentElement.classList.add('pgm');
+if(window.LITE)document.documentElement.classList.add('lite')})();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Roboto+Condensed:wght@700;900&display=swap" rel="stylesheet">

@@ -125,15 +125,24 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
         <label class="mini"><input type="checkbox" id="monFit" checked>dopasuj</label></div>
       <div class="screen" id="capWrap">
         <video id="capB" autoplay muted playsinline></video>
-        <div class="capph" id="capPh"><div>🖥</div><b>Kliknij, aby wybrać okno lub aplikację</b><small>Okno gry · stąd publikujesz obraz do streamu (zakładka Stream)</small></div>
+        <div class="capph" id="capPh"><div>🖥</div><b>Kliknij, aby wybrać okno lub aplikację</b><small>Okno gry · stąd bierze obraz podgląd, okno na Discorda i stream (zakładka Stream)</small></div>
       </div>
     </div>
+  </div>
+  <div class="box" id="outPick" hidden style="margin-bottom:12px">
+    <b>Które okno otworzyć?</b> Otworzy się osobne okno – w Discordzie wybierz „Udostępnij ekran” → <b>to okno</b> (maksymalizuj je albo wciśnij F11 / dwuklik).
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+      <button class="b1" id="outPgm">PGM – z paskiem i overlayem</button>
+      <button class="b2" id="outPvw">PVW – czyste okno (bez paska)</button>
+      <button class="b3" id="outCancel">Anuluj</button>
+    </div>
+    <div class="hint" style="margin-top:8px">W otwartym oknie możesz przełączać: <b>P</b> = PGM, <b>V</b> = PVW, <b>F</b> lub dwuklik = pełny ekran. Obraz idzie prosto z przechwytywania (bez chmury), więc jakość jest taka jak w oknie gry.</div>
   </div>
   <div class="capbar">
     <button class="b1" id="capStart">🖥 Wybierz okno / ekran</button>
     <button class="b3" id="capStop" disabled>■ Zatrzymaj</button>
     <button class="b2" id="capSwap">⇄ Zamień monitory</button>
-    <button class="b2" id="capFs" title="Pełny ekran czystego okna">⛶ Pełny ekran</button>
+    <button class="b2" id="capFs" title="Otwiera osobne okno z PGM albo PVW – to okno udostępniasz na Discordzie">⛶ Pełny ekran (okno na Discorda)</button>
     <span class="hint" id="capMsg">Skróty: 1–8 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)</span>
   </div>
 
@@ -307,7 +316,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <div class="sub">
       <h3>Operator</h3>
       <div style="max-width:420px"><label for="stOp">Twoja nazwa (widoczna dla innych operatorów)</label><input type="text" id="stOp" maxlength="40" placeholder="np. Kuba"></div>
-      <div class="hint">Kto wybierze okno gry (albo kliknie <b>START STREAM</b>), ten publikuje obraz i dźwięk <b>ze swoimi ustawieniami dźwięku</b> (poniżej – zapamiętane tylko w tej przeglądarce). Overlay (PGM) pokazuje obraz od razu, bez START STREAM – START tylko włącza wysyłkę na Twitcha/TikToka. Drugi operator może w każdej chwili przejąć publikację (wybór okna lub START STREAM) – wysyłka na platformy nie jest wtedy restartowana.</div>
+      <div class="hint">Kto wybierze okno gry (albo kliknie <b>START STREAM</b>), ten publikuje obraz i dźwięk <b>ze swoimi ustawieniami dźwięku</b> (poniżej – zapamiętane tylko w tej przeglądarce). Obraz publikuje się do chmury dopiero przy START STREAM (Twitch/TikTok). Na Discordzie używasz przycisku „⛶ Pełny ekran” pod monitorami. Drugi operator może w trakcie streamu kliknąć START STREAM i przejąć publikację – wysyłka na platformy nie jest wtedy restartowana.</div>
     </div>
     <div class="sub">
       <h3>Cele – stream wysyła strona (chmura), nie Twój komputer</h3>
@@ -325,6 +334,8 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       <select id="stFps" style="max-width:320px"><option value="60">1080p · 60 kl/s (płynnie – zalecane)</option><option value="30">1080p · 30 kl/s (mniej danych)</option></select>
       <label for="stBr">Bitrate wysyłki na platformy</label>
       <select id="stBr" style="max-width:320px"><option value="6000">6 000 kb/s (Twitch – bezpiecznie)</option><option value="8000">8 000 kb/s (zalecane do 1080p60)</option><option value="10000">10 000 kb/s (TikTok / własny serwer)</option></select>
+      <label for="stPubBr">Bitrate obrazu do overlayu (Discord) – zależy od Twojego uploadu</label>
+      <select id="stPubBr" style="max-width:420px"><option value="8000">8 Mb/s</option><option value="12000">12 Mb/s – zalecane</option><option value="16000">16 Mb/s</option><option value="20000">20 Mb/s (potrzebny mocny upload)</option></select>
       <label for="stPri">Priorytet obrazu – zależy od Twojego łącza (zapamiętane tylko w tej przeglądarce)</label>
       <select id="stPri" style="max-width:420px"><option value="res">Ostrość obrazu – zalecane (przy słabym łączu spada płynność)</option><option value="bal">Zrównoważony</option><option value="fps">Płynność (przy słabym łączu spada ostrość)</option></select>
       <div class="hint">Discord: udostępniasz ręcznie okno z linkiem PGM <code>/overlay?key=…</code> (zakładka Overlay). Klucze są trzymane tylko w bazie i nigdy nie trafiają do overlayu. Obraz z okna gry jest przechwytywany w 1080p z wybraną liczbą klatek (wymaga ok. 12–14 Mb/s uploadu u operatora przy 60 kl/s).</div>
@@ -351,7 +362,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     </div>
     <div class="sub">
       <h3>Obraz z gry</h3>
-      <div class="hint" id="stPubHint">1) Ustaw swój dźwięk powyżej, 2) kliknij monitor PVW i wybierz okno gry – obraz od razu trafia do overlayu (PGM), 3) „START STREAM” włącza wysyłkę na platformy. Okno gry musi być przechwytywane w tym panelu przez cały stream.</div>
+      <div class="hint" id="stPubHint">Twitch/TikTok: 1) wybierz okno gry (monitor PVW), 2) ustaw swój dźwięk powyżej, 3) „START STREAM”. Okno gry musi być przechwytywane w tym panelu przez cały stream. Discord: przycisk „⛶ Pełny ekran” pod monitorami.</div>
       <div class="hint" id="stStat" style="font-weight:800;margin-top:10px">Stream: wyłączony</div>
       <div class="hint" id="stQual" style="margin-top:6px">Wysyłka do overlayu: nie publikuję</div>
     </div>
@@ -611,7 +622,8 @@ function loadLk(){
     sc.onload = ok; sc.onerror = () => { lkLib = null; er(new Error('Nie udało się załadować biblioteki LiveKit (sprawdź internet)')); }; document.head.appendChild(sc);
   }));
 }
-try { const v = localStorage.getItem('jeden_pri'); if (v) $('stPri').value = v; } catch (e) {}
+try { const v = localStorage.getItem('jeden_pri'); if (v) $('stPri').value = v; const b = localStorage.getItem('jeden_pubbr'); if (b) $('stPubBr').value = b; } catch (e) {}
+$('stPubBr').onchange = async () => { try { localStorage.setItem('jeden_pubbr', $('stPubBr').value); } catch (e) {} if (lkRoom) { await lkUnpublish(); await lkPublish({soft: true}); } };
 $('stPri').onchange = async () => { try { localStorage.setItem('jeden_pri', $('stPri').value); } catch (e) {} if (lkRoom) { await lkUnpublish(); await lkPublish({soft: true}); } };
 let stPrev = null;
 async function stQualTick(){
@@ -652,7 +664,7 @@ async function lkPublish(opt){
     pubSay( 'Łączę z serwerem…', true);
     const j = await api('/api/lk', 'POST', {action: 'publisher'}); await loadLk();
     const L = window.LivekitClient, fps = num($('stFps').value) || 60, ebr = num($('stBr').value) || 8000;
-    const br = Math.min(12000000, Math.round(ebr * 1400)); // wysyłka do chmury z zapasem ponad bitrate końcowy
+    const br = (num($('stPubBr').value) || 12000) * 1000;   // bitrate obrazu do overlayu (ustawienie operatora)
     const pri = $('stPri').value, dp = pri === 'fps' ? 'maintain-framerate' : pri === 'bal' ? 'balanced' : 'maintain-resolution';
     room = new L.Room({dynacast: false, adaptiveStream: false});
     await room.connect(j.url, j.token);
@@ -674,7 +686,7 @@ async function lkPublish(opt){
     });
     lkRoom = room; room = null; stRender();
     if (au.errs.length) pubSay( 'Obraz publikowany ✔ w overlayu – ale dźwięk NIE działa: ' + au.errs.join(' · '), false);
-    else pubSay( au.track ? 'Publikuję obraz ✔ i dźwięk ✔ (' + au.used.join(' + ') + ')' : 'Publikuję obraz ✔ – BEZ dźwięku (zaznacz źródła dźwięku powyżej)', !!au.track);
+    else pubSay( au.track ? 'Publikuję obraz ✔ i dźwięk ✔ (' + au.used.join(' + ') + ')' : 'Publikuję obraz ✔ (bez dźwięku)', true);
     return true;
   } catch (e) { if (room) { try { room.disconnect(false); } catch (x) {} } auCleanup(); pubSay( e.message || String(e), false); return false; }
   finally { lkBusy = false; }
@@ -693,7 +705,7 @@ const auCfgSave = () => { try { localStorage.setItem('jeden_au', JSON.stringify(
   vg: +$('auVg').value, vd: +$('auVd').value, vm: +$('auVm').value})); } catch (e) {} };
 (function(){
   const c = auCfgLoad();
-  if (c.game === false) $('auGame').checked = false; if (c.dc) $('auDc').checked = true; if (c.mic === undefined || c.mic) $('auMic').checked = true; if (c.mode) $('auMode').value = c.mode;
+  if (c.game === false) $('auGame').checked = false; if (c.dc) $('auDc').checked = true; if (c.mic) $('auMic').checked = true; if (c.mode) $('auMode').value = c.mode;
   [['vg', 'auVg'], ['vd', 'auVd'], ['vm', 'auVm']].forEach(([k, id]) => { if (c[k] != null) $(id).value = c[k]; $(id + 'T').textContent = $(id).value + '%'; });
 })();
 function auVis(){ $('auDevWrap').style.display = $('auMode').value === 'dev' ? '' : 'none'; }
@@ -748,7 +760,7 @@ async function auBuild(){
   const errs = [], used = [], src = [];
   if ($('auGame').checked) {
     const g = capStream ? capStream.getAudioTracks()[0] : null;
-    if (g) src.push(['game', 'gra', g, +$('auVg').value]); else errs.push('okno gry nie udostępnia dźwięku (wybierz ekran/kartę z dźwiękiem albo odznacz „dźwięk z okna gry”)');
+    if (g) src.push(['game', 'gra', g, +$('auVg').value]);   // okno zwykle nie ma dźwięku – to nie błąd, po prostu obraz bez dźwięku gry
   }
   if ($('auDc').checked) {
     try { src.push(['dc', 'Discord', await auPrepare(), +$('auVd').value]); }
@@ -1015,7 +1027,7 @@ async function capStart(){
     const tr = st.getVideoTracks()[0]; try { tr.contentHint = 'motion'; } catch (x) {} tr.onended = capStop;
     try { await tr.applyConstraints({frameRate: {ideal: fps, max: fps}}); } catch (x) {}
     const sg = tr.getSettings ? tr.getSettings() : {};
-    setTimeout(() => { if (!lkRoom && !lkBusy) lkPublish({soft: true}); }, 0);   // overlay (PGM) ma obraz od razu, bez START STREAM
+    if (outWin && !outWin.closed) outAttach(outWin, st);
     capSay('Podgląd: ' + (tr.label || 'okno') + (sg.width ? ' · ' + sg.width + '×' + sg.height : '') + (sg.frameRate ? ' @ ' + Math.round(sg.frameRate) + ' kl/s' : ''), false);
   } catch (e) { capSay(e && e.name === 'NotAllowedError' ? 'Anulowano wybór okna.' : 'Nie udało się: ' + (e && e.message), true); }
 }
@@ -1031,7 +1043,38 @@ $('monOv').onchange = () => $('prevWrap').classList.toggle('noov', !$('monOv').c
 $('monFit').onchange = () => { const c = !$('monFit').checked; $('prevWrap').classList.toggle('cover', c); $('capWrap').classList.toggle('cover', c); };
 let swapped = false;
 $('capSwap').onclick = () => { swapped = !swapped; document.querySelector('.mons').style.flexDirection = ''; document.querySelectorAll('.mons .mon').forEach((m, i) => m.style.order = swapped ? 1 - i : i); };
-$('capFs').onclick = () => { const w = $('capWrap'); (w.requestFullscreen || w.webkitRequestFullscreen || (() => {})).call(w); };
+/* ---------- okno wyjściowe (do udostępnienia na Discordzie): PGM albo PVW, obraz prosto z przechwytywania ---------- */
+let outWin = null;
+const OUT_HTML = '<!doctype html><meta charset="utf-8"><title>JEDEN</title><style>html,body{margin:0;height:100%;background:#000;overflow:hidden;cursor:none}' +
+  '#s{position:absolute;inset:0}#s.pgm{inset:auto;left:50%;top:50%;width:1920px;height:1080px;margin:-540px 0 0 -960px;transform-origin:50% 50%}' +
+  'video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;display:none}#s.pgm iframe{display:block}</style>' +
+  '<div id="s"><video id="v" autoplay muted playsinline disablepictureinpicture></video><iframe id="f"></iframe></div>' +
+  '<script>function fit(){var s=document.getElementById("s");s.style.transform=s.className==="pgm"?"scale("+Math.min(innerWidth/1920,innerHeight/1080)+")":"";}' +
+  'addEventListener("resize",fit);fit();' +
+  'function fs(){var d=document.documentElement;if(document.fullscreenElement)document.exitFullscreen();else if(d.requestFullscreen)d.requestFullscreen();}' +
+  'addEventListener("dblclick",fs);' +
+  'addEventListener("keydown",function(e){var k=(e.key||"").toLowerCase();if(k==="f")fs();else if(k==="p"&&opener&&opener.jedenOutMode)opener.jedenOutMode(window,"pgm");else if(k==="v"&&opener&&opener.jedenOutMode)opener.jedenOutMode(window,"pvw");});<\/script>';
+window.jedenOutMode = (w, mode) => {
+  try {
+    const d = w.document, s = d.getElementById('s'), f = d.getElementById('f');
+    s.className = mode === 'pgm' ? 'pgm' : '';
+    if (mode === 'pgm') { if (!f.src || f.src === 'about:blank') f.src = location.origin + '/overlay?preview=1&lite=1&key=' + encodeURIComponent(cfg.overlayKey); }
+    d.title = 'JEDEN – ' + (mode === 'pgm' ? 'PGM' : 'PVW');
+    w.fit();
+  } catch (e) {}
+};
+function outAttach(w, st){ try { const v = w.document.getElementById('v'); v.srcObject = st; v.play().catch(() => {}); } catch (e) {} }
+function openOut(mode){
+  $('outPick').hidden = true;
+  if (!capStream) { capSay('Najpierw wybierz okno gry (przycisk „Wybierz okno / ekran”)', true); return; }
+  const w = window.open('', 'jeden_out', 'popup=yes,width=1280,height=720');
+  if (!w) { capSay('Przeglądarka zablokowała nowe okno – zezwól tej stronie na wyskakujące okna', true); return; }
+  if (!w.document.getElementById('s')) { w.document.open(); w.document.write(OUT_HTML); w.document.close(); }
+  outWin = w; outAttach(w, capStream); window.jedenOutMode(w, mode); w.focus();
+  capSay('Otwarto okno ' + (mode === 'pgm' ? 'PGM' : 'PVW') + ' – w Discordzie udostępnij to okno', false);
+}
+$('capFs').onclick = () => { $('outPick').hidden = !$('outPick').hidden; };
+$('outPgm').onclick = () => openOut('pgm'); $('outPvw').onclick = () => openOut('pvw'); $('outCancel').onclick = () => { $('outPick').hidden = true; };
 
 (async () => { try { const j = await api('/api/login'); j.admin ? await start() : showLogin(); } catch (e) { showLogin(); } })();
 </script>
