@@ -7,6 +7,8 @@
 /* tryb PGM = obraz z gry + overlay, wyskalowane do okna. Przezroczysty overlay (OBS): dopisz &clean=1 do adresu */
 (function(){var q=new URLSearchParams(location.search),f=false;try{f=window.top!==window.self}catch(e){f=true}
 window.EGRESS=q.has('egress');
+window.LITE=q.get('lite')==='1'||(window.EGRESS&&q.get('lite')!=='0');
+if(window.LITE)document.documentElement.classList.add('lite');
 window.PGM=window.EGRESS||!(q.get('clean')==='1'||q.has('transparent')||q.has('preview')||q.has('demo')||f);
 if(window.PGM)document.documentElement.className='pgm'})();
 </script>
@@ -279,12 +281,17 @@ html.pgm #pgmv{display:block}
 #pgmwait small{font-size:24px;font-weight:700;color:#6f84a8;letter-spacing:1px}
 html.pgm #pgmwait.on{display:flex}
 #snd{display:none;position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:99;background:#d60f08;color:#fff;font:700 15px Arial,sans-serif;padding:9px 18px;border:0;border-radius:8px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,.5)}
+
+/* ---- tryb lite (wysyłka z chmury / ?lite=1): wyłączone dekoracyjne pętle animacji, żeby nic nie zwalniało klatek ---- */
+html.lite .ldot,html.lite .lpdot,html.lite #ltname::after,html.lite #fllabel::after,html.lite #ffill::after,html.lite #phead::after,
+html.lite .bk-st,html.lite .bk-sw,html.lite #bkp i,html.lite #bktk,html.lite #fltxt.mq{animation:none !important}
+html.lite #bkp{display:none}
 </style>
 </head>
 <body>
 <div id="scene">
-  <video id="pgmv" autoplay muted playsinline></video>
-  <div id="pgmwait"><div>Czekam na obraz z gry…</div><small>W panelu: wybierz okno gry i kliknij „Publikuj okno gry”</small></div>
+  <video id="pgmv" autoplay muted playsinline disablepictureinpicture disableremoteplayback></video>
+  <div id="pgmwait"><div>Czekam na obraz z gry…</div><small>W panelu: wybierz okno gry i kliknij „START STREAM”</small></div>
 
   <div id="barwrap" class="off">
     <div id="root">
@@ -789,7 +796,7 @@ function fundPct(){
   return Math.max(0, Math.min(100, Math.floor((+fund.percent || 0) + inc)));
 }
 let lastFundP = -1;
-function renderFund(){ const p = fundPct(); $('fpct').textContent = p + '%'; $('ffill').style.width = p + '%';
+function renderFund(){ const p = fundPct(), tx = p + '%'; if ($('fpct').textContent !== tx) $('fpct').textContent = tx; if ($('ffill').style.width !== tx) $('ffill').style.width = tx;
   if (p !== lastFundP && lastFundP >= 0) { const st = $('fstrip'); st.classList.remove('bump'); void st.offsetWidth; st.classList.add('bump'); }
   lastFundP = p; }
 setInterval(renderFund, 500);
@@ -1034,44 +1041,70 @@ if (QS.get('fit') === 'cover') pgmv.style.objectFit = 'cover';
 /* tryb egress (wysyłka z chmury na Twitcha/TikToka): sygnał startu nagrywania dla LiveKit */
 function startRec(){ if (!EGRESS || recSent) return; recSent = true; console.log('START_RECORDING'); }
 if (EGRESS) setTimeout(startRec, 20000);
-pgmv.addEventListener('playing', () => setTimeout(startRec, 1500));
+pgmv.addEventListener('playing', () => { setTimeout(startRec, 1500); pgmStuck = 0; pgmMsg(''); });
 function pgmMsg(t, sub){
   if (!t) { pgmwait.classList.remove('on'); return; }
   if (EGRESS) return;
   pgmwait.firstElementChild.textContent = t; pgmwait.lastElementChild.textContent = sub || ''; pgmwait.classList.add('on');
 }
 function sndHint(){ snd.style.display = (pgmRoom && !pgmRoom.canPlaybackAudio && !MUTE && !EGRESS) ? 'block' : 'none'; }
-function loadLk(){
-  return lkLib || (lkLib = new Promise((ok, er) => {
-    if (window.LivekitClient) return ok();
-    const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/livekit-client@2.5.7/dist/livekit-client.umd.min.js';
-    sc.onload = ok; sc.onerror = () => { lkLib = null; er(new Error('Nie udało się załadować biblioteki LiveKit')); }; document.head.appendChild(sc);
-  }));
+const LK_URLS = ['https://cdn.jsdelivr.net/npm/livekit-client@2.5.7/dist/livekit-client.umd.min.js', 'https://unpkg.com/livekit-client@2.5.7/dist/livekit-client.umd.min.js'];
+function loadScriptT(src, ms){
+  return new Promise((ok, er) => {
+    const sc = document.createElement('script'), t = setTimeout(() => { sc.remove(); er(new Error('timeout')); }, ms);
+    sc.src = src; sc.onload = () => { clearTimeout(t); ok(); }; sc.onerror = () => { clearTimeout(t); sc.remove(); er(new Error('blocked')); };
+    document.head.appendChild(sc);
+  });
 }
+function loadLk(){
+  return lkLib || (lkLib = (async () => {
+    if (window.LivekitClient) return;
+    for (const u of LK_URLS) { try { await loadScriptT(u, 10000); if (window.LivekitClient) return; } catch (e) { /* następny adres */ } }
+    lkLib = null; throw new Error('Nie udało się załadować modułu obrazu (sprawdź internet / blokadę skryptów w przeglądarce)');
+  })());
+}
+/* stan obrazu: kto publikuje, czy obraz faktycznie dochodzi; przy zawieszeniu – ponowne połączenie */
+let pgmStuck = 0;
+function pgmHasVideo(){ const t = pgmv.srcObject && pgmv.srcObject.getVideoTracks ? pgmv.srcObject.getVideoTracks() : []; return t.length > 0 && t[0].readyState === 'live'; }
+function pgmCheck(){
+  if (!pgmRoom) return;
+  if (pgmHasVideo() && pgmv.readyState >= 2) { pgmStuck = 0; pgmMsg(''); return; }
+  const pub = [...pgmRoom.remoteParticipants.values()].find(p => p.identity === 'gra');
+  if (!pub) { pgmStuck = 0; pgmMsg('Czekam na obraz z gry…', 'W panelu kliknij „START STREAM” (publikuje okno gry)'); return; }
+  const vp = [...pub.trackPublications.values()].find(x => x.kind === 'video');
+  if (!vp) { pgmStuck = 0; pgmMsg('Czekam na obraz z gry…', 'Operator jest połączony, ale nie opublikował okna gry'); return; }
+  pgmMsg('Obraz z gry nie dociera…', 'Ponawiam połączenie');
+  if (++pgmStuck >= 4) { pgmStuck = 0; try { pgmRoom.disconnect(); } catch (e) {} }   // Disconnected → automatyczne ponowne łączenie
+}
+setInterval(pgmCheck, 2500);
 async function pgmConnect(){
   if (!window.PGM || DEMO || !KEY || pgmRoom) return;
   let retry = Math.min(15000, 2000 * (++pgmTry));
   try {
-    pgmMsg('Łączę z obrazem z gry…', '');
-    const r = await fetch('/api/lk?key=' + encodeURIComponent(KEY), {cache: 'no-store'});
+    pgmMsg('Łączę z obrazem z gry…', 'Pobieram dostęp');
+    const ac = new AbortController(), to = setTimeout(() => ac.abort(), 10000);
+    let r; try { r = await fetch('/api/lk?key=' + encodeURIComponent(KEY), {cache: 'no-store', signal: ac.signal}); } finally { clearTimeout(to); }
     if (r.status === 503) { pgmMsg('Brak LiveKit na serwerze', 'Ustaw LIVEKIT_URL / LIVEKIT_API_KEY / LIVEKIT_API_SECRET w Vercelu'); return; }
     if (!r.ok) throw new Error('HTTP ' + r.status);
-    const j = await r.json(); await loadLk();
+    const j = await r.json(); pgmMsg('Łączę z obrazem z gry…', 'Ładuję moduł obrazu'); await loadLk();
+    pgmMsg('Łączę z obrazem z gry…', 'Łączę z serwerem obrazu');
     const L = window.LivekitClient, room = new L.Room({adaptiveStream: false, dynacast: false});
     room.on(L.RoomEvent.TrackSubscribed, track => {
-      if (track.kind === 'video') { track.attach(pgmv); pgmMsg(''); }
-      else if (track.kind === 'audio') { const a = track.attach(); a.muted = MUTE; a.style.display = 'none'; document.body.appendChild(a); }
-      sndHint();
+      if (track.kind === 'video') { track.attach(pgmv); const p = pgmv.play(); if (p && p.catch) p.catch(() => {}); }
+      else if (track.kind === 'audio') { const a = track.attach(); a.muted = MUTE; a.volume = 1; a.style.display = 'none'; document.body.appendChild(a); const p = a.play(); if (p && p.catch) p.catch(() => sndHint()); }
+      sndHint(); pgmCheck();
     });
     room.on(L.RoomEvent.TrackUnsubscribed, track => {
-      if (track.kind === 'video') { track.detach(pgmv); pgmv.srcObject = null; pgmMsg('Czekam na obraz z gry…', 'W panelu: wybierz okno gry i kliknij „Publikuj okno gry”'); }
+      if (track.kind === 'video') { track.detach(pgmv); pgmv.srcObject = null; }
       else track.detach().forEach(el => el.remove());
+      pgmCheck();
     });
+    [L.RoomEvent.ParticipantConnected, L.RoomEvent.ParticipantDisconnected, L.RoomEvent.TrackPublished, L.RoomEvent.TrackUnpublished].forEach(ev => room.on(ev, () => setTimeout(pgmCheck, 300)));
     room.on(L.RoomEvent.AudioPlaybackStatusChanged, sndHint);
-    room.on(L.RoomEvent.Disconnected, () => { if (pgmRoom === room) { pgmRoom = null; pgmv.srcObject = null; sndHint(); pgmMsg('Czekam na obraz z gry…', ''); setTimeout(pgmConnect, 3000); } });
-    await Promise.race([room.connect(j.url, j.token), new Promise((_, no) => setTimeout(() => no(new Error('Przekroczono czas łączenia z LiveKit')), 15000))]);
-    pgmRoom = room; pgmTry = 0; sndHint();
-    if (![...room.remoteParticipants.values()].length) pgmMsg('Czekam na obraz z gry…', 'W panelu: wybierz okno gry i kliknij „Publikuj okno gry”');
+    room.on(L.RoomEvent.Disconnected, () => { if (pgmRoom === room) { pgmRoom = null; pgmv.srcObject = null; sndHint(); pgmMsg('Czekam na obraz z gry…', 'Łączę ponownie…'); setTimeout(pgmConnect, 3000); } });
+    await Promise.race([room.connect(j.url, j.token), new Promise((_, no) => setTimeout(() => no(new Error('Przekroczono czas łączenia z serwerem obrazu (sprawdź blokadę WebRTC/VPN)')), 15000))]);
+    pgmRoom = room; pgmTry = 0; sndHint(); try { room.startAudio().then(sndHint).catch(() => {}); } catch (e) {}
+    pgmCheck();
   } catch (e) {
     console.error('pgm', e); pgmRoom = null;
     pgmMsg('Nie mogę połączyć z obrazem z gry', String((e && e.message) || e).slice(0, 120) + ' · ponawiam…');
@@ -1079,7 +1112,7 @@ async function pgmConnect(){
   }
 }
 function unlockAudio(){ if (pgmRoom) pgmRoom.startAudio().then(sndHint).catch(() => {}); }
-snd.onclick = unlockAudio; document.addEventListener('pointerdown', unlockAudio);
+snd.onclick = unlockAudio; ['pointerdown', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, unlockAudio));
 pgmConnect();
 </script>
 </body>

@@ -92,6 +92,8 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
 .chips .chip.on small,.chips .chip.on kbd{color:#fff;border-color:#ffffff66}
 .tabs{padding:6px}.tabs button{font-weight:800;letter-spacing:.5px;text-transform:uppercase;font-size:12px}
 @media(max-width:800px){.mons{grid-template-columns:1fr}.top{grid-template-columns:1fr auto}.clock{display:none}}
+.meter{height:8px;background:#0a101c;border:1px solid var(--line);border-radius:4px;overflow:hidden;max-width:420px;margin:8px 0}.meter i{display:block;height:100%;width:0;background:var(--ok);transition:width .08s}
+.vol{display:flex;align-items:center;gap:10px;max-width:420px;margin:0 0 8px 26px;font-size:11px;color:var(--mut)}.vol input{flex:1;width:auto;height:auto;padding:0;appearance:auto;-webkit-appearance:auto;background:none;border:0}
 .actbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:0 0 14px;margin-bottom:4px;border-bottom:1px solid var(--line)}.actbar button{margin:0}.actbar .msg{margin:0 0 0 6px;min-height:0}
 </style>
 </head>
@@ -297,11 +299,16 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
   <!-- STREAM -->
   <div class="tab box" id="tStream" data-sec="stream">
     <button class="b1" id="stSave">Zapisz</button>
-    <button class="b2" id="stPub">▶ Publikuj okno gry</button>
+    <button class="b2" id="stPub" title="Tylko obraz i dźwięk do overlayu – bez wysyłki na Twitcha/TikToka">Tylko publikuj (test)</button>
     <button class="b3" id="stUnpub">■ Zakończ publikację</button>
     <button class="b1" id="stGo">● START STREAM</button>
     <button class="b3" id="stStop">■ STOP STREAM</button>
     <div class="msg" id="stMsg"></div>
+    <div class="sub">
+      <h3>Operator</h3>
+      <div style="max-width:420px"><label for="stOp">Twoja nazwa (widoczna dla innych operatorów)</label><input type="text" id="stOp" maxlength="40" placeholder="np. Kuba"></div>
+      <div class="hint">Kto kliknie <b>START STREAM</b>, ten publikuje obraz i dźwięk <b>ze swoimi ustawieniami dźwięku</b> (poniżej – zapamiętane tylko w tej przeglądarce). Drugi operator może w trakcie streamu kliknąć START STREAM i przejąć publikację – wysyłka na platformy nie jest wtedy restartowana.</div>
+    </div>
     <div class="sub">
       <h3>Cele – stream wysyła strona (chmura), nie Twój komputer</h3>
       <label class="chk"><input type="checkbox" id="stTwOn">Twitch</label>
@@ -315,28 +322,34 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
         <div><label for="stTkKey">Klucz streamu (Stream Key)</label><input type="password" id="stTkKey" maxlength="300" autocomplete="off"></div>
       </div>
       <label for="stFps">Klatki na sekundę</label>
-      <select id="stFps" style="max-width:200px"><option value="30">1080p · 30 kl/s (stabilnie)</option><option value="60">1080p · 60 kl/s (płynniej, więcej danych)</option></select>
-      <div class="hint">Discord: udostępniasz ręcznie okno z linkiem PGM <code>/overlay?key=…</code> (zakładka Overlay). Klucze są trzymane tylko w bazie i nigdy nie trafiają do overlayu.</div>
+      <select id="stFps" style="max-width:320px"><option value="60">1080p · 60 kl/s (płynnie – zalecane)</option><option value="30">1080p · 30 kl/s (mniej danych)</option></select>
+      <label for="stBr">Bitrate wysyłki na platformy</label>
+      <select id="stBr" style="max-width:320px"><option value="6000">6 000 kb/s (Twitch – bezpiecznie)</option><option value="8000">8 000 kb/s (zalecane do 1080p60)</option><option value="10000">10 000 kb/s (TikTok / własny serwer)</option></select>
+      <div class="hint">Discord: udostępniasz ręcznie okno z linkiem PGM <code>/overlay?key=…</code> (zakładka Overlay). Klucze są trzymane tylko w bazie i nigdy nie trafiają do overlayu. Obraz z okna gry jest przechwytywany w 1080p z wybraną liczbą klatek (wymaga ok. 12–14 Mb/s uploadu u operatora przy 60 kl/s).</div>
     </div>
     <div class="sub">
-      <h3>Dźwięk do streamu</h3>
+      <h3>Dźwięk do streamu – Twoje ustawienia</h3>
       <label class="chk"><input type="checkbox" id="auGame" checked>Dźwięk z okna gry</label>
+      <div class="vol">głośność <input type="range" id="auVg" min="0" max="150" value="100"><b id="auVgT">100%</b></div>
       <label class="chk"><input type="checkbox" id="auDc">Dźwięk z Discorda (głosy innych)</label>
+      <div class="vol">głośność <input type="range" id="auVd" min="0" max="150" value="100"><b id="auVdT">100%</b></div>
       <label class="chk"><input type="checkbox" id="auMic">Mój mikrofon (Twój głos)</label>
+      <div class="vol">głośność <input type="range" id="auVm" min="0" max="150" value="100"><b id="auVmT">100%</b></div>
       <div id="auMicWrap" style="max-width:420px"><label for="auMicDev">Mikrofon</label><select id="auMicDev"><option value="">Domyślny</option></select></div>
       <div class="grid2">
         <div><label for="auMode">Skąd brać dźwięk Discorda</label>
           <select id="auMode"><option value="dev">Urządzenie audio (np. VB-Cable)</option><option value="tab">Karta przeglądarki (discord.com/app)</option></select></div>
-        <div id="auDevWrap"><label for="auDev">Urządzenie wejściowe</label><select id="auDev"><option value="">Domyślne</option></select></div>
+        <div id="auDevWrap"><label for="auDev">Urządzenie z dźwiękiem Discorda</label><select id="auDev"><option value="">— wybierz urządzenie —</option></select></div>
       </div>
       <button class="b2" id="auPrep">🎧 Połącz dźwięk Discorda</button>
       <button class="b2" id="auRefresh">↻ Wczytaj listę urządzeń</button>
       <div class="msg" id="auMsg"></div>
-      <div class="hint">Odznacz „dźwięk z okna gry”, a zostanie tylko Discord (obraz dalej z gry). <b>Urządzenie:</b> w Discordzie ustaw wyjście na „CABLE Input (VB-Audio)”, tu wybierz „CABLE Output”. <b>Karta:</b> otwórz Discorda w przeglądarce, tu wybierz tę kartę i zaznacz „Udostępnij dźwięk karty”. Ustaw to PRZED kliknięciem „Publikuj okno gry”.</div>
+      <div class="meter" title="Poziom dźwięku wysyłanego na stream"><i id="auLvl"></i></div>
+      <div class="hint"><b>Poziom</b> pokazuje to, co faktycznie leci na stream (po kliknięciu START STREAM). Zaznaczone źródło, które nie działa, zatrzymuje start – żeby nie wyjść na antenę bez głosów. Mikrofon i Discord muszą być na <b>różnych</b> urządzeniach. <b>Urządzenie:</b> w Discordzie ustaw wyjście na „CABLE Input (VB-Audio)”, tu wybierz „CABLE Output”. <b>Karta:</b> otwórz Discorda w przeglądarce, kliknij „Połącz dźwięk Discorda”, wybierz kartę i zaznacz „Udostępnij dźwięk karty” (zrób to PRZED START STREAM). Zmianę źródeł zastosujesz po „Zakończ publikację” i ponownym START; głośności działają od razu.</div>
     </div>
     <div class="sub">
       <h3>Obraz z gry</h3>
-      <div class="hint" id="stPubHint">1) Wybierz okno gry (monitor PVW wyżej), 2) kliknij „Publikuj”, 3) kliknij „START STREAM”. Okno gry musi być otwarte w tym panelu przez cały stream.</div>
+      <div class="hint" id="stPubHint">1) Ustaw swój dźwięk powyżej, 2) kliknij „START STREAM” – przy pierwszym razie wybierz okno gry (jeśli nie wybrano go wcześniej w monitorze PVW). Okno gry musi być przechwytywane w tym panelu przez cały stream.</div>
       <div class="hint" id="stStat" style="font-weight:800;margin-top:10px">Stream: wyłączony</div>
     </div>
   </div>
@@ -459,7 +472,7 @@ $('tabs').onclick = e => {
 /* ---------- podgląd ---------- */
 function fitPreview(){ $('prevFrame').style.transform = 'scale(' + ($('prevWrap').clientWidth / 1920) + ')'; }
 addEventListener('resize', fitPreview);
-function setPreview(){ $('prevFrame').src = '/overlay?preview=1&key=' + encodeURIComponent(cfg.overlayKey); fitPreview(); }
+function setPreview(){ $('prevFrame').src = '/overlay?preview=1&lite=1&key=' + encodeURIComponent(cfg.overlayKey); fitPreview(); }
 
 /* ---------- pasek ---------- */
 function newsRow(v){
@@ -580,11 +593,12 @@ $('ltSave').onclick = () => save('lower_third', {visible: $('ltVis').checked, na
 /* ---------- stream: publikacja okna gry do LiveKit + start/stop wysyłki na Twitcha/TikToka ---------- */
 function fillStream(){
   const t = cfg.stream; $('stTwOn').checked = t.twitchOn; $('stTwUrl').value = t.twitchUrl; $('stTwKey').value = t.twitchKey;
-  $('stTkOn').checked = t.tiktokOn; $('stTkUrl').value = t.tiktokUrl; $('stTkKey').value = t.tiktokKey; $('stFps').value = String(t.fps); stRender();
+  $('stTkOn').checked = t.tiktokOn; $('stTkUrl').value = t.tiktokUrl; $('stTkKey').value = t.tiktokKey; $('stFps').value = String(t.fps); $('stBr').value = String(t.bitrate || 8000); stOpInit(); stRender();
 }
 const stData = () => ({twitchOn: $('stTwOn').checked, twitchUrl: $('stTwUrl').value, twitchKey: $('stTwKey').value,
-  tiktokOn: $('stTkOn').checked, tiktokUrl: $('stTkUrl').value, tiktokKey: $('stTkKey').value, fps: num($('stFps').value)});
+  tiktokOn: $('stTkOn').checked, tiktokUrl: $('stTkUrl').value, tiktokKey: $('stTkKey').value, fps: num($('stFps').value), bitrate: num($('stBr').value) || 8000});
 $('stSave').onclick = () => save('stream', stData(), 'stMsg');
+$('stFps').onchange = () => { if (typeof capStream !== 'undefined' && capStream) { const t = capStream.getVideoTracks()[0], f = num($('stFps').value) || 60; if (t) t.applyConstraints({frameRate: {ideal: f, max: f}}).catch(() => {}); } };
 
 let lkRoom = null, lkTracks = [], lkLib = null;
 function loadLk(){
@@ -594,26 +608,50 @@ function loadLk(){
     sc.onload = ok; sc.onerror = () => { lkLib = null; er(new Error('Nie udało się załadować biblioteki LiveKit (sprawdź internet)')); }; document.head.appendChild(sc);
   }));
 }
+let lkBusy = false, stOpName = '';
+function stOpInit(){ try { stOpName = localStorage.getItem('jeden_op') || ''; } catch (e) {} if (!$('stOp').value) $('stOp').value = stOpName; }
+$('stOp').onchange = () => { stOpName = $('stOp').value.trim(); try { localStorage.setItem('jeden_op', stOpName); } catch (e) {} };
 async function lkPublish(){
+  if (lkBusy) return false;
+  if (lkRoom) { say('stMsg', 'Już publikujesz', true); return true; }
+  lkBusy = true;
+  let room = null;
   try {
+    // 1) obraz z gry (jeśli jeszcze nie wybrano okna)
     if (!capStream) await capStart();
-    if (!capStream) { say('stMsg', 'Najpierw wybierz okno gry', false); return; }
-    if (lkRoom) { say('stMsg', 'Już publikujesz', true); return; }
+    if (!capStream) { say('stMsg', 'Najpierw wybierz okno gry', false); return false; }
+    // 2) dźwięk operatora – zanim ruszy sieć; błąd zaznaczonego źródła zatrzymuje start
+    say('stMsg', 'Przygotowuję dźwięk…', true);
+    const au = await auBuild();
+    if (au.errs.length) { auCleanup(); say('stMsg', 'Dźwięk: ' + au.errs.join(' · ') + ' – popraw ustawienia lub odznacz to źródło', false); return false; }
+    // 3) połączenie i publikacja
     say('stMsg', 'Łączę z serwerem…', true);
     const j = await api('/api/lk', 'POST', {action: 'publisher'}); await loadLk();
-    const L = window.LivekitClient, fps = num($('stFps').value) || 30, br = fps === 60 ? 9000000 : 6000000;
-    const room = new L.Room({dynacast: false, adaptiveStream: false});
+    const L = window.LivekitClient, fps = num($('stFps').value) || 60, ebr = num($('stBr').value) || 8000;
+    const br = Math.min(12000000, Math.round(ebr * 1400)); // wysyłka do chmury z zapasem ponad bitrate końcowy
+    room = new L.Room({dynacast: false, adaptiveStream: false});
     await room.connect(j.url, j.token);
-    const opt = {source: L.Track.Source.ScreenShare, videoCodec: 'h264', simulcast: false, degradationPreference: 'maintain-framerate',
+    const opt = {source: L.Track.Source.ScreenShare, videoCodec: 'h264', backupCodec: false, simulcast: false, degradationPreference: 'maintain-framerate',
       videoEncoding: {maxBitrate: br, maxFramerate: fps}, screenShareEncoding: {maxBitrate: br, maxFramerate: fps}};
     const vt = capStream.getVideoTracks()[0]; try { vt.contentHint = 'motion'; } catch (x) {}
     const lv = new L.LocalVideoTrack(vt, undefined, false); await room.localParticipant.publishTrack(lv, opt); lkTracks = [lv];
-    const at = await auBuild();
-    if (at) { const la = new L.LocalAudioTrack(at, undefined, false); await room.localParticipant.publishTrack(la, {source: L.Track.Source.ScreenShareAudio, dtx: false, red: false}); lkTracks.push(la); }
-    room.on(L.RoomEvent.Disconnected, () => { if (lkRoom === room) { lkRoom = null; lkTracks = []; stRender(); } });
-    lkRoom = room; stRender();
-    say('stMsg', at ? 'Publikuję obraz i dźwięk ✔' : 'Publikuję obraz ✔ (bez dźwięku – w oknie wyboru zaznacz „Udostępnij dźwięk”, jeśli jest dostępne)', true);
-  } catch (e) { say('stMsg', e.message || String(e), false); }
+    if (au.track) {
+      const la = new L.LocalAudioTrack(au.track, undefined, false);
+      const ao = {source: L.Track.Source.ScreenShareAudio, dtx: false, red: false, forceStereo: true};
+      if (L.AudioPresets && L.AudioPresets.musicHighQualityStereo) ao.audioPreset = L.AudioPresets.musicHighQualityStereo;
+      await room.localParticipant.publishTrack(la, ao); lkTracks.push(la);
+    }
+    const mine = room;
+    room.on(L.RoomEvent.Disconnected, reason => {
+      if (lkRoom !== mine) return;
+      lkRoom = null; lkTracks = []; auCleanup(); stRender();
+      if (L.DisconnectReason && reason === L.DisconnectReason.DUPLICATE_IDENTITY) say('stMsg', 'Inny operator przejął publikację – Twój obraz i dźwięk zostały zatrzymane', false);
+    });
+    lkRoom = room; room = null; stRender();
+    say('stMsg', au.track ? 'Publikuję obraz ✔ i dźwięk ✔ (' + au.used.join(' + ') + ')' : 'Publikuję obraz ✔ – BEZ dźwięku (zaznacz źródła dźwięku powyżej)', !!au.track);
+    return true;
+  } catch (e) { if (room) { try { room.disconnect(false); } catch (x) {} } auCleanup(); say('stMsg', e.message || String(e), false); return false; }
+  finally { lkBusy = false; }
 }
 async function lkUnpublish(){
   const r = lkRoom; lkRoom = null; if (r) auCleanup();
@@ -622,31 +660,40 @@ async function lkUnpublish(){
 }
 $('stPub').onclick = lkPublish; $('stUnpub').onclick = lkUnpublish;
 
-/* ---------- dźwięk do streamu: gra i/lub Discord (miks) ---------- */
-let auExtra = null, auCtx = null, auMicS = null;
+/* ---------- dźwięk do streamu: gra i/lub Discord i/lub mikrofon (miks) – ustawienia operatora tylko w tej przeglądarce ---------- */
+let auExtra = null, auCtx = null, auMicS = null, auGains = {}, auNodes = [], auAna = null, auMeterT = null;
 const auCfgLoad = () => { try { return JSON.parse(localStorage.getItem('jeden_au') || '{}'); } catch (e) { return {}; } };
-const auCfgSave = () => { try { localStorage.setItem('jeden_au', JSON.stringify({game: $('auGame').checked, dc: $('auDc').checked, mic: $('auMic').checked, mode: $('auMode').value, dev: $('auDev').value, micDev: $('auMicDev').value})); } catch (e) {} };
-(function(){ const c = auCfgLoad(); if (c.game === false) $('auGame').checked = false; if (c.dc) $('auDc').checked = true; if (c.mic) $('auMic').checked = true; if (c.mode) $('auMode').value = c.mode; })();
+const auCfgSave = () => { try { localStorage.setItem('jeden_au', JSON.stringify({game: $('auGame').checked, dc: $('auDc').checked, mic: $('auMic').checked, mode: $('auMode').value, dev: $('auDev').value, micDev: $('auMicDev').value,
+  vg: +$('auVg').value, vd: +$('auVd').value, vm: +$('auVm').value})); } catch (e) {} };
+(function(){
+  const c = auCfgLoad();
+  if (c.game === false) $('auGame').checked = false; if (c.dc) $('auDc').checked = true; if (c.mic === undefined || c.mic) $('auMic').checked = true; if (c.mode) $('auMode').value = c.mode;
+  [['vg', 'auVg'], ['vd', 'auVd'], ['vm', 'auVm']].forEach(([k, id]) => { if (c[k] != null) $(id).value = c[k]; $(id + 'T').textContent = $(id).value + '%'; });
+})();
 function auVis(){ $('auDevWrap').style.display = $('auMode').value === 'dev' ? '' : 'none'; }
 async function auDevices(ask){
   if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
   if (ask) { try { const t = await navigator.mediaDevices.getUserMedia({audio: true}); t.getTracks().forEach(x => x.stop()); } catch (e) { say('auMsg', 'Brak zgody na dostęp do urządzeń audio', false); } }
   const list = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'audioinput' && d.deviceId !== 'default' && d.deviceId !== 'communications');
+  const opts = list.map((d, i) => '<option value="' + d.deviceId + '">' + (d.label || 'Urządzenie ' + (i + 1)).replace(/</g, '&lt;') + '</option>').join('');
   const sel = $('auDev'), keep = sel.value || auCfgLoad().dev || '';
-  sel.innerHTML = '<option value="">Domyślne</option>' + list.map((d, i) => '<option value="' + d.deviceId + '">' + (d.label || 'Urządzenie ' + (i + 1)).replace(/</g, '&lt;') + '</option>').join('');
+  sel.innerHTML = '<option value="">— wybierz urządzenie —</option>' + opts;
   const ms = $('auMicDev'), mk = ms.value || auCfgLoad().micDev || '';
-  ms.innerHTML = '<option value="">Domyślny</option>' + list.map((d, i) => '<option value="' + d.deviceId + '">' + (d.label || 'Urządzenie ' + (i + 1)).replace(/</g, '&lt;') + '</option>').join('');
+  ms.innerHTML = '<option value="">Domyślny</option>' + opts;
   if ([...ms.options].some(o => o.value === mk)) ms.value = mk;
   if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
   else { const cab = [...sel.options].find(o => /cable output|voicemeeter|vb-audio/i.test(o.text)); if (cab && !keep) sel.value = cab.value; }
 }
 $('auRefresh').onclick = () => auDevices(true);
 $('auMode').onchange = () => { auVis(); auCfgSave(); }; $('auDev').onchange = auCfgSave; $('auMicDev').onchange = auCfgSave; $('auMic').onchange = auCfgSave; $('auGame').onchange = auCfgSave; $('auDc').onchange = auCfgSave;
+[['auVg', 'game'], ['auVd', 'dc'], ['auVm', 'mic']].forEach(([id, k]) => { $(id).oninput = () => { $(id + 'T').textContent = $(id).value + '%'; if (auGains[k]) auGains[k].gain.value = +$(id).value / 100; auCfgSave(); }; });
 auVis(); auDevices(false);
 function auCleanup(){
+  clearInterval(auMeterT); auMeterT = null; $('auLvl').style.width = '0';
   if (auExtra) { auExtra.getTracks().forEach(t => t.stop()); auExtra = null; }
   if (auMicS) { auMicS.getTracks().forEach(t => t.stop()); auMicS = null; }
   if (auCtx) { try { auCtx.close(); } catch (e) {} auCtx = null; }
+  auGains = {}; auNodes = []; auAna = null;
 }
 async function auPrepare(){
   if (auExtra && auExtra.getAudioTracks()[0] && auExtra.getAudioTracks()[0].readyState === 'live') return auExtra.getAudioTracks()[0];
@@ -658,7 +705,8 @@ async function auPrepare(){
     if (!s.getAudioTracks()[0]) { s.getTracks().forEach(t => t.stop()); throw new Error('Nie zaznaczono „Udostępnij dźwięk karty” – wybierz kartę z Discordem i zaznacz dźwięk'); }
   } else {
     const id = $('auDev').value;
-    s = await navigator.mediaDevices.getUserMedia({audio: Object.assign({channelCount: 2}, raw, id ? {deviceId: {exact: id}} : {})});
+    if (!id) throw new Error('wybierz urządzenie z dźwiękiem Discorda (np. CABLE Output)');
+    s = await navigator.mediaDevices.getUserMedia({audio: Object.assign({channelCount: 2}, raw, {deviceId: {exact: id}})});
     await auDevices(false);
   }
   if (auExtra) auExtra.getTracks().forEach(t => t.stop());
@@ -666,48 +714,70 @@ async function auPrepare(){
   return s.getAudioTracks()[0];
 }
 $('auPrep').onclick = async () => {
-  try { $('auDc').checked = true; const t = await auPrepare(); say('auMsg', 'Discord podłączony ✔ (' + (t.label || 'dźwięk') + ')', true); }
+  try { $('auDc').checked = true; const t = await auPrepare(); say('auMsg', 'Discord podłączony ✔ (' + (t.label || 'dźwięk') + ')', true); auCfgSave(); }
   catch (e) { say('auMsg', e && e.name === 'NotAllowedError' ? 'Anulowano wybór.' : (e.message || String(e)), false); }
 };
+// buduje miks z ustawień TEGO operatora: { track, used: [nazwy], errs: [błędy zaznaczonych źródeł] }
 async function auBuild(){
-  const game = $('auGame').checked && capStream ? capStream.getAudioTracks()[0] : null;
-  let dc = null, mic = null;
-  if ($('auDc').checked) { try { dc = await auPrepare(); } catch (e) { say('stMsg', 'Dźwięk Discorda: ' + (e.message || e) + ' – kliknij „Połącz dźwięk Discorda”', false); } }
+  const errs = [], used = [], src = [];
+  if ($('auGame').checked) {
+    const g = capStream ? capStream.getAudioTracks()[0] : null;
+    if (g) src.push(['game', 'gra', g, +$('auVg').value]); else errs.push('okno gry nie udostępnia dźwięku (wybierz ekran/kartę z dźwiękiem albo odznacz „dźwięk z okna gry”)');
+  }
+  if ($('auDc').checked) {
+    try { src.push(['dc', 'Discord', await auPrepare(), +$('auVd').value]); }
+    catch (e) { errs.push('Discord: ' + (e && e.name === 'NotAllowedError' ? 'kliknij najpierw „Połącz dźwięk Discorda”' : (e.message || e))); }
+  }
   if ($('auMic').checked) {
-    try {
-      const id = $('auMicDev').value;
+    const id = $('auMicDev').value;
+    if (id && id === $('auDev').value && $('auDc').checked && $('auMode').value === 'dev') errs.push('mikrofon i Discord to to samo urządzenie – wybierz dla nich różne');
+    else try {
       if (auMicS) auMicS.getTracks().forEach(t => t.stop());
-      auMicS = await navigator.mediaDevices.getUserMedia({audio: Object.assign({echoCancellation: true, noiseSuppression: true, autoGainControl: true}, id ? {deviceId: {exact: id}} : {})});
-      mic = auMicS.getAudioTracks()[0]; auCfgSave();
-    } catch (e) { say('stMsg', 'Mikrofon: ' + (e.message || e), false); }
+      auMicS = await navigator.mediaDevices.getUserMedia({audio: Object.assign({channelCount: 2, echoCancellation: true, noiseSuppression: true, autoGainControl: true}, id ? {deviceId: {exact: id}} : {})});
+      src.push(['mic', 'mikrofon', auMicS.getAudioTracks()[0], +$('auVm').value]); auCfgSave();
+    } catch (e) { errs.push('mikrofon: ' + (e.message || e)); }
   }
-  const all = [game, dc, mic].filter(Boolean);
-  if (all.length > 1) {
-    auCtx = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 48000});
-    const dest = auCtx.createMediaStreamDestination();
-    all.forEach(t => auCtx.createMediaStreamSource(new MediaStream([t])).connect(dest));
-    if (auCtx.resume) await auCtx.resume();
-    return dest.stream.getAudioTracks()[0];
-  }
-  return all[0] || null;
+  if (errs.length || !src.length) return {track: null, used, errs};
+  const AC = window.AudioContext || window.webkitAudioContext;
+  auCtx = new AC({sampleRate: 48000, latencyHint: 'interactive'});
+  try { await auCtx.resume(); } catch (e) {}
+  const dest = auCtx.createMediaStreamDestination(); dest.channelCount = 2;
+  auAna = auCtx.createAnalyser(); auAna.fftSize = 512;
+  src.forEach(([k, name, track, vol]) => {
+    const node = auCtx.createMediaStreamSource(new MediaStream([track])), g = auCtx.createGain();
+    g.gain.value = vol / 100; node.connect(g); g.connect(dest); g.connect(auAna); auGains[k] = g; auNodes.push(node); used.push(name);
+  });
+  const buf = new Uint8Array(auAna.fftSize); clearInterval(auMeterT);
+  auMeterT = setInterval(() => {
+    if (!auAna) return; auAna.getByteTimeDomainData(buf);
+    let m = 0; for (let i = 0; i < buf.length; i++) m = Math.max(m, Math.abs(buf[i] - 128)); $('auLvl').style.width = Math.min(100, Math.round(m / 128 * 140)) + '%';
+  }, 100);
+  return {track: dest.stream.getAudioTracks()[0], used, errs};
 }
-let stLive = 'off', stErr = '';
+let stLive = 'off', stErr = '', stBy = '';
 function stRender(){
   const m = {off: 'wyłączony', starting: 'uruchamianie…', live: '● NA ŻYWO – wysyłam na Twitcha/TikToka', ending: 'kończenie…'};
-  $('stStat').innerHTML = 'Obraz z gry: <b style="color:' + (lkRoom ? 'var(--ok)' : 'var(--er)') + '">' + (lkRoom ? 'publikowany' : 'nie publikowany') + '</b> · Stream: <b style="color:' + (stLive === 'live' ? 'var(--ok)' : '#fff') + '">' + (m[stLive] || stLive) + '</b>' + (stErr ? ' · <span class="er">' + stErr.replace(/</g, '&lt;') + '</span>' : '');
+  $('stStat').innerHTML = 'Obraz z gry: <b style="color:' + (lkRoom ? 'var(--ok)' : 'var(--er)') + '">' + (lkRoom ? 'publikowany' : 'nie publikowany') + '</b> · Stream: <b style="color:' + (stLive === 'live' ? 'var(--ok)' : '#fff') + '">' + (m[stLive] || stLive) + '</b>' + (stBy && stLive !== 'off' ? ' · publikuje: <b>' + stBy.replace(/</g, '&lt;') + '</b>' : '') + (stErr ? ' · <span class="er">' + stErr.replace(/</g, '&lt;') + '</span>' : '');
 }
 async function stPoll(){
   if (!cfg || $('app').hidden) return;
-  try { const r = await api('/api/lk', 'POST', {action: 'status'}); stLive = r.status; stErr = r.error || ''; } catch (e) { /* brak LiveKit / chwilowy błąd */ }
+  try { const r = await api('/api/lk', 'POST', {action: 'status'}); stLive = r.status; stErr = r.error || ''; stBy = r.operator || ''; } catch (e) { /* brak LiveKit / chwilowy błąd */ }
   stRender();
 }
 $('stGo').onclick = async () => {
   try {
-    if (!lkRoom) { say('stMsg', 'Najpierw kliknij „Publikuj okno gry”', false); return; }
+    if ($('stOp').value.trim() !== stOpName) $('stOp').onchange();
+    if (!lkRoom) { if (!(await lkPublish())) return; }   // publikuję obraz + dźwięk ZE SWOIMI ustawieniami
     if (!(await save('stream', stData(), 'stMsg'))) return;
+    const s = await api('/api/lk', 'POST', {action: 'status'});
+    if (s.status === 'live' || s.status === 'starting') {
+      await api('/api/lk', 'POST', {action: 'operator', operator: stOpName});
+      stLive = s.status; stErr = ''; stRender();
+      say('stMsg', 'Przejąłeś publikację ✔ – stream na platformach leci dalej (Twój obraz i dźwięk)', true); return;
+    }
     say('stMsg', 'Uruchamiam wysyłkę w chmurze…', true);
-    const r = await api('/api/lk', 'POST', {action: 'start'}); stLive = 'starting'; stErr = ''; stRender();
-    say('stMsg', 'Start ✔ – cele: ' + r.targets + '. Za kilka sekund powinno być widać na platformach.', true);
+    const r = await api('/api/lk', 'POST', {action: 'start', operator: stOpName}); stLive = 'starting'; stErr = ''; stRender();
+    say('stMsg', 'Start ✔ – cele: ' + r.targets + ' · ' + r.fps + ' kl/s · ' + r.bitrate + ' kb/s. Za kilka sekund powinno być widać na platformach.', true);
   } catch (e) { say('stMsg', e.message, false); }
 };
 $('stStop').onclick = async () => {
@@ -909,13 +979,16 @@ const capSay = (m, er) => { const e = $('capMsg'); e.textContent = m; e.style.co
 async function capStart(){
   if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) { capSay('Ta przeglądarka nie obsługuje przechwytywania ekranu (użyj Chrome/Edge po HTTPS).', true); return; }
   try {
-    const st = await navigator.mediaDevices.getDisplayMedia({video: {frameRate: {ideal: +($('stFps').value) || 30}, width: {ideal: 1920}, height: {ideal: 1080}}, audio: true});
+    const fps = +($('stFps').value) || 60;
+    const st = await navigator.mediaDevices.getDisplayMedia({video: {frameRate: {ideal: fps, max: fps}, width: {ideal: 1920}, height: {ideal: 1080}}, audio: {echoCancellation: false, noiseSuppression: false, autoGainControl: false}});
     capStop(); capStream = st;
     ['capA', 'capB'].forEach(id => { $(id).srcObject = st; $(id).play().catch(() => {}); });
     $('prevWrap').classList.add('live'); $('capWrap').classList.add('live');
     $('capStop').disabled = false;
     const tr = st.getVideoTracks()[0]; try { tr.contentHint = 'motion'; } catch (x) {} tr.onended = capStop;
-    capSay('Podgląd: ' + (tr.label || 'okno'), false);
+    try { await tr.applyConstraints({frameRate: {ideal: fps, max: fps}}); } catch (x) {}
+    const sg = tr.getSettings ? tr.getSettings() : {};
+    capSay('Podgląd: ' + (tr.label || 'okno') + (sg.width ? ' · ' + sg.width + '×' + sg.height : '') + (sg.frameRate ? ' @ ' + Math.round(sg.frameRate) + ' kl/s' : ''), false);
   } catch (e) { capSay(e && e.name === 'NotAllowedError' ? 'Anulowano wybór okna.' : 'Nie udało się: ' + (e && e.message), true); }
 }
 function capStop(){

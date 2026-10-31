@@ -20,8 +20,8 @@ export const DEFAULTS = {
   },
   live_badge: { visible: false, text: 'NA ŻYWO', top: 43, right: 53 },
   qr: { visible: false },
-  stream: { twitchOn: true, twitchUrl: 'rtmp://live.twitch.tv/app', twitchKey: '', tiktokOn: false, tiktokUrl: '', tiktokKey: '', fps: 30 },
-  stream_state: { egressId: '', startedAt: '' },
+  stream: { twitchOn: true, twitchUrl: 'rtmp://live.twitch.tv/app', twitchKey: '', tiktokOn: false, tiktokUrl: '', tiktokKey: '', fps: 60, bitrate: 8000 },
+  stream_state: { egressId: '', startedAt: '', operator: '' },
   flash: { visible: false, label: 'PILNE', text: '', top: 125, hideAfter: 0 },
   age: { visible: false, rating: 12 },
   lower_third: { visible: false, name: '', role: '', hideAfter: 0, guests: [] },
@@ -149,6 +149,7 @@ export const SCHEMAS = {
     tiktokUrl: z.string().trim().max(300).refine((u) => u === '' || /^rtmps?:\/\//i.test(u), 'Adres serwera TikToka musi zaczynać się od rtmp:// lub rtmps://'),
     tiktokKey: z.string().trim().max(300),
     fps: z.number().refine((n) => n === 30 || n === 60, 'Klatki: 30 lub 60'),
+    bitrate: z.number().int().min(2500, 'Bitrate min. 2500 kb/s').max(12000, 'Bitrate max. 12000 kb/s').default(8000),
   }),
   qr: z.object({
     visible: z.boolean(),
@@ -297,6 +298,8 @@ export async function readConfig() {
   const s = (await dbGet()) || {};
   const cfg = { overlayKey: s.overlayKey || derivedKey(), rev: Number(s.rev) || 0 };
   for (const k of Object.keys(DEFAULTS)) cfg[k] = { ...DEFAULTS[k], ...(s[k] || {}) };
+  // jednorazowa migracja: starszy zapis (bez bitrate) miał 30 kl/s – podnosimy do 60
+  if (s.stream && s.stream.bitrate === undefined) cfg.stream.fps = 60;
   return cfg;
 }
 export async function writeConfig(cfg) {

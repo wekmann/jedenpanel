@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import { AccessToken, EgressClient, StreamOutput, StreamProtocol, EncodingOptionsPreset } from 'livekit-server-sdk';
+import * as LK from 'livekit-server-sdk';
 import { readConfig, writeConfig, requireAdmin, safeEqual, fail } from './_lib.js';
 
 // LiveKit: tokeny dla widzów/publikującego + start/stop streamu na Twitcha i TikToka (RTMP-out po stronie LiveKit)
@@ -12,6 +13,7 @@ async function makeToken({ key, secret }, identity, publish) {
   at.addGrant({ room: ROOM, roomJoin: true, canPublish: publish, canPublishData: false, canSubscribe: true });
   return at.toJwt();
 }
+const cleanOp = (x) => String(x || '').replace(/[<>"]/g, '').trim().slice(0, 40);
 const target = (base, key) => (base.replace(/\/+$/, '') + '/' + key.replace(/^\/+/, ''));
 
 export default async function handler(req, res) {
@@ -52,17 +54,33 @@ export default async function handler(req, res) {
       const host = req.headers['x-forwarded-host'] || req.headers.host;
       const proto = req.headers['x-forwarded-proto'] || 'https';
       const page = `${proto}://${host}/overlay?key=${encodeURIComponent(cfg.overlayKey)}&egress=1`;
-      const preset = st.fps === 60 ? EncodingOptionsPreset.H264_1080P_60 : EncodingOptionsPreset.H264_1080P_30;
-      const info = await eg.startWebEgress(page, { stream: new StreamOutput({ protocol: StreamProtocol.RTMP, urls }) }, { preset, awaitStartSignal: true });
-      cfg.stream_state = { egressId: info.egressId, startedAt: new Date().toISOString() };
+      // jakość wysyłki do Twitcha/TikToka: własne parametry (1080p, 60 kl/s, wyższy bitrate, klatka kluczowa co 2 s)
+      const fps = st.fps === 30 ? 30 : 60;
+      const br = Math.min(12000, Math.max(2500, Number(st.bitrate) || 8000));
+      const enc = {
+        width: 1920, height: 1080, depth: 24, framerate: fps,
+        audioCodec: (LK.AudioCodec && LK.AudioCodec.AAC) ?? 2, audioBitrate: 160, audioFrequency: 48000,
+        videoCodec: (LK.VideoCodec && LK.VideoCodec.H264_HIGH) ?? 3, videoBitrate: br, keyFrameInterval: 2,
+      };
+      const encodingOptions = LK.EncodingOptions ? new LK.EncodingOptions(enc) : enc;
+      const info = await eg.startWebEgress(page, { stream: new StreamOutput({ protocol: StreamProtocol.RTMP, urls }) }, { encodingOptions, advanced: encodingOptions, awaitStartSignal: true });
+      const operator = cleanOp(req.body && req.body.operator);
+      cfg.stream_state = { egressId: info.egressId, startedAt: new Date().toISOString(), operator };
       await writeConfig(cfg);
-      return res.status(200).json({ ok: true, egressId: info.egressId, targets: urls.length });
+      return res.status(200).json({ ok: true, egressId: info.egressId, targets: urls.length, fps, bitrate: br });
+    }
+
+    // inny operator przejmuje publikację obrazu/dźwięku (stream na platformach leci dalej bez restartu)
+    if (action === 'operator') {
+      cfg.stream_state = { ...cfg.stream_state, operator: cleanOp(req.body.operator) };
+      await writeConfig(cfg);
+      return res.status(200).json({ ok: true });
     }
 
     if (action === 'stop') {
       const id = cfg.stream_state.egressId;
       if (id) { try { await eg.stopEgress(id); } catch (x) { /* już zakończony */ } }
-      cfg.stream_state = { egressId: '', startedAt: '' };
+      cfg.stream_state = { egressId: '', startedAt: '', operator: '' };
       await writeConfig(cfg);
       return res.status(200).json({ ok: true });
     }
@@ -75,11 +93,11 @@ export default async function handler(req, res) {
       // 0 STARTING, 1 ACTIVE, 2 ENDING, 3 COMPLETE, 4 FAILED, 5 ABORTED, 6 LIMIT_REACHED
       if (!info || info.status >= 3) {
         const err = info && info.error ? String(info.error) : '';
-        cfg.stream_state = { egressId: '', startedAt: '' };
+        cfg.stream_state = { egressId: '', startedAt: '', operator: '' };
         await writeConfig(cfg);
         return res.status(200).json({ status: 'off', error: err });
       }
-      return res.status(200).json({ status: info.status === 1 ? 'live' : info.status === 2 ? 'ending' : 'starting', startedAt: cfg.stream_state.startedAt });
+      return res.status(200).json({ status: info.status === 1 ? 'live' : info.status === 2 ? 'ending' : 'starting', startedAt: cfg.stream_state.startedAt, operator: cfg.stream_state.operator || '' });
     }
 
     return res.status(400).json({ error: 'Zła akcja' });
