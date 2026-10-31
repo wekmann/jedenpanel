@@ -299,7 +299,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
   <!-- STREAM -->
   <div class="tab box" id="tStream" data-sec="stream">
     <button class="b1" id="stSave">Zapisz</button>
-    <button class="b2" id="stPub" title="Tylko obraz i dźwięk do overlayu – bez wysyłki na Twitcha/TikToka">Tylko publikuj (test)</button>
+    <button class="b2" id="stPub" title="Publikuje obraz i Twój dźwięk do overlayu (dzieje się też automatycznie po wyborze okna)">Publikuj okno gry</button>
     <button class="b3" id="stUnpub">■ Zakończ publikację</button>
     <button class="b1" id="stGo">● START STREAM</button>
     <button class="b3" id="stStop">■ STOP STREAM</button>
@@ -307,7 +307,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <div class="sub">
       <h3>Operator</h3>
       <div style="max-width:420px"><label for="stOp">Twoja nazwa (widoczna dla innych operatorów)</label><input type="text" id="stOp" maxlength="40" placeholder="np. Kuba"></div>
-      <div class="hint">Kto kliknie <b>START STREAM</b>, ten publikuje obraz i dźwięk <b>ze swoimi ustawieniami dźwięku</b> (poniżej – zapamiętane tylko w tej przeglądarce). Drugi operator może w trakcie streamu kliknąć START STREAM i przejąć publikację – wysyłka na platformy nie jest wtedy restartowana.</div>
+      <div class="hint">Kto wybierze okno gry (albo kliknie <b>START STREAM</b>), ten publikuje obraz i dźwięk <b>ze swoimi ustawieniami dźwięku</b> (poniżej – zapamiętane tylko w tej przeglądarce). Overlay (PGM) pokazuje obraz od razu, bez START STREAM – START tylko włącza wysyłkę na Twitcha/TikToka. Drugi operator może w każdej chwili przejąć publikację (wybór okna lub START STREAM) – wysyłka na platformy nie jest wtedy restartowana.</div>
     </div>
     <div class="sub">
       <h3>Cele – stream wysyła strona (chmura), nie Twój komputer</h3>
@@ -345,11 +345,11 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       <button class="b2" id="auRefresh">↻ Wczytaj listę urządzeń</button>
       <div class="msg" id="auMsg"></div>
       <div class="meter" title="Poziom dźwięku wysyłanego na stream"><i id="auLvl"></i></div>
-      <div class="hint"><b>Poziom</b> pokazuje to, co faktycznie leci na stream (po kliknięciu START STREAM). Zaznaczone źródło, które nie działa, zatrzymuje start – żeby nie wyjść na antenę bez głosów. Mikrofon i Discord muszą być na <b>różnych</b> urządzeniach. <b>Urządzenie:</b> w Discordzie ustaw wyjście na „CABLE Input (VB-Audio)”, tu wybierz „CABLE Output”. <b>Karta:</b> otwórz Discorda w przeglądarce, kliknij „Połącz dźwięk Discorda”, wybierz kartę i zaznacz „Udostępnij dźwięk karty” (zrób to PRZED START STREAM). Zmianę źródeł zastosujesz po „Zakończ publikację” i ponownym START; głośności działają od razu.</div>
+      <div class="hint"><b>Poziom</b> pokazuje to, co faktycznie leci na stream (po kliknięciu START STREAM). Zaznaczone źródło, które nie działa, zatrzymuje start – żeby nie wyjść na antenę bez głosów. Mikrofon i Discord muszą być na <b>różnych</b> urządzeniach. <b>Urządzenie:</b> w Discordzie ustaw wyjście na „CABLE Input (VB-Audio)”, tu wybierz „CABLE Output”. <b>Karta:</b> otwórz Discorda w przeglądarce, kliknij „Połącz dźwięk Discorda”, wybierz kartę i zaznacz „Udostępnij dźwięk karty” (zrób to PRZED START STREAM). Zmiana źródeł dźwięku zastosuje się po „Publikuj okno gry” lub przy START STREAM; głośności działają od razu.</div>
     </div>
     <div class="sub">
       <h3>Obraz z gry</h3>
-      <div class="hint" id="stPubHint">1) Ustaw swój dźwięk powyżej, 2) kliknij „START STREAM” – przy pierwszym razie wybierz okno gry (jeśli nie wybrano go wcześniej w monitorze PVW). Okno gry musi być przechwytywane w tym panelu przez cały stream.</div>
+      <div class="hint" id="stPubHint">1) Ustaw swój dźwięk powyżej, 2) kliknij monitor PVW i wybierz okno gry – obraz od razu trafia do overlayu (PGM), 3) „START STREAM” włącza wysyłkę na platformy. Okno gry musi być przechwytywane w tym panelu przez cały stream.</div>
       <div class="hint" id="stStat" style="font-weight:800;margin-top:10px">Stream: wyłączony</div>
     </div>
   </div>
@@ -608,10 +608,12 @@ function loadLk(){
     sc.onload = ok; sc.onerror = () => { lkLib = null; er(new Error('Nie udało się załadować biblioteki LiveKit (sprawdź internet)')); }; document.head.appendChild(sc);
   }));
 }
-let lkBusy = false, stOpName = '';
+let lkBusy = false, stOpName = '', lkAudioErrs = [], lkAuSig = '';
+const auSig = () => JSON.stringify([$('auGame').checked, $('auDc').checked, $('auMic').checked, $('auMode').value, $('auDev').value, $('auMicDev').value]);
 function stOpInit(){ try { stOpName = localStorage.getItem('jeden_op') || ''; } catch (e) {} if (!$('stOp').value) $('stOp').value = stOpName; }
 $('stOp').onchange = () => { stOpName = $('stOp').value.trim(); try { localStorage.setItem('jeden_op', stOpName); } catch (e) {} };
-async function lkPublish(){
+async function lkPublish(opt){
+  const soft = !!(opt && opt.soft);   // soft: obraz idzie do overlayu nawet gdy dźwięk nie działa (START STREAM jest ścisły)
   if (lkBusy) return false;
   if (lkRoom) { say('stMsg', 'Już publikujesz', true); return true; }
   lkBusy = true;
@@ -623,7 +625,8 @@ async function lkPublish(){
     // 2) dźwięk operatora – zanim ruszy sieć; błąd zaznaczonego źródła zatrzymuje start
     say('stMsg', 'Przygotowuję dźwięk…', true);
     const au = await auBuild();
-    if (au.errs.length) { auCleanup(); say('stMsg', 'Dźwięk: ' + au.errs.join(' · ') + ' – popraw ustawienia lub odznacz to źródło', false); return false; }
+    lkAudioErrs = au.errs; lkAuSig = auSig();
+    if (au.errs.length && !soft) { auCleanup(); say('stMsg', 'Dźwięk: ' + au.errs.join(' · ') + ' – popraw ustawienia lub odznacz to źródło', false); return false; }
     // 3) połączenie i publikacja
     say('stMsg', 'Łączę z serwerem…', true);
     const j = await api('/api/lk', 'POST', {action: 'publisher'}); await loadLk();
@@ -648,7 +651,8 @@ async function lkPublish(){
       if (L.DisconnectReason && reason === L.DisconnectReason.DUPLICATE_IDENTITY) say('stMsg', 'Inny operator przejął publikację – Twój obraz i dźwięk zostały zatrzymane', false);
     });
     lkRoom = room; room = null; stRender();
-    say('stMsg', au.track ? 'Publikuję obraz ✔ i dźwięk ✔ (' + au.used.join(' + ') + ')' : 'Publikuję obraz ✔ – BEZ dźwięku (zaznacz źródła dźwięku powyżej)', !!au.track);
+    if (au.errs.length) say('stMsg', 'Obraz publikowany ✔ w overlayu – ale dźwięk NIE działa: ' + au.errs.join(' · '), false);
+    else say('stMsg', au.track ? 'Publikuję obraz ✔ i dźwięk ✔ (' + au.used.join(' + ') + ')' : 'Publikuję obraz ✔ – BEZ dźwięku (zaznacz źródła dźwięku powyżej)', !!au.track);
     return true;
   } catch (e) { if (room) { try { room.disconnect(false); } catch (x) {} } auCleanup(); say('stMsg', e.message || String(e), false); return false; }
   finally { lkBusy = false; }
@@ -658,7 +662,7 @@ async function lkUnpublish(){
   if (r) { try { for (const t of lkTracks) await r.localParticipant.unpublishTrack(t, false); r.disconnect(false); } catch (e) {} }
   lkTracks = []; if (typeof stRender === 'function' && cfg) stRender();
 }
-$('stPub').onclick = lkPublish; $('stUnpub').onclick = lkUnpublish;
+$('stPub').onclick = async () => { if (lkRoom) await lkUnpublish(); await lkPublish({soft: true}); }; $('stUnpub').onclick = lkUnpublish;
 
 /* ---------- dźwięk do streamu: gra i/lub Discord i/lub mikrofon (miks) – ustawienia operatora tylko w tej przeglądarce ---------- */
 let auExtra = null, auCtx = null, auMicS = null, auGains = {}, auNodes = [], auAna = null, auMeterT = null;
@@ -767,7 +771,8 @@ async function stPoll(){
 $('stGo').onclick = async () => {
   try {
     if ($('stOp').value.trim() !== stOpName) $('stOp').onchange();
-    if (!lkRoom) { if (!(await lkPublish())) return; }   // publikuję obraz + dźwięk ZE SWOIMI ustawieniami
+    if (lkRoom && (lkAudioErrs.length || lkAuSig !== auSig())) await lkUnpublish();   // dźwięk nie działał / zmieniono ustawienia → publikuję od nowa
+    if (!lkRoom) { if (!(await lkPublish())) return; }   // obraz + dźwięk ZE SWOIMI ustawieniami
     if (!(await save('stream', stData(), 'stMsg'))) return;
     const s = await api('/api/lk', 'POST', {action: 'status'});
     if (s.status === 'live' || s.status === 'starting') {
@@ -988,6 +993,7 @@ async function capStart(){
     const tr = st.getVideoTracks()[0]; try { tr.contentHint = 'motion'; } catch (x) {} tr.onended = capStop;
     try { await tr.applyConstraints({frameRate: {ideal: fps, max: fps}}); } catch (x) {}
     const sg = tr.getSettings ? tr.getSettings() : {};
+    setTimeout(() => { if (!lkRoom && !lkBusy) lkPublish({soft: true}); }, 0);   // overlay (PGM) ma obraz od razu, bez START STREAM
     capSay('Podgląd: ' + (tr.label || 'okno') + (sg.width ? ' · ' + sg.width + '×' + sg.height : '') + (sg.frameRate ? ' @ ' + Math.round(sg.frameRate) + ' kl/s' : ''), false);
   } catch (e) { capSay(e && e.name === 'NotAllowedError' ? 'Anulowano wybór okna.' : 'Nie udało się: ' + (e && e.message), true); }
 }

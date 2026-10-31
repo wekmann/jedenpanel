@@ -102,15 +102,15 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #ltrole{box-sizing:border-box;max-width:100%;background:linear-gradient(90deg,#0e2347,#16305c);color:#e8eef9;font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;line-height:1.2;padding:9px 40px 9px 30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:6px solid #d60f08;font-family:'Roboto Condensed',Arial,sans-serif}
 
 /* ===== PILNE (pasek newsa przyklejony do góry dolnego paska) ===== */
-#flashwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + var(--bh,214px));width:1662px;transition:transform .6s var(--ease),opacity .45s ease,bottom .6s var(--ease)}
+#flashwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + var(--bh,214px));width:max-content;max-width:1662px;transition:transform .6s var(--ease),opacity .45s ease,bottom .6s var(--ease)}
 #flashwrap.off{opacity:0;transform:translateY(60px)}
-#flbox{display:grid;grid-template-columns:155px 1fr;height:62px;filter:drop-shadow(0 -4px 12px rgba(0,0,0,.4))}
+#flbox{display:grid;grid-template-columns:155px minmax(0,auto);height:62px;filter:drop-shadow(0 -4px 12px rgba(0,0,0,.4))}
 #flashwrap:not(.off) #flbox{animation:flin .6s var(--ease)}
 @keyframes flin{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 #fllabel{display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#d7192a,#a3162a);color:#fff;font:900 36px/1 'Roboto Condensed',Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,.35);position:relative;overflow:hidden;white-space:nowrap}
 #fllabel::after{content:"";position:absolute;top:0;bottom:0;width:50px;left:-80px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-20deg);animation:ltshine 3s ease-in-out infinite}
 #fltxtwrap{min-width:0;display:flex;align-items:center;overflow:hidden;background:#fff;border-radius:0 18px 0 0;padding:0 40px}
-#flbox.nolabel{grid-template-columns:1fr}
+#flbox.nolabel{grid-template-columns:minmax(0,auto)}
 #fltxt{display:inline-block;white-space:nowrap;color:#b3141f;font:800 38px/1 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:.3px}
 #fltxt.mq{animation:flmq var(--dur,10s) linear 1.2s infinite alternate}
 @keyframes flmq{from{transform:translateX(0)}to{transform:translateX(var(--dist,0px))}}
@@ -291,7 +291,7 @@ html.lite #bkp{display:none}
 <body>
 <div id="scene">
   <video id="pgmv" autoplay muted playsinline disablepictureinpicture disableremoteplayback></video>
-  <div id="pgmwait"><div>Czekam na obraz z gry…</div><small>W panelu: wybierz okno gry i kliknij „START STREAM”</small></div>
+  <div id="pgmwait"><div>Czekam na obraz z gry…</div><small>W panelu wybierz okno gry (monitor PVW)</small></div>
 
   <div id="barwrap" class="off">
     <div id="root">
@@ -1070,7 +1070,7 @@ function pgmCheck(){
   if (!pgmRoom) return;
   if (pgmHasVideo() && pgmv.readyState >= 2) { pgmStuck = 0; pgmMsg(''); return; }
   const pub = [...pgmRoom.remoteParticipants.values()].find(p => p.identity === 'gra');
-  if (!pub) { pgmStuck = 0; pgmMsg('Czekam na obraz z gry…', 'W panelu kliknij „START STREAM” (publikuje okno gry)'); return; }
+  if (!pub) { pgmStuck = 0; pgmMsg('Czekam na obraz z gry…', 'W panelu wybierz okno gry (monitor PVW)'); return; }
   const vp = [...pub.trackPublications.values()].find(x => x.kind === 'video');
   if (!vp) { pgmStuck = 0; pgmMsg('Czekam na obraz z gry…', 'Operator jest połączony, ale nie opublikował okna gry'); return; }
   pgmMsg('Obraz z gry nie dociera…', 'Ponawiam połączenie');
