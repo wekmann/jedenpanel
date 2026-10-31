@@ -325,6 +325,8 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       <select id="stFps" style="max-width:320px"><option value="60">1080p · 60 kl/s (płynnie – zalecane)</option><option value="30">1080p · 30 kl/s (mniej danych)</option></select>
       <label for="stBr">Bitrate wysyłki na platformy</label>
       <select id="stBr" style="max-width:320px"><option value="6000">6 000 kb/s (Twitch – bezpiecznie)</option><option value="8000">8 000 kb/s (zalecane do 1080p60)</option><option value="10000">10 000 kb/s (TikTok / własny serwer)</option></select>
+      <label for="stPri">Priorytet obrazu – zależy od Twojego łącza (zapamiętane tylko w tej przeglądarce)</label>
+      <select id="stPri" style="max-width:420px"><option value="res">Ostrość obrazu – zalecane (przy słabym łączu spada płynność)</option><option value="bal">Zrównoważony</option><option value="fps">Płynność (przy słabym łączu spada ostrość)</option></select>
       <div class="hint">Discord: udostępniasz ręcznie okno z linkiem PGM <code>/overlay?key=…</code> (zakładka Overlay). Klucze są trzymane tylko w bazie i nigdy nie trafiają do overlayu. Obraz z okna gry jest przechwytywany w 1080p z wybraną liczbą klatek (wymaga ok. 12–14 Mb/s uploadu u operatora przy 60 kl/s).</div>
     </div>
     <div class="sub">
@@ -351,6 +353,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       <h3>Obraz z gry</h3>
       <div class="hint" id="stPubHint">1) Ustaw swój dźwięk powyżej, 2) kliknij monitor PVW i wybierz okno gry – obraz od razu trafia do overlayu (PGM), 3) „START STREAM” włącza wysyłkę na platformy. Okno gry musi być przechwytywane w tym panelu przez cały stream.</div>
       <div class="hint" id="stStat" style="font-weight:800;margin-top:10px">Stream: wyłączony</div>
+      <div class="hint" id="stQual" style="margin-top:6px">Wysyłka do overlayu: nie publikuję</div>
     </div>
   </div>
 
@@ -608,6 +611,22 @@ function loadLk(){
     sc.onload = ok; sc.onerror = () => { lkLib = null; er(new Error('Nie udało się załadować biblioteki LiveKit (sprawdź internet)')); }; document.head.appendChild(sc);
   }));
 }
+try { const v = localStorage.getItem('jeden_pri'); if (v) $('stPri').value = v; } catch (e) {}
+$('stPri').onchange = async () => { try { localStorage.setItem('jeden_pri', $('stPri').value); } catch (e) {} if (lkRoom) { await lkUnpublish(); await lkPublish({soft: true}); } };
+let stPrev = null;
+async function stQualTick(){
+  const el = $('stQual'), lv = lkTracks[0];
+  if (!lkRoom || !lv || !lv.sender) { stPrev = null; el.className = 'hint'; el.textContent = 'Wysyłka do overlayu: nie publikuję'; return; }
+  try {
+    const rep = await lv.sender.getStats(); let o = null; rep.forEach(r => { if (r.type === 'outbound-rtp' && r.kind === 'video') o = r; });
+    if (!o) return;
+    const now = performance.now(), mb = stPrev ? ((o.bytesSent - stPrev.b) * 8 / 1e6) / ((now - stPrev.t) / 1000) : 0; stPrev = {t: now, b: o.bytesSent};
+    const why = o.qualityLimitationReason, hint = why === 'cpu' ? 'procesor nie wyrabia – obniż fps do 30, zamknij inne programy' : why === 'bandwidth' ? 'za wolny upload – obniż bitrate/fps lub wybierz „Płynność”' : '';
+    el.className = 'hint' + (hint ? ' er' : '');
+    el.textContent = 'Wysyłka do overlayu: ' + (o.frameWidth || '?') + '×' + (o.frameHeight || '?') + ' · ' + Math.round(o.framesPerSecond || 0) + ' kl/s · ' + mb.toFixed(1) + ' Mb/s' + (hint ? ' · ⚠ ' + hint : ' · bez ograniczeń ✔');
+  } catch (e) { /* brak statystyk */ }
+}
+setInterval(stQualTick, 2000);
 let lkBusy = false, stOpName = '', lkAudioErrs = [], lkAuSig = '';
 const auSig = () => JSON.stringify([$('auGame').checked, $('auDc').checked, $('auMic').checked, $('auMode').value, $('auDev').value, $('auMicDev').value]);
 function stOpInit(){ try { stOpName = localStorage.getItem('jeden_op') || ''; } catch (e) {} if (!$('stOp').value) $('stOp').value = stOpName; }
@@ -634,11 +653,12 @@ async function lkPublish(opt){
     const j = await api('/api/lk', 'POST', {action: 'publisher'}); await loadLk();
     const L = window.LivekitClient, fps = num($('stFps').value) || 60, ebr = num($('stBr').value) || 8000;
     const br = Math.min(12000000, Math.round(ebr * 1400)); // wysyłka do chmury z zapasem ponad bitrate końcowy
+    const pri = $('stPri').value, dp = pri === 'fps' ? 'maintain-framerate' : pri === 'bal' ? 'balanced' : 'maintain-resolution';
     room = new L.Room({dynacast: false, adaptiveStream: false});
     await room.connect(j.url, j.token);
-    const opt = {source: L.Track.Source.ScreenShare, videoCodec: 'h264', backupCodec: false, simulcast: false, degradationPreference: 'maintain-framerate',
+    const opt = {source: L.Track.Source.ScreenShare, videoCodec: 'h264', backupCodec: false, simulcast: false, degradationPreference: dp,
       videoEncoding: {maxBitrate: br, maxFramerate: fps}, screenShareEncoding: {maxBitrate: br, maxFramerate: fps}};
-    const vt = capStream.getVideoTracks()[0]; try { vt.contentHint = 'motion'; } catch (x) {}
+    const vt = capStream.getVideoTracks()[0]; try { vt.contentHint = pri === 'fps' ? 'motion' : pri === 'res' ? 'detail' : ''; } catch (x) {}
     const lv = new L.LocalVideoTrack(vt, undefined, false); await room.localParticipant.publishTrack(lv, opt); lkTracks = [lv];
     if (au.track) {
       const la = new L.LocalAudioTrack(au.track, undefined, false);
