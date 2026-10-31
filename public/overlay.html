@@ -11,11 +11,6 @@
 html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#fff}
 #scene{position:relative;width:1920px;height:1080px;overflow:hidden;background:transparent}
 
-/* ===== OBRAZ Z GRY (LiveKit) ===== */
-#gamev{position:absolute;left:0;top:0;width:1920px;height:1080px;object-fit:contain;background:#000;display:none}
-html.hasvideo,html.hasvideo body{background:#000 !important}
-#sndbtn{position:fixed;right:18px;bottom:18px;z-index:99;display:none;background:#c21c28;color:#fff;border:0;border-radius:10px;padding:12px 18px;font:700 16px Arial,sans-serif;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5)}
-
 /* ===== PASEK DOLNY ===== */
 #barwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:var(--mb,43px);transition:transform .6s var(--ease),opacity .5s ease}
 #barwrap.off{opacity:0;transform:translateY(calc(100% + var(--mb,43px) + 30px))}
@@ -80,14 +75,14 @@ html.hasvideo,html.hasvideo body{background:#000 !important}
 #lpfoot{display:flex;justify-content:space-between;gap:10px;padding:12px 22px 14px;font-size:17px;color:#9fb2d4;border-top:1px solid rgba(255,255,255,.08);margin-top:8px;letter-spacing:.5px}
 
 /* ===== QR (nad logiem JEDEN, lewa krawędź i szerokość równo z logiem) ===== */
-#qrwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + 14px);transition:transform .6s var(--ease),opacity .5s ease}
+#qrwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + var(--fh,0px) + 14px);transition:transform .6s var(--ease),opacity .5s ease,bottom .6s var(--ease)}
 #qrwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - 60px))}
 #fqrbox{box-sizing:border-box;width:155px;background:#fff;padding:8px;box-shadow:0 6px 14px rgba(0,0,0,.45);transition:opacity .45s ease,transform .6s var(--ease);transform-origin:50% 100%}
 #fqrbox.hide{opacity:0;transform:translateY(18px) scale(.9);pointer-events:none}
 #fqr{display:block;width:100%;height:auto}
 
 /* ===== PLANSZA ROZMÓWCY (nad paskiem, od lewej; omija QR gdy ten jest widoczny) ===== */
-#ltwrap{position:absolute;left:calc(129px + var(--ox,0px) + var(--lx,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + 14px);max-width:940px;transition:transform .6s var(--ease),opacity .5s ease,left .4s var(--ease)}
+#ltwrap{position:absolute;left:calc(129px + var(--ox,0px) + var(--lx,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + var(--fh,0px) + 14px);max-width:940px;transition:transform .6s var(--ease),opacity .5s ease,left .4s var(--ease),bottom .6s var(--ease)}
 #ltwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - var(--lx,0px) - 60px))}
 #ltbox{display:flex;flex-direction:column;align-items:flex-start;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
 #ltwrap:not(.off) #ltbox{animation:ltin .7s var(--ease)}
@@ -97,21 +92,22 @@ html.hasvideo,html.hasvideo body{background:#000 !important}
 @keyframes ltshine{0%{left:-90px}50%,100%{left:110%}}
 #ltrole{box-sizing:border-box;max-width:100%;background:linear-gradient(90deg,#0e2347,#16305c);color:#e8eef9;font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;line-height:1.2;padding:9px 40px 9px 30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:6px solid #d60f08;font-family:'Roboto Condensed',Arial,sans-serif}
 
-/* ===== PILNE (pasek newsa u góry) ===== */
-#flashwrap{position:absolute;left:calc(129px + var(--ox,0px));right:calc(129px - var(--ox,0px));top:var(--ft,125px);transition:transform .6s var(--ease),opacity .45s ease}
-#flashwrap.off{opacity:0;transform:translateY(-160%)}
-#flbox{display:flex;align-items:stretch;height:62px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))}
+/* ===== PILNE (pasek newsa przyklejony do góry dolnego paska) ===== */
+#flashwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + var(--bh,214px));width:1662px;transition:transform .6s var(--ease),opacity .45s ease,bottom .6s var(--ease)}
+#flashwrap.off{opacity:0;transform:translateY(60px)}
+#flbox{display:grid;grid-template-columns:155px 1fr;height:62px;filter:drop-shadow(0 -4px 12px rgba(0,0,0,.4))}
 #flashwrap:not(.off) #flbox{animation:flin .6s var(--ease)}
-@keyframes flin{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:none}}
-#fllabel{flex:none;display:flex;align-items:center;padding:0 26px;background:linear-gradient(180deg,#e8141f,#a50d16);color:#fff;font:900 34px/1 'Roboto Condensed',Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;border-left:6px solid #fff;text-shadow:0 2px 4px rgba(0,0,0,.35);position:relative;overflow:hidden}
+@keyframes flin{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+#fllabel{display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#d7192a,#a3162a);color:#fff;font:900 36px/1 'Roboto Condensed',Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,.35);position:relative;overflow:hidden;white-space:nowrap}
 #fllabel::after{content:"";position:absolute;top:0;bottom:0;width:50px;left:-80px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-20deg);animation:ltshine 3s ease-in-out infinite}
-#fltxtwrap{flex:1;min-width:0;display:flex;align-items:center;overflow:hidden;background:#fff;border-bottom:5px solid #a50d16;padding:0 26px}
-#fltxt{display:inline-block;white-space:nowrap;color:#0b1d4a;font:800 36px/1 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:.2px}
+#fltxtwrap{min-width:0;display:flex;align-items:center;overflow:hidden;background:#fff;border-radius:0 18px 0 0;padding:0 40px}
+#flbox.nolabel{grid-template-columns:1fr}
+#fltxt{display:inline-block;white-space:nowrap;color:#b3141f;font:800 38px/1 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:.3px}
 #fltxt.mq{animation:flmq var(--dur,10s) linear 1.2s infinite alternate}
 @keyframes flmq{from{transform:translateX(0)}to{transform:translateX(var(--dist,0px))}}
 
 /* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem) ===== */
-#fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + var(--fbh,var(--bh,214px)) + 14px);display:flex;align-items:flex-end;transition:transform .6s var(--ease),opacity .5s ease,bottom .6s var(--ease)}
+#fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + var(--fbh,var(--bh,214px)) + var(--fh,0px) + 14px);display:flex;align-items:flex-end;transition:transform .6s var(--ease),opacity .5s ease,bottom .6s var(--ease)}
 #fundwrap.off{opacity:0;transform:translateX(calc(100% + 500px))}
 #fundwrap:not(.off) #fcard{animation:fin .7s var(--ease)}
 @keyframes fin{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
@@ -223,23 +219,27 @@ html.hasvideo,html.hasvideo body{background:#000 !important}
 /* ===== MAPA WYNIKÓW (Polska z województw + lista partii) ===== */
 #mapwrap{position:absolute;inset:0;z-index:15;pointer-events:none;transition:opacity .5s ease}
 #mapwrap.off{opacity:0}
-#mcard{position:absolute;left:50%;top:var(--mtop,50%);width:1480px;transform:translate(-50%,-50%) scale(var(--mk,1));border-radius:22px;overflow:hidden;font-family:'Roboto Condensed',Arial,sans-serif;color:#fff;
+#mcard{position:absolute;left:50%;top:var(--mtop,50%);width:1480px;transform:translate(-50%,-50%) scale(var(--mk,1));border-radius:38px;overflow:hidden;font-family:'Roboto Condensed',Arial,sans-serif;color:#fff;
  background:radial-gradient(900px 420px at 0% 0%,rgba(214,15,8,.22),transparent 70%),radial-gradient(700px 380px at 100% 100%,rgba(59,130,246,.2),transparent 70%),linear-gradient(160deg,#0f1f3b,#070f20 75%);
- box-shadow:0 34px 90px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,255,255,.07);transition:transform .9s var(--ease),clip-path .9s var(--ease),top .5s var(--ease);clip-path:inset(0 0 0 0 round 22px)}
-#mapwrap.off #mcard{transform:translate(-50%,-47%) scale(calc(var(--mk,1)*.95));clip-path:inset(0 100% 0 0 round 22px)}
-#mhead{position:relative;padding:26px 44px 22px;background:linear-gradient(90deg,#8d1123,#c21c28 55%,#ff3b3b);box-shadow:0 8px 24px rgba(0,0,0,.4);overflow:hidden}
+ box-shadow:0 34px 90px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,255,255,.07);transition:transform .9s var(--ease),clip-path .9s var(--ease),top .5s var(--ease);clip-path:inset(0 0 0 0 round 38px)}
+#mapwrap.off #mcard{transform:translate(-50%,-47%) scale(calc(var(--mk,1)*.95));clip-path:inset(0 100% 0 0 round 38px)}
+#mhead{position:relative;padding:26px 44px 40px;background:linear-gradient(90deg,#8d1123,#c21c28 55%,#ff3b3b);box-shadow:0 8px 24px rgba(0,0,0,.4);overflow:hidden;clip-path:polygon(0 0,100% 0,100% calc(100% - 14px),calc(100% - 70px) 100%,0 100%);margin-bottom:-14px;z-index:2}
 #mhead::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.06) 0 2px,transparent 2px 26px);pointer-events:none}
 #mtitle{position:relative;padding-right:360px;font-size:50px;font-weight:700;letter-spacing:1px;text-transform:uppercase;line-height:1.1;text-shadow:0 3px 10px rgba(0,0,0,.4)}
 #msub{position:relative;display:inline-block;margin-top:10px;font-size:19px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:rgba(0,0,0,.28);padding:6px 14px;border-radius:30px}
 #mbadge{position:absolute;right:44px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:12px;background:#fff;color:#0b1d4a;font-size:27px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;padding:12px 28px;border-radius:10px;box-shadow:0 6px 16px rgba(0,0,0,.4);white-space:nowrap}
 #mbadge i{width:14px;height:14px;border-radius:50%;background:#d60f08;box-shadow:0 0 8px rgba(214,15,8,.7);flex:none}
 #mbody{display:grid;grid-template-columns:680px 1fr;gap:40px;padding:26px 44px 22px;align-items:center}
-#mmap{height:620px;display:flex;align-items:center;justify-content:center}
-#msvg{display:block;height:100%;width:auto;max-width:100%;filter:drop-shadow(0 10px 18px rgba(0,0,0,.55))}
-#msvg path{fill:#3b4559;stroke:rgba(255,255,255,.22);stroke-width:1.5;stroke-linejoin:round;transition:fill .7s ease,opacity .5s ease,transform .7s var(--ease);opacity:0;transform:scale(.86);transform-box:fill-box;transform-origin:center}
+#mmap{position:relative;height:620px;display:flex;align-items:center;justify-content:center;border-radius:30px;overflow:hidden;
+ background:radial-gradient(closest-side at 50% 52%,rgba(80,130,255,.28),rgba(40,70,150,.10) 60%,transparent 100%),radial-gradient(rgba(255,255,255,.07) 1.4px,transparent 1.6px) 0 0/26px 26px,linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015));
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.09),inset 0 0 60px rgba(0,0,0,.35)}
+#mmap::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(115deg,rgba(255,255,255,.10),transparent 32%);pointer-events:none}
+#msvg{position:relative;z-index:1;display:block;height:94%;width:auto;max-width:94%;overflow:visible;filter:drop-shadow(0 0 22px rgba(90,140,255,.35)) drop-shadow(0 12px 16px rgba(0,0,0,.55))}
+#msvg path{fill:#3b4559;stroke:#0a1428;stroke-width:3;paint-order:stroke;stroke-linejoin:round;stroke-linecap:round;transition:fill .7s ease,opacity .5s ease,transform .7s var(--ease);opacity:0;transform:scale(.86);transform-box:fill-box;transform-origin:center}
 #mapwrap.in #msvg path{opacity:1;transform:none}
+#msvg path.sh{fill:url(#msh) !important;stroke:rgba(255,255,255,.28);stroke-width:1.2;pointer-events:none;mix-blend-mode:soft-light}
 #mparties{position:relative;height:620px}
-.mrow{position:absolute;left:0;right:0;top:0;box-sizing:border-box;padding:0 22px;border-radius:16px;display:flex;flex-direction:column;justify-content:center;
+.mrow{position:absolute;left:0;right:0;top:0;box-sizing:border-box;padding:0 24px;border-radius:24px;display:flex;flex-direction:column;justify-content:center;
  background:linear-gradient(90deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);overflow:hidden;opacity:0;margin-left:-70px;
  transition:transform .8s var(--ease),opacity .5s ease,margin-left .8s var(--ease),border-color .5s,background .5s}
 #mapwrap.in .mrow{opacity:1;margin-left:0}
@@ -254,13 +254,12 @@ html.hasvideo,html.hasvideo body{background:#000 !important}
 .mval small{font-size:.5em;opacity:.8;margin-left:3px;font-weight:700}
 .mbar{height:5px;margin-top:calc(var(--rh)*.1);border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
 .mbar i{display:block;height:100%;width:0;border-radius:4px;background:var(--c);box-shadow:0 0 10px var(--c);transition:width 1.2s var(--ease)}
-#mfoot{display:flex;justify-content:space-between;gap:20px;padding:14px 44px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:18px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#cfd9ee}
+#mfoot{display:flex;justify-content:space-between;gap:20px;padding:14px 52px 24px;border-top:1px solid rgba(255,255,255,.08);font-size:18px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#cfd9ee}
 #mnote,#mcnt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
 </head>
 <body>
 <div id="scene">
-  <video id="gamev" autoplay muted playsinline></video>
   <div id="barwrap" class="off">
     <div id="root">
       <div id="logo"></div>
@@ -405,7 +404,7 @@ html.hasvideo,html.hasvideo body{background:#000 !important}
 
   <div id="mapwrap" class="off"><div id="mcard">
     <div id="mhead"><div id="mtitle"></div><div id="msub"></div><div id="mbadge"><i></i><span id="mbtxt"></span></div></div>
-    <div id="mbody"><div id="mmap"><svg id="msvg" viewBox="0 0 709 648" aria-hidden="true"></svg></div><div id="mparties"></div></div>
+    <div id="mbody"><div id="mmap"><svg id="msvg" viewBox="0 0 709 648" aria-hidden="true"><defs><linearGradient id="msh" x1="0" y1="0" x2="0.6" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".5" stop-color="#fff" stop-opacity=".12"/><stop offset="1" stop-color="#000" stop-opacity=".7"/></linearGradient></defs></svg></div><div id="mparties"></div></div>
     <div id="mfoot"><span id="mnote"></span><span id="mcnt"></span></div>
   </div></div>
 
@@ -425,7 +424,6 @@ html.hasvideo,html.hasvideo body{background:#000 !important}
   </div>
 </div>
 
-<button id="sndbtn">🔊 Włącz dźwięk</button>
 <script>
 const $ = id => document.getElementById(id);
 const KEY = new URLSearchParams(location.search).get('key') || '';
@@ -533,6 +531,7 @@ let mapOn = false, mapSig = '';
   for (const k in POLSKA_PATHS) {
     const pa = document.createElementNS(NS, 'path'); pa.setAttribute('d', POLSKA_PATHS[k]); pa.dataset.id = k.toLowerCase();
     const d = (i++ * 55) + 'ms'; pa.style.transitionDelay = '0ms,' + d + ',' + d; svg.appendChild(pa);
+    const sh = pa.cloneNode(); sh.removeAttribute('data-id'); sh.setAttribute('class', 'sh'); sh.style.transitionDelay = '0ms,' + d + ',' + d; svg.appendChild(sh);
   }
 })();
 const mfmt = v => String(+(+v || 0).toFixed(2)).replace('.', ',');
@@ -547,7 +546,7 @@ function renderMap(m){
   const regs = m.regions || [], got = regs.filter(r => byId[r.party]);
   $('mcnt').textContent = 'Regiony z wynikiem: ' + got.length + '/' + regs.length;
   /* województwa: kolor zwycięzcy albo szary (brak danych) */
-  document.querySelectorAll('#msvg path').forEach(pa => {
+  document.querySelectorAll('#msvg path:not(.sh)').forEach(pa => {
     const r = regs.find(x => x.id === pa.dataset.id), p = r && byId[r.party];
     pa.style.fill = p ? p.color : '';
   });
@@ -578,7 +577,7 @@ function renderMap(m){
 function fitMap(){
   /* mapa mieści się nad paskiem dolnym (gdy jest na antenie), a bez paska – na środku ekranu */
   const card = $('mcard'), h = card.offsetHeight; if (!h) return;
-  const top = 30, bottom = barBh ? barMb + barBh + 20 : 30, avail = 1080 - top - bottom;
+  const top = 30, bottom = barBh ? barMb + barBh + flH + 20 : 30, avail = 1080 - top - bottom;
   const k = Math.min(1, avail / h);
   card.style.setProperty('--mk', k.toFixed(3));
   card.style.setProperty('--mtop', (top + avail / 2) + 'px');
@@ -708,12 +707,13 @@ let flSig = '', flPrev = false, flForceOff = false, flT = null;
 function fitFlash(){
   const t = $('fltxt'), w = $('fltxtwrap'); t.classList.remove('mq'); t.style.removeProperty('--dist');
   requestAnimationFrame(() => {
-    const over = t.scrollWidth - (w.clientWidth - 52);
+    const over = t.scrollWidth - (w.clientWidth - 80);
     if (over > 4) { t.style.setProperty('--dist', -(over + 10) + 'px'); t.style.setProperty('--dur', Math.max(4, over / 70) + 's'); t.classList.add('mq'); }
   });
 }
+function setFlH(on){ flH = on ? 62 : 0; $('scene').style.setProperty('--fh', flH + 'px'); try { fitPoll(); if (mapOn) fitMap(); } catch (e) {} }
 function setVis(id, on){ $(id).classList.toggle('off', !on); }
-function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('flashwrap', false); setVis('pollwrap', false); setVis('mapwrap', false); mapOn = false; setAge(AGE_URL || 0); renderBreak(null); }
+function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('flashwrap', false); setFlH(false); setVis('pollwrap', false); setVis('mapwrap', false); mapOn = false; setAge(AGE_URL || 0); renderBreak(null); }
 
 /* ---------- QR: działa niezależnie od zbiórki (s.qr.visible) ---------- */
 let fund = null, qrOk = false, qrCfg = {visible: false}, fundSig = '';
@@ -772,14 +772,14 @@ function setAge(r){
 ageImg.onerror = () => { ageShown = 0; setVis('agewrap', false); $('scene').style.setProperty('--pt', '43px'); };
 
 /* ---------- ankieta na żywo: skalowanie, żeby nie wchodziła na QR / planszę / pasek ---------- */
-let barMb = 43, barBh = 214;
+let barMb = 43, barBh = 214, flH = 0;
 function fitPoll(){
   const box = $('lpbox'), h = box.offsetHeight; if (!h) return;
   const top = ageShown ? 129 : 43;
   const qrOn = !$('qrwrap').classList.contains('off') && !$('fqrbox').classList.contains('hide');
   const ltOn = !$('ltwrap').classList.contains('off');
   const extra = Math.max(qrOn ? $('fqrbox').offsetHeight : 0, ltOn ? $('ltwrap').offsetHeight : 0);
-  const reserve = barMb + barBh + (extra ? 14 + extra : 0) + 14;
+  const reserve = barMb + barBh + flH + (extra ? 14 + extra : 0) + 14;
   const k = Math.max(.5, Math.min(1, (1080 - top - reserve) / h));
   box.style.transform = k < 1 ? 'scale(' + k.toFixed(3) + ')' : '';
 }
@@ -865,17 +865,17 @@ function apply(s){
     const f = s.flash;
     if (f && f.text) {
       $('fllabel').textContent = f.label || ''; $('fllabel').style.display = f.label ? '' : 'none';
-      $('scene').style.setProperty('--ft', (+f.top || 0) + 'px');
+      $('flbox').classList.toggle('nolabel', !f.label);
       const sig = f.label + '|' + f.text;
       if (sig !== flSig) { flSig = sig; $('fltxt').textContent = f.text; fitFlash(); }
       const on = !!f.visible;
       if (on && !flPrev) {
         flForceOff = false; clearTimeout(flT); fitFlash();
-        if (+f.hideAfter > 0) flT = setTimeout(() => { flForceOff = true; setVis('flashwrap', false); }, f.hideAfter * 1000);
+        if (+f.hideAfter > 0) flT = setTimeout(() => { flForceOff = true; setVis('flashwrap', false); setFlH(false); }, f.hideAfter * 1000);
       }
       if (!on) { clearTimeout(flT); flForceOff = false; }
-      flPrev = on; setVis('flashwrap', on && !flForceOff);
-    } else { flPrev = false; setVis('flashwrap', false); }
+      flPrev = on; setVis('flashwrap', on && !flForceOff); setFlH(on && !flForceOff);
+    } else { flPrev = false; setVis('flashwrap', false); setFlH(false); }
   } catch (e) { console.error('pilne', e); }
 
   try {
@@ -991,50 +991,6 @@ async function livePoll(){
   } catch (e) { /* chwilowy brak sieci – zostawiamy jak jest */ }
 }
 livePoll(); setInterval(livePoll, 12000);
-
-/* ---------- obraz z gry (LiveKit): widz, OBS-owa przeglądarka i chmurowy egress na Twitcha/TikToka ---------- */
-(function(){
-  const QS = new URLSearchParams(location.search), EGRESS = QS.get('egress') === '1', PREV = QS.get('preview') === '1';
-  const inObs = !!window.obsstudio;
-  function fitScene(){
-    if (PREV || inObs) return;
-    const k = Math.min(innerWidth / 1920, innerHeight / 1080), sc = $('scene');
-    sc.style.transformOrigin = '0 0'; sc.style.transform = 'translate(' + ((innerWidth - 1920 * k) / 2) + 'px,' + ((innerHeight - 1080 * k) / 2) + 'px) scale(' + k + ')';
-  }
-  addEventListener('resize', fitScene); fitScene();
-  let started = false, signalled = false;
-  const signal = () => { if (EGRESS && !signalled) { signalled = true; console.log('START_RECORDING'); } };
-  if (EGRESS) setTimeout(signal, 8000); // egress nie zawiesi się, nawet gdy nie ma obrazu z gry
-  async function loadLib(){
-    if (window.LivekitClient) return;
-    await new Promise((ok, er) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/livekit-client@2.5.7/dist/livekit-client.umd.min.js'; s.onload = ok; s.onerror = er; document.head.appendChild(s); });
-  }
-  async function join(){
-    if (started || !KEY || PREV || DEMO) return; started = true;
-    try {
-      const r = await fetch('/api/lk?key=' + encodeURIComponent(KEY), {cache: 'no-store'});
-      if (!r.ok) { started = false; return; }               // brak konfiguracji LiveKit – overlay działa jak dotąd
-      const j = await r.json(); await loadLib();
-      const L = window.LivekitClient;
-      const room = new L.Room({adaptiveStream: !EGRESS, dynacast: true});
-      const v = $('gamev'), btn = $('sndbtn'); let auds = [];
-      room.on(L.RoomEvent.TrackSubscribed, (tr, pub) => {
-        if (tr.kind === 'video') { tr.attach(v); v.style.display = 'block'; if (!inObs) document.documentElement.classList.add('hasvideo'); setTimeout(signal, 1200); }
-        else if (tr.kind === 'audio') { const a = tr.attach(); document.body.appendChild(a); auds.push(a); }
-      });
-      room.on(L.RoomEvent.TrackUnsubscribed, (tr) => {
-        if (tr.kind === 'video') { tr.detach(v); v.style.display = 'none'; document.documentElement.classList.remove('hasvideo'); }
-        else if (tr.kind === 'audio') tr.detach().forEach(a => a.remove());
-      });
-      room.on(L.RoomEvent.AudioPlaybackStatusChanged, () => { btn.style.display = (!EGRESS && !room.canPlaybackAudio) ? 'block' : 'none'; });
-      btn.onclick = () => { room.startAudio(); btn.style.display = 'none'; };
-      room.on(L.RoomEvent.Disconnected, () => { v.style.display = 'none'; document.documentElement.classList.remove('hasvideo'); started = false; setTimeout(join, 4000); });
-      await room.connect(j.url, j.token);
-      setTimeout(signal, 2500);
-    } catch (e) { console.error('livekit', e); started = false; setTimeout(join, 8000); }
-  }
-  join();
-})();
 </script>
 </body>
 </html>
