@@ -42,7 +42,6 @@ button:hover{filter:brightness(1.12);transform:translateY(-1px)}button:active{tr
 .rgrow .xy input{width:68px;padding:6px 8px}
 .mprow input[type=color]{width:44px;height:40px;padding:2px;border:1px solid var(--line);border-radius:8px;background:#081529;cursor:pointer}
 .gsrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.gsrow select{flex:1 1 220px;width:auto}.gsrow button{margin:0}
-.phrow{display:flex;gap:12px;align-items:center}.phrow input{flex:1}.phrow img{height:64px;width:48px;object-fit:cover;object-position:50% 12%;border-radius:6px;border:1px solid var(--line);background:#081529}
 @media(max-width:700px){.rgrow{grid-template-columns:60px 1fr 34px}.rgrow .pt,.rgrow .pc{grid-column:span 1}}
 .msg{margin-top:10px;font-weight:700;min-height:18px}.ok{color:var(--ok)}.er{color:var(--er)}
 .hint{color:var(--mut);font-size:12px;margin-top:6px}
@@ -56,6 +55,43 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
 .adbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.adbtns button{margin:0}
 .live{display:inline-flex;align-items:center;gap:8px}.live::before{content:"";width:9px;height:9px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 8px #ff3b3b;animation:pl 1.4s infinite}@keyframes pl{50%{opacity:.3}}
 @media(max-width:700px){.grid2{grid-template-columns:1fr}.tabs button{flex:1 1 auto}}
+
+/* ===== REŻYSERKA ===== */
+:root{--bg:#04070d;--card:#0b1220;--line:#1b2a45;--mut:#7f93b8}
+body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60%),radial-gradient(900px 500px at 100% 0,#10316633,transparent 60%),#04070d;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+.top{display:grid;grid-template-columns:1fr auto auto auto;gap:22px;align-items:center;background:linear-gradient(180deg,#0e1626,#080d17);border-bottom:2px solid var(--red);box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.top>div.brand{max-width:none}
+.top h1{font-size:20px;letter-spacing:3px;text-transform:uppercase}
+.tally{display:flex;align-items:center;gap:12px;padding:8px 22px;border-radius:10px;background:#141c2b;border:1px solid #2a3a58;color:#6b7c9c;font-weight:900;letter-spacing:3px;font-size:20px;font-family:"Roboto Condensed","Segoe UI",sans-serif;transition:.25s}
+.tally i{width:16px;height:16px;border-radius:50%;background:#3a4863}
+.tally.on{background:linear-gradient(180deg,#e0141f,#a3101a);color:#fff;border-color:#ff5a63;box-shadow:0 0 28px #ff2b3a99,inset 0 1px 0 #ffffff44}
+.tally.on i{background:#fff;box-shadow:0 0 12px #fff;animation:pl 1s infinite}
+.clock{text-align:right;font-variant-numeric:tabular-nums}.clock span{display:block;font:700 26px "Roboto Condensed","Segoe UI",sans-serif;letter-spacing:2px}
+.clock small{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:1px}.clock small b{color:#fff}
+.box,.tabs{background:linear-gradient(180deg,#0e1728,#0a1120);border-color:var(--line);border-radius:12px}
+.mons{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px}
+.mon{background:#080d17;border:1px solid var(--line);border-radius:12px;padding:10px;box-shadow:0 10px 28px rgba(0,0,0,.5)}
+.monhd{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--mut)}.monhd b{color:#dbe5f7}.grow{flex:1}
+.tag{padding:3px 10px;border-radius:5px;font-weight:900;letter-spacing:2px;color:#fff;font-size:12px}.tag.pgm{background:#d4141f;box-shadow:0 0 12px #d4141f88}.tag.pvw{background:#1fa04a;box-shadow:0 0 12px #1fa04a77}
+.mini{display:flex;align-items:center;gap:6px;margin:0;font-size:11px;color:var(--mut);cursor:pointer;text-transform:uppercase}.mini input{width:auto;height:auto;appearance:auto;-webkit-appearance:auto;background:none}.mini input::after{display:none}
+.screen{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;border:1px solid #243756;background:#000 repeating-conic-gradient(#0c1424 0 25%,#0a101c 0 50%) 0 0/24px 24px}
+.screen video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;display:none}
+.screen.live video{display:block}.screen.cover video{object-fit:cover}
+#prevWrap{width:100%;max-width:100%;border:1px solid #243756;border-radius:8px;box-shadow:none;background-color:#000}
+#prevWrap #prevFrame{z-index:2}#prevWrap.noov #prevFrame{display:none}
+.capph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;color:var(--mut);cursor:pointer;background:radial-gradient(circle at 50% 40%,#10203a,#070c15)}
+.capph div{font-size:42px}.capph b{color:#fff;font-size:15px}.capph small{font-size:11px}.capph:hover{color:#fff}
+.screen.live .capph{display:none}
+.capbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}.capbar button{margin:0}.capbar .hint{margin:0 0 0 6px}
+.chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.chips .chip{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px 10px;border-radius:12px;background:linear-gradient(180deg,#121c30,#0b1322);border:1px solid #223455;position:relative;margin:0;text-align:left;min-height:78px}
+.chips{align-items:stretch}.chips>:first-child:not(.chip){grid-column:1/-1}.chips .chip span{padding-right:20px;font:800 15px "Roboto Condensed","Segoe UI",sans-serif;text-transform:uppercase;letter-spacing:1.2px}
+.chips .chip small{font-size:10px;letter-spacing:1.5px;color:var(--mut);font-weight:800}
+.chips .chip kbd{position:absolute;top:8px;right:10px;font:700 11px monospace;color:#5d7096;border:1px solid #2a3b5c;border-radius:4px;padding:0 6px}
+.chips .chip.on{background:linear-gradient(180deg,#e0141f,#8d0d17);border-color:#ff6770;box-shadow:0 0 22px #ff2b3a66,inset 0 1px 0 #ffffff33}
+.chips .chip.on small,.chips .chip.on kbd{color:#fff;border-color:#ffffff66}
+.tabs{padding:6px}.tabs button{font-weight:800;letter-spacing:.5px;text-transform:uppercase;font-size:12px}
+@media(max-width:800px){.mons{grid-template-columns:1fr}.top{grid-template-columns:1fr auto}.clock{display:none}}
 </style>
 </head>
 <body>
@@ -69,16 +105,42 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
 </div>
 
 <div class="wrap" id="app" hidden>
-  <div class="top"><div class="brand"><img src="/assets/jeden_logo.png" alt=""><div><h1>Panel transmisji</h1><small>JEDEN · sterowanie overlayem</small></div></div><button class="b3 sm" id="bLogout">Wyloguj</button></div>
+  <div class="top">
+    <div class="brand"><img src="/assets/jeden_logo.png" alt=""><div><h1>Reżyserka</h1><small>JEDEN · sterowanie transmisją</small></div></div>
+    <div class="tally" id="tally"><i></i><b id="tallyTxt">OFF AIR</b></div>
+    <div class="clock"><span id="clk">--:--:--</span><small>Na antenie: <b id="upt">00:00:00</b></small></div>
+    <button class="b3 sm" id="bLogout">Wyloguj</button>
+  </div>
 
   <div class="box" id="dbWarn" hidden style="border-color:#ff6b6b"><b style="color:#ff6b6b">⚠ Brak bazy danych.</b> Ustawienia się nie zapiszą i overlay ich nie zobaczy. W Vercelu: <b>Storage → Upstash Redis</b> → podłącz do projektu, potem <b>Redeploy</b>.</div>
 
-  <div class="box">
-    <h3 class="live">Podgląd na żywo</h3>
-    <div id="prevWrap"><iframe id="prevFrame" title="Podgląd overlayu"></iframe></div>
+  <div class="mons">
+    <div class="mon">
+      <div class="monhd"><span class="tag pgm">PGM</span><b>Z paskiem i overlayem</b><span class="grow"></span>
+        <label class="mini"><input type="checkbox" id="monOv" checked>overlay</label></div>
+      <div id="prevWrap" class="screen">
+        <video id="capA" autoplay muted playsinline></video>
+        <iframe id="prevFrame" title="Podgląd overlayu"></iframe>
+      </div>
+    </div>
+    <div class="mon">
+      <div class="monhd"><span class="tag pvw">PVW</span><b>Czyste okno (bez paska)</b><span class="grow"></span>
+        <label class="mini"><input type="checkbox" id="monFit" checked>dopasuj</label></div>
+      <div class="screen" id="capWrap">
+        <video id="capB" autoplay muted playsinline></video>
+        <div class="capph" id="capPh"><div>🖥</div><b>Kliknij, aby wybrać okno lub aplikację</b><small>Podgląd tylko w panelu · stream i tak łapie OBS</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="capbar">
+    <button class="b1" id="capStart">🖥 Wybierz okno / ekran</button>
+    <button class="b3" id="capStop" disabled>■ Zatrzymaj</button>
+    <button class="b2" id="capSwap">⇄ Zamień monitory</button>
+    <button class="b2" id="capFs" title="Pełny ekran czystego okna">⛶ Pełny ekran</button>
+    <span class="hint" id="capMsg">Skróty: 1–7 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)</span>
   </div>
 
-  <div class="chips" id="chips">Na antenie – kliknij, aby przełączyć:</div>
+  <div class="chips" id="chips"><div style="grid-column:1/-1;color:var(--mut);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase">Na antenie – kliknij lub użyj klawiszy</div></div>
 
   <div class="tabs" id="tabs">
     <button data-t="tBar" class="on">📰 Pasek</button>
@@ -209,17 +271,10 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
         <button class="b3 sm" id="ltGAdd">＋ Zapisz na liście</button>
         <button class="b3 sm" id="ltGDel">✕ Usuń z listy</button>
       </div>
-      <div class="hint">Lista zapisuje się razem z planszą (przycisk Zapisz). Wczytanie gościa podstawia nazwisko, funkcję i zdjęcie.</div>
+      <div class="hint">Lista zapisuje się razem z planszą (przycisk Zapisz). Wczytanie gościa podstawia nazwisko i funkcję.</div>
 
-      <label for="ltTag">Etykieta nad nazwiskiem (puste = bez etykiety)</label>
-      <input type="text" id="ltTag" maxlength="30" list="ltTags" placeholder="GOŚĆ">
-      <datalist id="ltTags"><option value="GOŚĆ"><option value="GOŚĆ STUDIA"><option value="ROZMÓWCA"><option value="EKSPERT"><option value="KORESPONDENT"><option value="WIDEOŁĄCZENIE"><option value="NA TELEFONIE"><option value="KOMENTARZ"></datalist>
       <label for="ltName">Imię i nazwisko</label><input type="text" id="ltName" maxlength="80">
       <label for="ltRole">Funkcja / opis (opcjonalnie)</label><input type="text" id="ltRole" maxlength="120">
-      <label for="ltTopic">Temat rozmowy (opcjonalnie)</label><input type="text" id="ltTopic" maxlength="160">
-      <label for="ltPhoto">Zdjęcie (nazwa pliku z folderu goscie albo link https)</label>
-      <div class="phrow"><input type="text" id="ltPhoto" maxlength="2000" placeholder="np. tarcza.png"><img id="ltPhotoImg" alt="" hidden></div>
-      <div class="hint" id="ltPhotoMsg">Wrzuć plik do <code>public/goscie/</code> i wpisz samą nazwę (np. <code>tarcza.png</code>). Zdjęcie pionowe, osoba z boku kadru, jak w przykładzie – głowa u góry.</div>
       <label for="ltHide">Chowaj po (sekundy, 0 = nie chowaj)</label><input type="number" id="ltHide" min="0" max="3600" style="max-width:160px">
       <button class="b1" id="ltSave">Zapisz</button><div class="msg" id="ltMsg"></div>
     </div>
@@ -310,7 +365,7 @@ async function start(){
   let r; try { r = await api('/api/config'); } catch (e) { return; }
   cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); $('dbWarn').hidden = !!r.persistent;
   $('login').hidden = true; $('app').hidden = false;
-  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
+  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillBrk(); fillAds(); fillOverlay(); renderChips(); updTally(); scanAds();
 }
 
 /* ---------- zakładki ---------- */
@@ -412,33 +467,23 @@ $('qrSave').onclick = () => save('qr', {visible: $('qrVis').checked}, 'qrMsg');
 function fillAge(){ const a = cfg.age; $('ageVis').checked = a.visible; $('ageRat').value = String(a.rating); }
 $('ageSave').onclick = () => save('age', {visible: $('ageVis').checked, rating: num($('ageRat').value)}, 'ageMsg');
 
-/* ---------- widżety: plansza rozmówcy (+ zdjęcie, temat, lista gości) ---------- */
+/* ---------- widżety: plansza rozmówcy (lista gości) ---------- */
 let ltGuests = [];
-const photoUrl = p => { p = (p || '').trim(); return !p ? '' : /^https?:\/\//i.test(p) ? p : '/goscie/' + encodeURIComponent(p); };
-function ltPhotoPreview(){
-  const u = photoUrl($('ltPhoto').value), im = $('ltPhotoImg');
-  if (!u) { im.hidden = true; im.removeAttribute('src'); return; }
-  im.hidden = false; im.src = u;
-}
-$('ltPhotoImg').onerror = () => { $('ltPhotoImg').hidden = true; $('ltPhotoMsg').textContent = '⚠ Nie znaleziono zdjęcia – sprawdź nazwę pliku (folder public/goscie/) albo link.'; $('ltPhotoMsg').style.color = 'var(--er)'; };
-$('ltPhotoImg').onload = () => { $('ltPhotoMsg').style.color = ''; $('ltPhotoMsg').innerHTML = 'Wrzuć plik do <code>public/goscie/</code> i wpisz samą nazwę (np. <code>tarcza.png</code>). Zdjęcie pionowe, osoba z boku kadru, jak w przykładzie – głowa u góry.'; };
-$('ltPhoto').addEventListener('input', () => { clearTimeout($('ltPhoto')._t); $('ltPhoto')._t = setTimeout(ltPhotoPreview, 350); });
 function fillGuests(){
   const sel = $('ltGuest'); sel.replaceChildren(new Option('— wybierz z listy —', ''));
   ltGuests.forEach((g, i) => sel.appendChild(new Option(g.name + (g.role ? ' · ' + g.role : ''), String(i))));
 }
 function fillLt(){
   const l = cfg.lower_third; $('ltVis').checked = l.visible; $('ltName').value = l.name; $('ltRole').value = l.role; $('ltHide').value = l.hideAfter;
-  $('ltTag').value = l.tag || ''; $('ltTopic').value = l.topic || ''; $('ltPhoto').value = l.photo || '';
-  ltGuests = (l.guests || []).map(g => ({name: g.name, role: g.role || '', photo: g.photo || ''})); fillGuests(); ltPhotoPreview();
+  ltGuests = (l.guests || []).map(g => ({name: g.name, role: g.role || ''})); fillGuests();
 }
 $('ltGLoad').onclick = () => {
   const g = ltGuests[+$('ltGuest').value]; if (!g || $('ltGuest').value === '') { say('ltMsg', 'Wybierz gościa z listy', false); return; }
-  $('ltName').value = g.name; $('ltRole').value = g.role; $('ltPhoto').value = g.photo; ltPhotoPreview(); say('ltMsg', 'Wczytano – kliknij Zapisz, aby wyświetlić', true);
+  $('ltName').value = g.name; $('ltRole').value = g.role; say('ltMsg', 'Wczytano – kliknij Zapisz, aby wyświetlić', true);
 };
 $('ltGAdd').onclick = () => {
   const name = $('ltName').value.trim(); if (!name) { say('ltMsg', 'Wpisz imię i nazwisko, żeby zapisać gościa', false); return; }
-  const g = {name, role: $('ltRole').value.trim(), photo: $('ltPhoto').value.trim()}, i = ltGuests.findIndex(x => x.name.toLowerCase() === name.toLowerCase());
+  const g = {name, role: $('ltRole').value.trim()}, i = ltGuests.findIndex(x => x.name.toLowerCase() === name.toLowerCase());
   if (i >= 0) ltGuests[i] = g; else if (ltGuests.length >= 40) { say('ltMsg', 'Maks. 40 gości na liście', false); return; } else ltGuests.push(g);
   fillGuests(); $('ltGuest').value = String(i >= 0 ? i : ltGuests.length - 1); say('ltMsg', 'Dodano do listy – kliknij Zapisz', true);
 };
@@ -447,7 +492,7 @@ $('ltGDel').onclick = () => {
   ltGuests.splice(+i, 1); fillGuests(); say('ltMsg', 'Usunięto z listy – kliknij Zapisz', true);
 };
 $('ltSave').onclick = () => save('lower_third', {visible: $('ltVis').checked, name: $('ltName').value, role: $('ltRole').value, hideAfter: num($('ltHide').value),
-  tag: $('ltTag').value, topic: $('ltTopic').value, photo: $('ltPhoto').value.trim(), guests: ltGuests}, 'ltMsg');
+  guests: ltGuests}, 'ltMsg');
 
 /* ---------- mapa wyników ---------- */
 const uid = () => 'x' + Math.random().toString(36).slice(2, 8);
@@ -566,11 +611,11 @@ document.addEventListener('click', e => { if (e.target.matches && e.target.match
 
 function renderChips(){
   const box = $('chips'); box.replaceChildren(box.firstChild);
-  Object.keys(NAME).forEach(k => {
-    const on = !!cfg[k].visible, b = document.createElement('button');
-    b.className = 'chip' + (on ? ' on' : ''); b.innerHTML = (on ? '● ' : '○ ') + NAME[k] + ' <small>' + (on ? 'NA ANTENIE' : 'wyłączone') + '</small>';
+  Object.keys(NAME).forEach((k, n) => {
+    const on = !!cfg[k].visible, b = document.createElement('button'); b.dataset.k = k;
+    b.className = 'chip' + (on ? ' on' : ''); b.innerHTML = '<kbd>' + (n + 1) + '</kbd><span>' + NAME[k] + '</span><small>' + (on ? 'NA ANTENIE' : 'wyłączone') + '</small>';
     b.onclick = async () => {
-      try { const r = await api('/api/config', 'POST', {section: k, patch: {visible: !cfg[k].visible}}); cfg = r.config; if (!dirty[k]) FILL[k](); renderChips(); }
+      try { const r = await api('/api/config', 'POST', {section: k, patch: {visible: !cfg[k].visible}}); cfg = r.config; if (!dirty[k]) FILL[k](); renderChips(); updTally(); }
       catch (e) { say(MSG[k], e.message, false); }
     };
     box.appendChild(b);
@@ -595,7 +640,7 @@ async function sync(){
       dirty[k] ? conflict(k) : FILL[k]();
     }
     if (old.overlayKey !== cfg.overlayKey) fillOverlay();
-    renderChips();
+    renderChips(); updTally();
   } catch (e) { /* chwilowy brak sieci – spróbujemy za chwilę */ }
   finally { syncing = false; }
 }
@@ -614,6 +659,56 @@ $('ovRegen').onclick = async () => {
   try { cfg = (await api('/api/key', 'POST')).config; fillOverlay(); say('ovMsg', 'Nowy klucz wygenerowany – wklej nowy link w OBS', true); }
   catch (e) { say('ovMsg', e.message, false); }
 };
+
+
+/* ---------- reżyserka: ON AIR, zegar, skróty ---------- */
+let onSince = 0;
+function updTally(){
+  if (!cfg) return;
+  const on = Object.keys(NAME).some(k => cfg[k] && cfg[k].visible);
+  $('tally').classList.toggle('on', on); $('tallyTxt').textContent = on ? 'ON AIR' : 'OFF AIR';
+  if (on && !onSince) onSince = Date.now(); if (!on) onSince = 0;
+}
+const p2 = n => String(n).padStart(2, '0');
+setInterval(() => {
+  const d = new Date(); $('clk').textContent = p2(d.getHours()) + ':' + p2(d.getMinutes()) + ':' + p2(d.getSeconds());
+  const t = onSince ? Math.floor((Date.now() - onSince) / 1000) : 0;
+  $('upt').textContent = p2(Math.floor(t / 3600)) + ':' + p2(Math.floor(t / 60) % 60) + ':' + p2(t % 60);
+}, 500);
+document.addEventListener('keydown', e => {
+  if (!cfg || e.ctrlKey || e.metaKey || e.altKey) return;
+  const t = e.target; if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
+  if (e.key === ' ') { e.preventDefault(); document.querySelectorAll('#chips .chip.on').forEach(b => b.click()); return; }
+  if (/^[1-9]$/.test(e.key)) { const b = document.querySelectorAll('#chips .chip')[+e.key - 1]; if (b) b.click(); }
+});
+
+/* ---------- podgląd okna / aplikacji (tylko w panelu) ---------- */
+let capStream = null;
+const capSay = (m, er) => { const e = $('capMsg'); e.textContent = m; e.style.color = er ? 'var(--er)' : ''; };
+async function capStart(){
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) { capSay('Ta przeglądarka nie obsługuje przechwytywania ekranu (użyj Chrome/Edge po HTTPS).', true); return; }
+  try {
+    const st = await navigator.mediaDevices.getDisplayMedia({video: {frameRate: 30}, audio: false});
+    capStop(); capStream = st;
+    ['capA', 'capB'].forEach(id => { $(id).srcObject = st; $(id).play().catch(() => {}); });
+    $('prevWrap').classList.add('live'); $('capWrap').classList.add('live');
+    $('capStop').disabled = false;
+    const tr = st.getVideoTracks()[0]; tr.onended = capStop;
+    capSay('Podgląd: ' + (tr.label || 'okno'), false);
+  } catch (e) { capSay(e && e.name === 'NotAllowedError' ? 'Anulowano wybór okna.' : 'Nie udało się: ' + (e && e.message), true); }
+}
+function capStop(){
+  if (capStream) { capStream.getTracks().forEach(t => { t.onended = null; t.stop(); }); capStream = null; }
+  ['capA', 'capB'].forEach(id => { $(id).srcObject = null; });
+  $('prevWrap').classList.remove('live'); $('capWrap').classList.remove('live'); $('capStop').disabled = true;
+  capSay('Skróty: 1–7 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)', false);
+}
+$('capStart').onclick = capStart; $('capPh').onclick = capStart; $('capStop').onclick = capStop;
+$('monOv').onchange = () => $('prevWrap').classList.toggle('noov', !$('monOv').checked);
+$('monFit').onchange = () => { const c = !$('monFit').checked; $('prevWrap').classList.toggle('cover', c); $('capWrap').classList.toggle('cover', c); };
+let swapped = false;
+$('capSwap').onclick = () => { swapped = !swapped; document.querySelector('.mons').style.flexDirection = ''; document.querySelectorAll('.mons .mon').forEach((m, i) => m.style.order = swapped ? 1 - i : i); };
+$('capFs').onclick = () => { const w = $('capWrap'); (w.requestFullscreen || w.webkitRequestFullscreen || (() => {})).call(w); };
 
 (async () => { try { const j = await api('/api/login'); j.admin ? await start() : showLogin(); } catch (e) { showLogin(); } })();
 </script>

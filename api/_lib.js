@@ -21,7 +21,7 @@ export const DEFAULTS = {
   live_badge: { visible: false, text: 'NA ŻYWO', top: 43, right: 53 },
   qr: { visible: false },
   age: { visible: false, rating: 12 },
-  lower_third: { visible: false, name: '', role: '', hideAfter: 0, tag: 'GOŚĆ', topic: '', photo: '', guests: [] },
+  lower_third: { visible: false, name: '', role: '', hideAfter: 0, guests: [] },
   map: {
     visible: false,
     kind: 'exit',
@@ -101,15 +101,6 @@ export const DEFAULTS = {
 
 /* ---------- walidacja (zod) ---------- */
 const txt = (max) => z.string().max(max);
-// zdjęcie gościa: nazwa pliku z folderu /goscie/ (np. tarcza.png) albo pełny link https
-const photoStr = z
-  .string()
-  .trim()
-  .max(2000)
-  .refine(
-    (u) => u === '' || /^https?:\/\//i.test(u) || /^[^\/\\:*?"<>|]{1,100}\.(png|jpe?g|webp|gif)$/i.test(u),
-    'Zdjęcie: nazwa pliku z folderu goscie (np. tarcza.png) albo link https://…',
-  );
 export const SCHEMAS = {
   bar: z.object({
     visible: z.boolean(),
@@ -152,11 +143,8 @@ export const SCHEMAS = {
     name: z.string().trim().max(80),
     role: z.string().trim().max(120),
     hideAfter: z.number().min(0, 'Sekundy min. 0').max(3600, 'Sekundy max. 3600'),
-    tag: z.string().trim().max(30),
-    topic: z.string().trim().max(160),
-    photo: photoStr,
     guests: z
-      .array(z.object({ name: z.string().trim().min(1, 'Gość bez nazwy').max(80), role: z.string().trim().max(120), photo: photoStr }))
+      .array(z.object({ name: z.string().trim().min(1, 'Gość bez nazwy').max(80), role: z.string().trim().max(120) }))
       .max(40, 'Maks. 40 gości na liście'),
   }),
   map: z
