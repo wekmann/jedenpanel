@@ -90,6 +90,8 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #qrwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - 60px))}
 #fqrbox{box-sizing:border-box;width:155px;background:#fff;padding:8px;box-shadow:0 6px 14px rgba(0,0,0,.45);transition:opacity .45s ease,transform .6s var(--ease);transform-origin:50% 100%}
 #fqrbox.hide{opacity:0;transform:translateY(18px) scale(.9);pointer-events:none}
+#fqrcap{width:155px;margin-top:7px;text-align:center;white-space:nowrap;color:#fff;font:900 23px/1 'Roboto Condensed',Arial,sans-serif;letter-spacing:.3px;text-transform:uppercase;text-shadow:0 0 3px #000,0 2px 4px rgba(0,0,0,.85);transition:opacity .45s ease,transform .6s var(--ease)}
+#fqrbox.hide + #fqrcap{opacity:0;transform:translateY(18px)}
 #fqr{display:block;width:100%;height:auto}
 
 /* ===== PLANSZA ROZMÓWCY (nad paskiem, od lewej; omija QR gdy ten jest widoczny) ===== */
@@ -317,6 +319,7 @@ html.lite #bkp{display:none}
 
   <div id="qrwrap" class="off">
     <div id="fqrbox" class="hide"><img id="fqr" alt=""></div>
+    <div id="fqrcap">WESPRZYJ NAS!</div>
   </div>
 
   <div id="ltwrap" class="off">
@@ -788,6 +791,7 @@ qr.src = '/assets/kodqr.png';
 function showQr(){
   const on = !!(qrCfg && qrCfg.visible && qrOk);
   $('fqrbox').classList.toggle('hide', !on);
+  $('fqrcap').textContent = (qrCfg && qrCfg.caption) || 'WESPRZYJ NAS!';
   $('scene').style.setProperty('--lx', on ? '169px' : '0px'); // plansza rozmówcy omija QR
 }
 
@@ -842,7 +846,7 @@ function fitPoll(){
   const top = ageShown ? 129 : 43;
   const qrOn = !$('qrwrap').classList.contains('off') && !$('fqrbox').classList.contains('hide');
   const ltOn = !$('ltwrap').classList.contains('off');
-  const extra = Math.max(qrOn ? $('fqrbox').offsetHeight : 0, ltOn ? $('ltwrap').offsetHeight : 0);
+  const extra = Math.max(qrOn ? $('qrwrap').offsetHeight : 0, ltOn ? $('ltwrap').offsetHeight : 0);
   const reserve = barMb + barBh + flH + (extra ? 14 + extra : 0) + 14;
   const k = Math.max(.5, Math.min(1, (1080 - top - reserve) / h));
   const tf = k < 1 ? 'scale(' + k.toFixed(3) + ')' : ''; if (tf !== box._tf) { box._tf = tf; box.style.transform = tf; }
