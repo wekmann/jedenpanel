@@ -201,6 +201,43 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #pstage.win #flash{animation:fl .7s ease-out}
 @keyframes fl{0%{opacity:.45}100%{opacity:0}}
 #pstage.off #pcard{opacity:0;transform:translate(-50%,-56%) scale(.96);clip-path:inset(0 0 0 100% round 22px);transition:all .7s ease-in}
+
+/* ===== MAPA WYNIKÓW (Polska z województw + lista partii) ===== */
+#mapwrap{position:absolute;inset:0;z-index:15;pointer-events:none;transition:opacity .5s ease}
+#mapwrap.off{opacity:0}
+#mcard{position:absolute;left:50%;top:50%;width:1480px;transform:translate(-50%,-50%);border-radius:22px;overflow:hidden;font-family:'Roboto Condensed',Arial,sans-serif;color:#fff;
+ background:radial-gradient(900px 420px at 0% 0%,rgba(214,15,8,.22),transparent 70%),radial-gradient(700px 380px at 100% 100%,rgba(59,130,246,.2),transparent 70%),linear-gradient(160deg,#0f1f3b,#070f20 75%);
+ box-shadow:0 34px 90px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,255,255,.07);transition:transform .9s var(--ease),clip-path .9s var(--ease);clip-path:inset(0 0 0 0 round 22px)}
+#mapwrap.off #mcard{transform:translate(-50%,-47%) scale(.95);clip-path:inset(0 100% 0 0 round 22px)}
+#mhead{position:relative;padding:26px 44px 22px;background:linear-gradient(90deg,#8d1123,#c21c28 55%,#ff3b3b);box-shadow:0 8px 24px rgba(0,0,0,.4);overflow:hidden}
+#mhead::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.06) 0 2px,transparent 2px 26px);pointer-events:none}
+#mtitle{position:relative;padding-right:360px;font-size:50px;font-weight:700;letter-spacing:1px;text-transform:uppercase;line-height:1.1;text-shadow:0 3px 10px rgba(0,0,0,.4)}
+#msub{position:relative;display:inline-block;margin-top:10px;font-size:19px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:rgba(0,0,0,.28);padding:6px 14px;border-radius:30px}
+#mbadge{position:absolute;right:44px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:12px;background:#fff;color:#0b1d4a;font-size:27px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;padding:12px 28px;border-radius:10px;box-shadow:0 6px 16px rgba(0,0,0,.4);white-space:nowrap}
+#mbadge i{width:14px;height:14px;border-radius:50%;background:#d60f08;box-shadow:0 0 8px rgba(214,15,8,.7);flex:none}
+#mbody{display:grid;grid-template-columns:680px 1fr;gap:40px;padding:26px 44px 22px;align-items:center}
+#mmap{height:620px;display:flex;align-items:center;justify-content:center}
+#msvg{display:block;height:100%;width:auto;max-width:100%;filter:drop-shadow(0 10px 18px rgba(0,0,0,.55))}
+#msvg path{fill:#3b4559;stroke:rgba(255,255,255,.22);stroke-width:1.5;stroke-linejoin:round;transition:fill .7s ease,opacity .5s ease,transform .7s var(--ease);opacity:0;transform:scale(.86);transform-box:fill-box;transform-origin:center}
+#mapwrap.in #msvg path{opacity:1;transform:none}
+#mparties{position:relative;height:620px}
+.mrow{position:absolute;left:0;right:0;top:0;box-sizing:border-box;padding:0 22px;border-radius:16px;display:flex;flex-direction:column;justify-content:center;
+ background:linear-gradient(90deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);overflow:hidden;opacity:0;margin-left:-70px;
+ transition:transform .8s var(--ease),opacity .5s ease,margin-left .8s var(--ease),border-color .5s,background .5s}
+#mapwrap.in .mrow{opacity:1;margin-left:0}
+.mrow.lead.win{border-color:rgba(255,210,58,.6);background:linear-gradient(90deg,rgba(255,210,58,.14),rgba(255,255,255,.03))}
+.mtop{display:flex;align-items:center;gap:14px;min-width:0}
+.msq{width:calc(var(--rh)*.2);height:calc(var(--rh)*.2);min-width:12px;min-height:12px;border-radius:4px;flex:none;background:var(--c);box-shadow:0 0 10px var(--c)}
+.mname{font-size:calc(var(--rh)*.36);font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mwin{flex:none;display:none;background:linear-gradient(90deg,#ffe27a,#ffb020);color:#1a1200;font-weight:900;font-size:calc(var(--rh)*.2);letter-spacing:1.5px;padding:3px 12px;border-radius:30px}
+.mrow.lead.win .mwin{display:block}
+.mreg{margin-left:auto;flex:none;font-size:calc(var(--rh)*.19);font-weight:700;letter-spacing:1.5px;color:#9fb2d4;text-transform:uppercase;white-space:nowrap}
+.mval{flex:none;min-width:calc(var(--rh)*1.6);text-align:right;font-size:calc(var(--rh)*.5);font-weight:900;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mval small{font-size:.5em;opacity:.8;margin-left:3px;font-weight:700}
+.mbar{height:5px;margin-top:calc(var(--rh)*.1);border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+.mbar i{display:block;height:100%;width:0;border-radius:4px;background:var(--c);box-shadow:0 0 10px var(--c);transition:width 1.2s var(--ease)}
+#mfoot{display:flex;justify-content:space-between;gap:20px;padding:14px 44px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:18px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#cfd9ee}
+#mnote,#mcnt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
 </head>
 <body>
@@ -343,6 +380,12 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
     </div>
   </div>
 
+  <div id="mapwrap" class="off"><div id="mcard">
+    <div id="mhead"><div id="mtitle"></div><div id="msub"></div><div id="mbadge"><i></i><span id="mbtxt"></span></div></div>
+    <div id="mbody"><div id="mmap"><svg id="msvg" viewBox="0 0 709 648" aria-hidden="true"></svg></div><div id="mparties"></div></div>
+    <div id="mfoot"><span id="mnote"></span><span id="mcnt"></span></div>
+  </div></div>
+
   <div id="adwrap"><video id="adv" playsinline preload="auto"></video><div id="adlabel">REKLAMA</div></div>
   <div id="brk">
     <div class="bk-bg"></div><div class="bk-st"></div><div class="bk-sw"></div><div id="bkp"></div>
@@ -455,6 +498,65 @@ function hidePoll(quiet){
   clearTimeout(ht); timers.forEach(clearTimeout);
   if (quiet === true) { $('pstage').className = ''; return; }
   if ($('pstage').classList.contains('on')) { $('pstage').className = 'off'; timers = [setTimeout(() => {$('pstage').className = ''}, 800)]; }
+}
+
+/* ---------- mapa wyników: Polska z województw (bez napisów) + lista partii ---------- */
+const POLSKA_PATHS = {"ZP": "M211.6,44.8 L204.0,45.2 L20.1,85.5 L21.2,89.1 L33.6,100.1 L37.1,113.5 L33.0,113.0 L21.1,103.5 L18.9,103.5 L17.0,106.0 L0.8,197.0 L3.2,204.0 L18.9,222.9 L23.3,225.4 L27.0,225.1 L147.0,178.6 L153.3,174.5 L190.3,116.0 L212.0,49.0Z", "PM": "M350.9,21.5 L327.0,3.2 L320.0,1.6 L225.1,41.5 L220.9,46.1 L200.8,109.0 L201.8,115.2 L224.0,127.6 L234.4,120.4 L239.0,119.0 L335.0,123.0 L342.5,122.1 L345.2,117.0 L349.1,54.0 L355.3,43.2 L347.0,45.5 L343.3,44.9 L339.1,28.1 L341.4,24.5 L350.5,23.5Z", "WM": "M617.2,51.3 L614.0,50.0 L358.1,52.3 L354.9,54.5 L354.0,58.0 L352.7,125.0 L356.3,131.0 L389.4,165.7 L394.0,167.9 L510.0,142.6 L524.0,133.4 L614.0,56.3Z", "PD": "M632.3,54.3 L627.0,56.7 L528.0,141.6 L525.7,146.2 L527.6,151.0 L626.3,262.0 L631.0,264.7 L636.0,262.9 L676.9,223.0 L679.8,216.0 L636.2,61.0Z", "KP": "M237.4,129.3 L234.7,133.0 L233.7,139.0 L247.5,224.0 L249.9,229.5 L255.0,233.2 L335.0,263.9 L342.0,263.8 L350.0,258.1 L356.6,249.0 L384.5,180.0 L381.7,172.0 L351.9,136.0 L346.7,131.5 L340.0,130.0 L245.0,126.0Z", "LB": "M123.5,198.5 L39.0,230.4 L30.0,236.4 L31.2,262.0 L36.0,277.0 L34.1,348.0 L37.3,356.0 L51.3,372.1 L58.0,371.9 L149.8,321.2 L148.5,315.0 L120.2,278.0 L118.1,273.0 L125.5,203.0Z", "WP": "M195.5,124.2 L191.7,127.0 L158.2,179.9 L153.0,184.5 L139.1,190.4 L135.3,194.3 L127.0,272.0 L130.0,278.0 L163.2,320.3 L250.0,373.6 L254.5,378.2 L258.0,386.5 L260.2,387.2 L264.4,383.0 L331.0,281.0 L331.9,276.4 L328.0,272.7 L241.8,239.0 L238.6,230.0 L224.6,141.0 L219.0,134.8 L200.0,124.7Z", "MZ": "M397.2,178.0 L392.2,184.0 L362.7,257.9 L363.8,262.2 L451.1,321.5 L453.0,327.0 L447.4,380.0 L449.5,385.5 L524.0,411.4 L529.4,411.4 L532.2,405.0 L543.4,312.5 L548.0,308.7 L618.0,273.7 L620.5,271.2 L619.8,267.0 L519.6,155.0 L515.0,151.7 L510.0,151.2Z", "LD": "M356.0,269.4 L351.0,271.6 L338.5,285.0 L268.6,392.0 L265.8,398.5 L270.0,401.8 L315.0,411.5 L382.0,438.2 L388.0,435.0 L435.9,386.0 L437.7,381.0 L443.3,329.0 L441.5,324.5 L361.0,270.5Z", "DS": "M159.0,328.5 L55.1,382.1 L49.8,390.0 L39.9,427.9 L41.5,430.4 L45.0,430.2 L51.5,422.1 L55.0,421.7 L107.0,451.4 L140.0,461.2 L148.0,465.4 L150.5,468.5 L150.5,472.1 L140.5,486.0 L139.7,492.0 L162.0,524.0 L168.0,527.4 L186.1,514.7 L187.5,510.0 L186.6,496.0 L189.0,490.0 L250.6,404.0 L252.6,397.0 L248.8,385.0 L243.0,378.2 L165.0,330.3Z", "OP": "M302.9,416.5 L263.0,408.2 L256.5,409.7 L196.8,490.0 L196.2,493.2 L199.0,495.6 L239.0,505.1 L244.1,507.8 L245.5,512.0 L244.8,517.0 L237.7,528.3 L239.6,533.0 L246.5,539.9 L252.0,538.8 L258.5,530.0 L304.9,424.0 L305.5,419.4Z", "SL": "M318.1,420.2 L314.9,421.6 L312.1,426.0 L268.1,532.8 L272.0,538.0 L303.0,555.5 L307.4,575.7 L318.9,585.2 L332.6,610.0 L337.2,612.7 L361.0,594.0 L364.0,588.7 L362.0,584.0 L340.4,557.0 L340.0,551.0 L391.9,494.0 L395.5,485.0 L388.4,453.0 L384.6,447.1Z", "SK": "M441.0,395.2 L412.0,422.0 L396.6,439.0 L396.1,444.0 L405.7,483.9 L411.0,490.7 L444.0,514.7 L450.0,515.3 L493.8,508.9 L499.8,504.0 L541.4,451.0 L543.1,447.0 L542.5,442.0 L534.2,427.0 L528.0,421.2 L447.0,394.6Z", "LU": "M628.9,280.2 L557.0,315.7 L552.4,319.5 L550.6,324.0 L540.7,417.0 L550.7,439.0 L556.2,447.0 L610.0,498.5 L617.0,501.3 L670.0,506.3 L674.5,503.7 L682.5,488.0 L701.9,481.5 L705.1,478.5 L705.8,455.0 L700.9,441.0 L705.9,428.0 L632.9,281.5Z", "MP": "M351.1,551.0 L352.2,558.0 L377.5,590.0 L393.5,631.0 L398.2,635.5 L418.0,635.5 L437.0,621.5 L446.0,618.3 L465.0,614.5 L481.0,619.4 L487.1,616.9 L492.3,609.6 L507.0,610.5 L510.5,608.5 L494.1,521.3 L490.8,518.5 L443.0,523.3 L409.0,500.5 L403.0,499.5Z", "PK": "M549.2,457.5 L545.5,460.0 L504.6,510.0 L502.0,516.0 L520.3,608.0 L525.1,612.7 L550.0,614.2 L622.3,644.0 L623.1,641.0 L619.0,631.0 L619.8,625.0 L668.3,522.0 L669.1,516.7 L665.0,514.3 L607.0,507.0 L556.0,459.7Z"};
+const MAP_KIND = {exit: 'Exit poll', wyniki: 'Wyniki wyborów', sondaz: 'Sondaż'};
+let mapOn = false, mapSig = '';
+(function(){
+  const svg = $('msvg'), NS = 'http://www.w3.org/2000/svg'; let i = 0;
+  for (const k in POLSKA_PATHS) {
+    const pa = document.createElementNS(NS, 'path'); pa.setAttribute('d', POLSKA_PATHS[k]); pa.dataset.id = k.toLowerCase();
+    const d = (i++ * 55) + 'ms'; pa.style.transitionDelay = '0ms,' + d + ',' + d; svg.appendChild(pa);
+  }
+})();
+const mfmt = v => String(+(+v || 0).toFixed(2)).replace('.', ',');
+const regWord = n => n === 1 ? 'region' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 'regiony' : 'regionów';
+function renderMap(m){
+  const sig = JSON.stringify(m); if (sig === mapSig) return; mapSig = sig;
+  $('mtitle').textContent = m.title || ''; $('msub').textContent = m.subtitle || ''; $('msub').style.display = m.subtitle ? '' : 'none';
+  $('mbtxt').textContent = m.badge || MAP_KIND[m.kind] || '';
+  $('mnote').textContent = m.note || '';
+  const parties = m.parties.slice().sort((a, b) => (+b.value || 0) - (+a.value || 0));
+  const byId = Object.fromEntries(m.parties.map(p => [p.id, p]));
+  const regs = m.regions || [], got = regs.filter(r => byId[r.party]);
+  $('mcnt').textContent = 'Regiony z wynikiem: ' + got.length + '/' + regs.length;
+  /* województwa: kolor zwycięzcy albo szary (brak danych) */
+  document.querySelectorAll('#msvg path').forEach(pa => {
+    const r = regs.find(x => x.id === pa.dataset.id), p = r && byId[r.party];
+    pa.style.fill = p ? p.color : '';
+  });
+  /* lista partii: wiersze stałe w czasie, przestawiane transformem */
+  const box = $('mparties'), n = parties.length, gap = n > 8 ? 8 : 14, H = 620;
+  const rh = Math.max(40, Math.min(88, Math.floor((H + gap) / n) - gap));
+  const top = (H - (n * rh + (n - 1) * gap)) / 2, max = Math.max(0, ...parties.map(p => +p.value || 0));
+  const keep = new Set(parties.map(p => p.id));
+  box.querySelectorAll('.mrow').forEach(el => { if (!keep.has(el.dataset.id)) el.remove(); });
+  parties.forEach((p, i) => {
+    let el = box.querySelector('.mrow[data-id="' + p.id + '"]');
+    if (!el) {
+      el = document.createElement('div'); el.className = 'mrow'; el.dataset.id = p.id;
+      el.innerHTML = '<div class="mtop"><i class="msq"></i><span class="mname"></span><span class="mwin">ZWYCIĘZCA</span><span class="mreg"></span><span class="mval"><b></b><small></small></span></div><div class="mbar"><i></i></div>';
+      box.appendChild(el);
+    }
+    const cnt = regs.filter(r => r.party === p.id).length;
+    el.style.setProperty('--c', p.color); el.style.setProperty('--rh', rh + 'px'); el.style.height = rh + 'px';
+    el.style.transform = 'translateY(' + (top + i * (rh + gap)) + 'px)';
+    const d = (i * 90) + 'ms'; el.style.transitionDelay = '0ms,' + d + ',' + d + ',0ms,0ms';
+    el.classList.toggle('lead', max > 0 && (+p.value || 0) === max); el.classList.toggle('win', !!m.winner);
+    el.querySelector('.mname').textContent = p.name;
+    el.querySelector('.mreg').textContent = cnt ? cnt + ' ' + regWord(cnt) : '';
+    el.querySelector('.mval b').textContent = mfmt(p.value); el.querySelector('.mval small').textContent = m.unit || '';
+    el.querySelector('.mbar i').style.width = (max > 0 ? (+p.value || 0) / max * 100 : 0) + '%';
+  });
+}
+function setMap(m){
+  renderMap(m);
+  const on = !!m.visible, w = $('mapwrap');
+  if (on && !mapOn) { w.classList.remove('in'); w.classList.remove('off'); void w.offsetWidth; setTimeout(() => w.classList.add('in'), 60); }
+  if (!on) { w.classList.remove('in'); w.classList.add('off'); }
+  mapOn = on;
 }
 
 /* ---------- reklamy: pliki /ads/1.mp4, 2.mp4 … (numerycznie) ---------- */
@@ -571,7 +673,7 @@ const setSeq = s => { lastSeq = s; try { localStorage.setItem('overlay_poll_seq'
 
 let ltPrev = false, ltT = null, ltForceOff = false;
 function setVis(id, on){ $(id).classList.toggle('off', !on); }
-function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('pollwrap', false); setAge(AGE_URL || 0); renderBreak(null); }
+function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('pollwrap', false); setVis('mapwrap', false); mapOn = false; setAge(AGE_URL || 0); renderBreak(null); }
 
 /* ---------- QR: działa niezależnie od zbiórki (s.qr.visible) ---------- */
 let fund = null, qrOk = false, qrCfg = {visible: false}, fundSig = '';
@@ -672,6 +774,8 @@ function apply(s){
     if (sig !== barSig) { barSig = sig; renderBar(b); }
     setVis('barwrap', !!b.visible);
   } catch (e) { console.error('pasek', e); }
+
+  try { if (s.map) setMap(s.map); } catch (e) { console.error('mapa', e); }
 
   try {
     const l = s.live_badge;
