@@ -612,23 +612,25 @@ let lkBusy = false, stOpName = '', lkAudioErrs = [], lkAuSig = '';
 const auSig = () => JSON.stringify([$('auGame').checked, $('auDc').checked, $('auMic').checked, $('auMode').value, $('auDev').value, $('auMicDev').value]);
 function stOpInit(){ try { stOpName = localStorage.getItem('jeden_op') || ''; } catch (e) {} if (!$('stOp').value) $('stOp').value = stOpName; }
 $('stOp').onchange = () => { stOpName = $('stOp').value.trim(); try { localStorage.setItem('jeden_op', stOpName); } catch (e) {} };
+// komunikaty publikacji widać zawsze: w zakładce Stream i pod monitorami
+const pubSay = (m, ok) => { say('stMsg', m, ok); const e = $('capMsg'); if (e) { e.textContent = m; e.style.color = ok ? 'var(--ok)' : 'var(--er)'; } };
 async function lkPublish(opt){
   const soft = !!(opt && opt.soft);   // soft: obraz idzie do overlayu nawet gdy dźwięk nie działa (START STREAM jest ścisły)
   if (lkBusy) return false;
-  if (lkRoom) { say('stMsg', 'Już publikujesz', true); return true; }
+  if (lkRoom) { pubSay( 'Już publikujesz', true); return true; }
   lkBusy = true;
   let room = null;
   try {
     // 1) obraz z gry (jeśli jeszcze nie wybrano okna)
     if (!capStream) await capStart();
-    if (!capStream) { say('stMsg', 'Najpierw wybierz okno gry', false); return false; }
+    if (!capStream) { pubSay( 'Najpierw wybierz okno gry', false); return false; }
     // 2) dźwięk operatora – zanim ruszy sieć; błąd zaznaczonego źródła zatrzymuje start
-    say('stMsg', 'Przygotowuję dźwięk…', true);
+    pubSay( 'Przygotowuję dźwięk…', true);
     const au = await auBuild();
     lkAudioErrs = au.errs; lkAuSig = auSig();
-    if (au.errs.length && !soft) { auCleanup(); say('stMsg', 'Dźwięk: ' + au.errs.join(' · ') + ' – popraw ustawienia lub odznacz to źródło', false); return false; }
+    if (au.errs.length && !soft) { auCleanup(); pubSay( 'Dźwięk: ' + au.errs.join(' · ') + ' – popraw ustawienia lub odznacz to źródło', false); return false; }
     // 3) połączenie i publikacja
-    say('stMsg', 'Łączę z serwerem…', true);
+    pubSay( 'Łączę z serwerem…', true);
     const j = await api('/api/lk', 'POST', {action: 'publisher'}); await loadLk();
     const L = window.LivekitClient, fps = num($('stFps').value) || 60, ebr = num($('stBr').value) || 8000;
     const br = Math.min(12000000, Math.round(ebr * 1400)); // wysyłka do chmury z zapasem ponad bitrate końcowy
@@ -648,13 +650,13 @@ async function lkPublish(opt){
     room.on(L.RoomEvent.Disconnected, reason => {
       if (lkRoom !== mine) return;
       lkRoom = null; lkTracks = []; auCleanup(); stRender();
-      if (L.DisconnectReason && reason === L.DisconnectReason.DUPLICATE_IDENTITY) say('stMsg', 'Inny operator przejął publikację – Twój obraz i dźwięk zostały zatrzymane', false);
+      if (L.DisconnectReason && reason === L.DisconnectReason.DUPLICATE_IDENTITY) pubSay( 'Inny operator przejął publikację – Twój obraz i dźwięk zostały zatrzymane', false);
     });
     lkRoom = room; room = null; stRender();
-    if (au.errs.length) say('stMsg', 'Obraz publikowany ✔ w overlayu – ale dźwięk NIE działa: ' + au.errs.join(' · '), false);
-    else say('stMsg', au.track ? 'Publikuję obraz ✔ i dźwięk ✔ (' + au.used.join(' + ') + ')' : 'Publikuję obraz ✔ – BEZ dźwięku (zaznacz źródła dźwięku powyżej)', !!au.track);
+    if (au.errs.length) pubSay( 'Obraz publikowany ✔ w overlayu – ale dźwięk NIE działa: ' + au.errs.join(' · '), false);
+    else pubSay( au.track ? 'Publikuję obraz ✔ i dźwięk ✔ (' + au.used.join(' + ') + ')' : 'Publikuję obraz ✔ – BEZ dźwięku (zaznacz źródła dźwięku powyżej)', !!au.track);
     return true;
-  } catch (e) { if (room) { try { room.disconnect(false); } catch (x) {} } auCleanup(); say('stMsg', e.message || String(e), false); return false; }
+  } catch (e) { if (room) { try { room.disconnect(false); } catch (x) {} } auCleanup(); pubSay( e.message || String(e), false); return false; }
   finally { lkBusy = false; }
 }
 async function lkUnpublish(){
