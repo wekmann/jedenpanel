@@ -21,7 +21,43 @@ export const DEFAULTS = {
   live_badge: { visible: false, text: 'NA ŻYWO', top: 43, right: 53 },
   qr: { visible: false },
   age: { visible: false, rating: 12 },
-  lower_third: { visible: false, name: '', role: '', hideAfter: 0 },
+  lower_third: { visible: false, name: '', role: '', hideAfter: 0, tag: 'GOŚĆ', topic: '', photo: '', guests: [] },
+  map: {
+    visible: false,
+    kind: 'exit',
+    badge: '',
+    title: 'Wybory parlamentarne',
+    subtitle: 'Exit poll – dane szacunkowe',
+    note: 'Przeliczono 0% komisji',
+    winner: false,
+    unit: '%',
+    parties: [
+      { id: 'pis', name: 'PiS', color: '#1b4f9c', value: 26.1 },
+      { id: 'morwin', name: 'MORWIN', color: '#dc0432', value: 22.4 },
+      { id: 'zln', name: 'ZLN+BN', color: '#2e9e44', value: 14.8 },
+      { id: 'pn', name: 'PN', color: '#f0c93a', value: 11.2 },
+      { id: 'kpn', name: 'KPN', color: '#4a8fe7', value: 9.7 },
+      { id: 'ln', name: 'LN', color: '#e6761a', value: 7.3 },
+    ],
+    regions: [
+      { id: 'zp', name: 'Zachodniopomorskie', code: 'ZP', x: 0, y: 0, party: 'morwin', pct: 34.2 },
+      { id: 'pm', name: 'Pomorskie', code: 'PM', x: 1, y: 0, party: 'zln', pct: 29.8 },
+      { id: 'wm', name: 'Warmińsko-mazurskie', code: 'WM', x: 2, y: 0, party: 'morwin', pct: 31.5 },
+      { id: 'pd', name: 'Podlaskie', code: 'PD', x: 3, y: 0, party: 'pis', pct: 38.9 },
+      { id: 'lb', name: 'Lubuskie', code: 'LB', x: 0, y: 1, party: 'morwin', pct: 27.4 },
+      { id: 'wp', name: 'Wielkopolskie', code: 'WP', x: 1, y: 1, party: 'zln', pct: 28.1 },
+      { id: 'kp', name: 'Kujawsko-pomorskie', code: 'KP', x: 2, y: 1, party: 'morwin', pct: 26.7 },
+      { id: 'mz', name: 'Mazowieckie', code: 'MZ', x: 3, y: 1, party: 'pis', pct: 30.3 },
+      { id: 'ds', name: 'Dolnośląskie', code: 'DS', x: 0, y: 2, party: 'zln', pct: 27.9 },
+      { id: 'op', name: 'Opolskie', code: 'OP', x: 1, y: 2, party: 'pn', pct: 24.6 },
+      { id: 'ld', name: 'Łódzkie', code: 'ŁD', x: 2, y: 2, party: 'pis', pct: 29.2 },
+      { id: 'sk', name: 'Świętokrzyskie', code: 'ŚK', x: 3, y: 2, party: 'pis', pct: 41.5 },
+      { id: 'lu', name: 'Lubelskie', code: 'LU', x: 4, y: 2, party: 'pis', pct: 44.0 },
+      { id: 'sl', name: 'Śląskie', code: 'ŚL', x: 1, y: 3, party: 'morwin', pct: 25.8 },
+      { id: 'mp', name: 'Małopolskie', code: 'MP', x: 2, y: 3, party: 'pis', pct: 36.4 },
+      { id: 'pk', name: 'Podkarpackie', code: 'PK', x: 3, y: 3, party: 'pis', pct: 47.1 },
+    ],
+  },
   break_screen: {
     visible: false,
     kind: 'break',
@@ -65,6 +101,15 @@ export const DEFAULTS = {
 
 /* ---------- walidacja (zod) ---------- */
 const txt = (max) => z.string().max(max);
+// zdjęcie gościa: nazwa pliku z folderu /goscie/ (np. tarcza.png) albo pełny link https
+const photoStr = z
+  .string()
+  .trim()
+  .max(2000)
+  .refine(
+    (u) => u === '' || /^https?:\/\//i.test(u) || /^[^\/\\:*?"<>|]{1,100}\.(png|jpe?g|webp|gif)$/i.test(u),
+    'Zdjęcie: nazwa pliku z folderu goscie (np. tarcza.png) albo link https://…',
+  );
 export const SCHEMAS = {
   bar: z.object({
     visible: z.boolean(),
@@ -107,7 +152,55 @@ export const SCHEMAS = {
     name: z.string().trim().max(80),
     role: z.string().trim().max(120),
     hideAfter: z.number().min(0, 'Sekundy min. 0').max(3600, 'Sekundy max. 3600'),
+    tag: z.string().trim().max(30),
+    topic: z.string().trim().max(160),
+    photo: photoStr,
+    guests: z
+      .array(z.object({ name: z.string().trim().min(1, 'Gość bez nazwy').max(80), role: z.string().trim().max(120), photo: photoStr }))
+      .max(40, 'Maks. 40 gości na liście'),
   }),
+  map: z
+    .object({
+      visible: z.boolean(),
+      kind: z.enum(['exit', 'wyniki', 'sondaz']),
+      badge: txt(40),
+      title: txt(120),
+      subtitle: txt(160),
+      note: txt(120),
+      winner: z.boolean(),
+      unit: txt(12),
+      parties: z
+        .array(
+          z.object({
+            id: z.string().regex(/^[a-z0-9]{1,12}$/, 'Zły identyfikator partii'),
+            name: z.string().trim().min(1, 'Partia bez nazwy').max(40),
+            color: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Zły kolor'),
+            value: z.number({ invalid_type_error: 'Wynik partii musi być liczbą' }).min(0, 'Wynik min. 0').max(1000, 'Wynik max. 1000'),
+          }),
+        )
+        .min(1, 'Dodaj co najmniej jedną partię')
+        .max(12, 'Maks. 12 partii'),
+      regions: z
+        .array(
+          z.object({
+            id: z.string().regex(/^[a-z0-9]{1,12}$/, 'Zły identyfikator regionu'),
+            name: z.string().trim().min(1, 'Region bez nazwy').max(40),
+            code: z.string().trim().min(1, 'Region bez skrótu').max(5, 'Skrót regionu: maks. 5 znaków'),
+            x: z.number({ invalid_type_error: 'Pozycja X musi być liczbą' }).int().min(0, 'X min. 0').max(14, 'X max. 14'),
+            y: z.number({ invalid_type_error: 'Pozycja Y musi być liczbą' }).int().min(0, 'Y min. 0').max(9, 'Y max. 9'),
+            party: z.string().max(12),
+            pct: z.number({ invalid_type_error: '% regionu musi być liczbą' }).min(0, '% min. 0').max(100, '% max. 100'),
+          }),
+        )
+        .min(1, 'Dodaj co najmniej jeden region')
+        .max(60, 'Maks. 60 regionów'),
+    })
+    .superRefine((m, ctx) => {
+      const dup = (arr, f) => new Set(arr.map(f)).size !== arr.length;
+      if (dup(m.parties, (p) => p.id)) ctx.addIssue({ code: 'custom', message: 'Powtórzony identyfikator partii' });
+      if (dup(m.regions, (r) => r.id)) ctx.addIssue({ code: 'custom', message: 'Powtórzony identyfikator regionu' });
+      if (dup(m.regions, (r) => r.x + ',' + r.y)) ctx.addIssue({ code: 'custom', message: 'Dwa regiony stoją na tym samym polu siatki (X, Y)' });
+    }),
   break_screen: z.object({
     visible: z.boolean(),
     kind: z.enum(['break', 'brb', 'start']),

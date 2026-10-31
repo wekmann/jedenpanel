@@ -15,6 +15,7 @@ export default async function handler(req, res) {
       qr: cfg.qr,
       age: cfg.age,
       lower_third: cfg.lower_third,
+      map: cfg.map,
       break_screen: cfg.break_screen,
       fund: cfg.fund,
       poll: cfg.poll,

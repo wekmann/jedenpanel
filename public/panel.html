@@ -36,6 +36,14 @@ button:hover{filter:brightness(1.12);transform:translateY(-1px)}button:active{tr
 .prow{display:grid;grid-template-columns:1fr 90px 44px 34px;gap:6px;margin-top:10px;padding:10px;background:#ffffff0a;border:1px solid var(--line);border-radius:10px}
 .prow .lg{grid-column:1/4}
 .prow input[type=color]{width:44px;height:40px;padding:2px;border:1px solid var(--line);border-radius:8px;background:#081529;cursor:pointer}
+.mprow{display:grid;grid-template-columns:1fr 100px 44px 34px;gap:6px;margin-top:8px;padding:8px;background:#ffffff0a;border:1px solid var(--line);border-radius:10px}
+.rgrow{display:grid;grid-template-columns:70px 1fr 170px 84px 34px;gap:6px;margin-top:8px;padding:8px;background:#ffffff0a;border:1px solid var(--line);border-radius:10px}
+.rgrow .xy{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:8px;color:var(--mut);font-size:12px}
+.rgrow .xy input{width:68px;padding:6px 8px}
+.mprow input[type=color]{width:44px;height:40px;padding:2px;border:1px solid var(--line);border-radius:8px;background:#081529;cursor:pointer}
+.gsrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.gsrow select{flex:1 1 220px;width:auto}.gsrow button{margin:0}
+.phrow{display:flex;gap:12px;align-items:center}.phrow input{flex:1}.phrow img{height:64px;width:48px;object-fit:cover;object-position:50% 12%;border-radius:6px;border:1px solid var(--line);background:#081529}
+@media(max-width:700px){.rgrow{grid-template-columns:60px 1fr 34px}.rgrow .pt,.rgrow .pc{grid-column:span 1}}
 .msg{margin-top:10px;font-weight:700;min-height:18px}.ok{color:var(--ok)}.er{color:var(--er)}
 .hint{color:var(--mut);font-size:12px;margin-top:6px}
 #prevWrap{width:960px;max-width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.4);background:repeating-conic-gradient(#2b2f38 0 25%,#1d2027 0 50%) 0 0/24px 24px}
@@ -75,6 +83,7 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
   <div class="tabs" id="tabs">
     <button data-t="tBar" class="on">📰 Pasek</button>
     <button data-t="tPoll">📊 Sondaż</button>
+    <button data-t="tMap">🗺 Mapa</button>
     <button data-t="tFund">💰 Zbiórka</button>
     <button data-t="tWidg">🔴 Widżety</button>
     <button data-t="tBrk">⏸ Przerwa</button>
@@ -112,6 +121,38 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
     <button class="b1" id="pShow">▶ POKAŻ</button>
     <button class="b3" id="pHide">■ UKRYJ</button>
     <div class="msg" id="pMsg"></div>
+  </div>
+
+  <!-- MAPA WYNIKÓW -->
+  <div class="tab box" id="tMap" data-sec="map">
+    <div class="grid2">
+      <div><label for="mpKind">Rodzaj</label>
+        <select id="mpKind"><option value="exit">Exit poll</option><option value="wyniki">Wyniki wyborów</option><option value="sondaz">Sondaż</option></select></div>
+      <div><label for="mpBadge">Własny napis plakietki (puste = wg rodzaju)</label><input type="text" id="mpBadge" maxlength="40"></div>
+    </div>
+    <label for="mpTitle">Tytuł</label><input type="text" id="mpTitle" maxlength="120">
+    <label for="mpSub">Podtytuł (źródło / zastrzeżenie)</label><input type="text" id="mpSub" maxlength="160">
+    <label for="mpNote">Dolna linia (np. „Przeliczono 62,4% komisji”)</label><input type="text" id="mpNote" maxlength="120">
+    <div class="grid2">
+      <div><label for="mpUnit">Jednostka wyniku partii (% / mandaty / puste)</label><input type="text" id="mpUnit" maxlength="12"></div>
+      <div><label class="chk" style="margin-top:36px"><input type="checkbox" id="mpWinner">Pokaż plakietkę „ZWYCIĘZCA” przy liderze</label></div>
+    </div>
+
+    <label>Partie (nazwa · wynik ogólnokrajowy · kolor · usuń)</label>
+    <div id="mpParties"></div>
+    <button class="b2 sm" id="mpAdd" style="margin-top:8px">+ Dodaj partię</button>
+
+    <label>Regiony (skrót · nazwa · zwycięzca · % zwycięzcy · usuń)</label>
+    <div id="mpRegions"></div>
+    <button class="b2 sm" id="rgAdd" style="margin-top:8px">+ Dodaj region</button>
+    <button class="b3 sm" id="rgClear" style="margin-top:8px">Wyczyść wyniki regionów</button>
+    <div class="hint">Region bez zwycięzcy świeci na szaro („brak danych”). Gdy mapa jest na antenie, wystarczy kliknąć <b>Zapisz</b> – kafelki same się przekolorują, a legenda przestawi.
+      Własny układ: pola <b>X</b> (kolumna) i <b>Y</b> (wiersz) przy regionie ustawiają kafelek na siatce; co drugi wiersz jest przesunięty o pół kafelka.</div>
+
+    <button class="b1" id="mpSave">Zapisz</button>
+    <button class="b1" id="mpShow">▶ POKAŻ</button>
+    <button class="b3" id="mpHide">■ UKRYJ</button>
+    <div class="msg" id="mpMsg"></div>
   </div>
 
   <!-- ZBIÓRKA -->
@@ -160,8 +201,25 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
     <div class="sub" data-sec="lower_third">
       <h3>Plansza rozmówcy</h3>
       <label class="chk"><input type="checkbox" id="ltVis">Widoczna</label>
+
+      <label for="ltGuest">Goście z listy</label>
+      <div class="gsrow">
+        <select id="ltGuest"></select>
+        <button class="b2 sm" id="ltGLoad">Wczytaj</button>
+        <button class="b3 sm" id="ltGAdd">＋ Zapisz na liście</button>
+        <button class="b3 sm" id="ltGDel">✕ Usuń z listy</button>
+      </div>
+      <div class="hint">Lista zapisuje się razem z planszą (przycisk Zapisz). Wczytanie gościa podstawia nazwisko, funkcję i zdjęcie.</div>
+
+      <label for="ltTag">Etykieta nad nazwiskiem (puste = bez etykiety)</label>
+      <input type="text" id="ltTag" maxlength="30" list="ltTags" placeholder="GOŚĆ">
+      <datalist id="ltTags"><option value="GOŚĆ"><option value="GOŚĆ STUDIA"><option value="ROZMÓWCA"><option value="EKSPERT"><option value="KORESPONDENT"><option value="WIDEOŁĄCZENIE"><option value="NA TELEFONIE"><option value="KOMENTARZ"></datalist>
       <label for="ltName">Imię i nazwisko</label><input type="text" id="ltName" maxlength="80">
       <label for="ltRole">Funkcja / opis (opcjonalnie)</label><input type="text" id="ltRole" maxlength="120">
+      <label for="ltTopic">Temat rozmowy (opcjonalnie)</label><input type="text" id="ltTopic" maxlength="160">
+      <label for="ltPhoto">Zdjęcie (nazwa pliku z folderu goscie albo link https)</label>
+      <div class="phrow"><input type="text" id="ltPhoto" maxlength="2000" placeholder="np. tarcza.png"><img id="ltPhotoImg" alt="" hidden></div>
+      <div class="hint" id="ltPhotoMsg">Wrzuć plik do <code>public/goscie/</code> i wpisz samą nazwę (np. <code>tarcza.png</code>). Zdjęcie pionowe, osoba z boku kadru, jak w przykładzie – głowa u góry.</div>
       <label for="ltHide">Chowaj po (sekundy, 0 = nie chowaj)</label><input type="number" id="ltHide" min="0" max="3600" style="max-width:160px">
       <button class="b1" id="ltSave">Zapisz</button><div class="msg" id="ltMsg"></div>
     </div>
@@ -252,7 +310,7 @@ async function start(){
   let r; try { r = await api('/api/config'); } catch (e) { return; }
   cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); $('dbWarn').hidden = !!r.persistent;
   $('login').hidden = true; $('app').hidden = false;
-  fillBar(); fillPoll(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
+  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
 }
 
 /* ---------- zakładki ---------- */
@@ -354,9 +412,99 @@ $('qrSave').onclick = () => save('qr', {visible: $('qrVis').checked}, 'qrMsg');
 function fillAge(){ const a = cfg.age; $('ageVis').checked = a.visible; $('ageRat').value = String(a.rating); }
 $('ageSave').onclick = () => save('age', {visible: $('ageVis').checked, rating: num($('ageRat').value)}, 'ageMsg');
 
-/* ---------- widżety: plansza rozmówcy ---------- */
-function fillLt(){ const l = cfg.lower_third; $('ltVis').checked = l.visible; $('ltName').value = l.name; $('ltRole').value = l.role; $('ltHide').value = l.hideAfter; }
-$('ltSave').onclick = () => save('lower_third', {visible: $('ltVis').checked, name: $('ltName').value, role: $('ltRole').value, hideAfter: num($('ltHide').value)}, 'ltMsg');
+/* ---------- widżety: plansza rozmówcy (+ zdjęcie, temat, lista gości) ---------- */
+let ltGuests = [];
+const photoUrl = p => { p = (p || '').trim(); return !p ? '' : /^https?:\/\//i.test(p) ? p : '/goscie/' + encodeURIComponent(p); };
+function ltPhotoPreview(){
+  const u = photoUrl($('ltPhoto').value), im = $('ltPhotoImg');
+  if (!u) { im.hidden = true; im.removeAttribute('src'); return; }
+  im.hidden = false; im.src = u;
+}
+$('ltPhotoImg').onerror = () => { $('ltPhotoImg').hidden = true; $('ltPhotoMsg').textContent = '⚠ Nie znaleziono zdjęcia – sprawdź nazwę pliku (folder public/goscie/) albo link.'; $('ltPhotoMsg').style.color = 'var(--er)'; };
+$('ltPhotoImg').onload = () => { $('ltPhotoMsg').style.color = ''; $('ltPhotoMsg').innerHTML = 'Wrzuć plik do <code>public/goscie/</code> i wpisz samą nazwę (np. <code>tarcza.png</code>). Zdjęcie pionowe, osoba z boku kadru, jak w przykładzie – głowa u góry.'; };
+$('ltPhoto').addEventListener('input', () => { clearTimeout($('ltPhoto')._t); $('ltPhoto')._t = setTimeout(ltPhotoPreview, 350); });
+function fillGuests(){
+  const sel = $('ltGuest'); sel.replaceChildren(new Option('— wybierz z listy —', ''));
+  ltGuests.forEach((g, i) => sel.appendChild(new Option(g.name + (g.role ? ' · ' + g.role : ''), String(i))));
+}
+function fillLt(){
+  const l = cfg.lower_third; $('ltVis').checked = l.visible; $('ltName').value = l.name; $('ltRole').value = l.role; $('ltHide').value = l.hideAfter;
+  $('ltTag').value = l.tag || ''; $('ltTopic').value = l.topic || ''; $('ltPhoto').value = l.photo || '';
+  ltGuests = (l.guests || []).map(g => ({name: g.name, role: g.role || '', photo: g.photo || ''})); fillGuests(); ltPhotoPreview();
+}
+$('ltGLoad').onclick = () => {
+  const g = ltGuests[+$('ltGuest').value]; if (!g || $('ltGuest').value === '') { say('ltMsg', 'Wybierz gościa z listy', false); return; }
+  $('ltName').value = g.name; $('ltRole').value = g.role; $('ltPhoto').value = g.photo; ltPhotoPreview(); say('ltMsg', 'Wczytano – kliknij Zapisz, aby wyświetlić', true);
+};
+$('ltGAdd').onclick = () => {
+  const name = $('ltName').value.trim(); if (!name) { say('ltMsg', 'Wpisz imię i nazwisko, żeby zapisać gościa', false); return; }
+  const g = {name, role: $('ltRole').value.trim(), photo: $('ltPhoto').value.trim()}, i = ltGuests.findIndex(x => x.name.toLowerCase() === name.toLowerCase());
+  if (i >= 0) ltGuests[i] = g; else if (ltGuests.length >= 40) { say('ltMsg', 'Maks. 40 gości na liście', false); return; } else ltGuests.push(g);
+  fillGuests(); $('ltGuest').value = String(i >= 0 ? i : ltGuests.length - 1); say('ltMsg', 'Dodano do listy – kliknij Zapisz', true);
+};
+$('ltGDel').onclick = () => {
+  const i = $('ltGuest').value; if (i === '') { say('ltMsg', 'Wybierz gościa do usunięcia', false); return; }
+  ltGuests.splice(+i, 1); fillGuests(); say('ltMsg', 'Usunięto z listy – kliknij Zapisz', true);
+};
+$('ltSave').onclick = () => save('lower_third', {visible: $('ltVis').checked, name: $('ltName').value, role: $('ltRole').value, hideAfter: num($('ltHide').value),
+  tag: $('ltTag').value, topic: $('ltTopic').value, photo: $('ltPhoto').value.trim(), guests: ltGuests}, 'ltMsg');
+
+/* ---------- mapa wyników ---------- */
+const uid = () => 'x' + Math.random().toString(36).slice(2, 8);
+function partyOpts(sel, want){
+  const cur = want !== undefined ? want : sel.value;
+  sel.replaceChildren(new Option('— brak danych —', ''));
+  document.querySelectorAll('.mprow').forEach(d => sel.appendChild(new Option(d.querySelector('.n').value.trim() || 'Partia', d.dataset.id)));
+  sel.value = [...sel.options].some(o => o.value === cur) ? cur : '';
+}
+const refreshParties = () => document.querySelectorAll('.rgrow .pt').forEach(sel => partyOpts(sel));
+function mpPartyRow(p){
+  const d = document.createElement('div'); d.className = 'mprow'; d.dataset.id = p.id;
+  d.innerHTML = '<input type="text" class="n" placeholder="Nazwa partii" maxlength="40"><input type="number" class="v" min="0" max="1000" step="0.01"><input type="color" class="c"><button class="b3 sm">✕</button>';
+  d.querySelector('.n').value = p.name; d.querySelector('.v').value = p.value; d.querySelector('.c').value = p.color;
+  d.querySelector('.n').addEventListener('input', refreshParties);
+  d.querySelector('button').onclick = () => { d.remove(); refreshParties(); };
+  $('mpParties').appendChild(d);
+}
+function mpRegionRow(r){
+  const d = document.createElement('div'); d.className = 'rgrow'; d.dataset.id = r.id;
+  d.innerHTML = '<input type="text" class="cd" placeholder="Skrót" maxlength="5"><input type="text" class="nm" placeholder="Nazwa regionu" maxlength="40"><select class="pt"></select>' +
+    '<input type="number" class="pc" min="0" max="100" step="0.1" placeholder="%"><button class="b3 sm">✕</button>' +
+    '<div class="xy">Siatka: kolumna X <input type="number" class="gx" min="0" max="14"> wiersz Y <input type="number" class="gy" min="0" max="9"></div>';
+  d.querySelector('.cd').value = r.code; d.querySelector('.nm').value = r.name; d.querySelector('.pc').value = r.pct || '';
+  d.querySelector('.gx').value = r.x; d.querySelector('.gy').value = r.y;
+  partyOpts(d.querySelector('.pt'), r.party);
+  d.querySelector('button').onclick = () => d.remove();
+  $('mpRegions').appendChild(d);
+}
+function fillMap(){
+  const m = cfg.map;
+  $('mpKind').value = m.kind; $('mpBadge').value = m.badge || ''; $('mpTitle').value = m.title; $('mpSub').value = m.subtitle; $('mpNote').value = m.note || '';
+  $('mpUnit').value = m.unit; $('mpWinner').checked = !!m.winner;
+  $('mpParties').replaceChildren(); m.parties.forEach(mpPartyRow);
+  $('mpRegions').replaceChildren(); m.regions.forEach(mpRegionRow);
+}
+$('mpAdd').onclick = () => { mpPartyRow({id: uid(), name: 'Nowa partia', value: 0, color: '#8a4fd1'}); refreshParties(); };
+$('rgAdd').onclick = () => {
+  const used = new Set([...document.querySelectorAll('.rgrow')].map(d => d.querySelector('.gx').value + ',' + d.querySelector('.gy').value));
+  let x = 0, y = 0; outer: for (y = 0; y <= 9; y++) for (x = 0; x <= 14; x++) if (!used.has(x + ',' + y)) break outer;
+  mpRegionRow({id: uid(), name: 'Nowy region', code: 'NR', x, y, party: '', pct: 0});
+};
+$('rgClear').onclick = () => { document.querySelectorAll('.rgrow').forEach(d => { d.querySelector('.pt').value = ''; d.querySelector('.pc').value = ''; }); say('mpMsg', 'Wyczyszczono wyniki regionów – kliknij Zapisz', true); };
+const mapData = visible => ({
+  visible, kind: $('mpKind').value, badge: $('mpBadge').value, title: $('mpTitle').value, subtitle: $('mpSub').value, note: $('mpNote').value,
+  winner: $('mpWinner').checked, unit: $('mpUnit').value,
+  parties: [...document.querySelectorAll('.mprow')].map(d => ({id: d.dataset.id, name: d.querySelector('.n').value, color: d.querySelector('.c').value, value: num(d.querySelector('.v').value)})),
+  regions: [...document.querySelectorAll('.rgrow')].map(d => ({id: d.dataset.id, name: d.querySelector('.nm').value, code: d.querySelector('.cd').value,
+    x: num(d.querySelector('.gx').value), y: num(d.querySelector('.gy').value), party: d.querySelector('.pt').value,
+    pct: d.querySelector('.pc').value === '' ? 0 : num(d.querySelector('.pc').value)}))
+});
+$('mpSave').onclick = () => save('map', mapData(!!cfg.map.visible), 'mpMsg');
+$('mpShow').onclick = async () => { if (await save('map', mapData(true), 'mpMsg')) say('mpMsg', 'Mapa na antenie ✔', true); };
+$('mpHide').onclick = async () => {
+  try { const r = await api('/api/config', 'POST', {section: 'map', patch: {visible: false}}); cfg = r.config; renderChips(); say('mpMsg', 'Mapa ukryta ✔', true); }
+  catch (e) { say('mpMsg', e.message, false); }
+};
 
 /* ---------- przerwa / zaraz wracamy ---------- */
 function fillBrk(){
@@ -408,13 +556,13 @@ async function scanAds(){
 $('adScan').onclick = scanAds;
 
 /* ---------- żywa synchronizacja z innymi osobami ---------- */
-const FILL = {bar: fillBar, poll: fillPoll, fund: fillFund, live_badge: fillBadge, qr: fillQr, age: fillAge, lower_third: fillLt, break_screen: fillBrk, ads: fillAds};
-const MSG = {bar: 'barMsg', poll: 'pMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', age: 'ageMsg', lower_third: 'ltMsg', break_screen: 'bkMsg', ads: 'adMsg'};
-const NAME = {bar: 'Pasek', fund: 'Zbiórka', live_badge: 'Na żywo', qr: 'QR', age: 'Wiek', lower_third: 'Rozmówca'};
+const FILL = {bar: fillBar, poll: fillPoll, map: fillMap, fund: fillFund, live_badge: fillBadge, qr: fillQr, age: fillAge, lower_third: fillLt, break_screen: fillBrk, ads: fillAds};
+const MSG = {bar: 'barMsg', poll: 'pMsg', map: 'mpMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', age: 'ageMsg', lower_third: 'ltMsg', break_screen: 'bkMsg', ads: 'adMsg'};
+const NAME = {bar: 'Pasek', map: 'Mapa', fund: 'Zbiórka', live_badge: 'Na żywo', qr: 'QR', age: 'Wiek', lower_third: 'Rozmówca'};
 const dirty = {};
 const markDirty = e => { const t = e.target.closest && e.target.closest('[data-sec]'); if (t) dirty[t.dataset.sec] = true; };
 document.addEventListener('input', markDirty);
-document.addEventListener('click', e => { if (e.target.matches && e.target.matches('.nrow button,#newsAdd,.prow button,#pAdd')) markDirty(e); });
+document.addEventListener('click', e => { if (e.target.matches && e.target.matches('.nrow button,#newsAdd,.prow button,#pAdd,.mprow button,.rgrow button,#mpAdd,#rgAdd,#rgClear,#ltGAdd,#ltGDel,#ltGLoad')) markDirty(e); });
 
 function renderChips(){
   const box = $('chips'); box.replaceChildren(box.firstChild);
