@@ -205,10 +205,10 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 /* ===== MAPA WYNIKÓW (Polska z województw + lista partii) ===== */
 #mapwrap{position:absolute;inset:0;z-index:15;pointer-events:none;transition:opacity .5s ease}
 #mapwrap.off{opacity:0}
-#mcard{position:absolute;left:50%;top:50%;width:1480px;transform:translate(-50%,-50%);border-radius:22px;overflow:hidden;font-family:'Roboto Condensed',Arial,sans-serif;color:#fff;
+#mcard{position:absolute;left:50%;top:var(--mtop,50%);width:1480px;transform:translate(-50%,-50%) scale(var(--mk,1));border-radius:22px;overflow:hidden;font-family:'Roboto Condensed',Arial,sans-serif;color:#fff;
  background:radial-gradient(900px 420px at 0% 0%,rgba(214,15,8,.22),transparent 70%),radial-gradient(700px 380px at 100% 100%,rgba(59,130,246,.2),transparent 70%),linear-gradient(160deg,#0f1f3b,#070f20 75%);
- box-shadow:0 34px 90px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,255,255,.07);transition:transform .9s var(--ease),clip-path .9s var(--ease);clip-path:inset(0 0 0 0 round 22px)}
-#mapwrap.off #mcard{transform:translate(-50%,-47%) scale(.95);clip-path:inset(0 100% 0 0 round 22px)}
+ box-shadow:0 34px 90px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,255,255,.07);transition:transform .9s var(--ease),clip-path .9s var(--ease),top .5s var(--ease);clip-path:inset(0 0 0 0 round 22px)}
+#mapwrap.off #mcard{transform:translate(-50%,-47%) scale(calc(var(--mk,1)*.95));clip-path:inset(0 100% 0 0 round 22px)}
 #mhead{position:relative;padding:26px 44px 22px;background:linear-gradient(90deg,#8d1123,#c21c28 55%,#ff3b3b);box-shadow:0 8px 24px rgba(0,0,0,.4);overflow:hidden}
 #mhead::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.06) 0 2px,transparent 2px 26px);pointer-events:none}
 #mtitle{position:relative;padding-right:360px;font-size:50px;font-weight:700;letter-spacing:1px;text-transform:uppercase;line-height:1.1;text-shadow:0 3px 10px rgba(0,0,0,.4)}
@@ -551,8 +551,16 @@ function renderMap(m){
     el.querySelector('.mbar i').style.width = (max > 0 ? (+p.value || 0) / max * 100 : 0) + '%';
   });
 }
+function fitMap(){
+  /* mapa mieści się nad paskiem dolnym (gdy jest na antenie), a bez paska – na środku ekranu */
+  const card = $('mcard'), h = card.offsetHeight; if (!h) return;
+  const top = 30, bottom = barBh ? barMb + barBh + 20 : 30, avail = 1080 - top - bottom;
+  const k = Math.min(1, avail / h);
+  card.style.setProperty('--mk', k.toFixed(3));
+  card.style.setProperty('--mtop', (top + avail / 2) + 'px');
+}
 function setMap(m){
-  renderMap(m);
+  renderMap(m); fitMap();
   const on = !!m.visible, w = $('mapwrap');
   if (on && !mapOn) { w.classList.remove('in'); w.classList.remove('off'); void w.offsetWidth; setTimeout(() => w.classList.add('in'), 60); }
   if (!on) { w.classList.remove('in'); w.classList.add('off'); }
@@ -859,6 +867,24 @@ async function poll(){
 }
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { barSig = ''; fundSig = ''; lblSig = ''; });
 poll(); setInterval(poll, 2000);
+
+/* po nowym wdrożeniu na Vercelu overlay sam się przeładowuje (OBS i podgląd w panelu nie zostają na starej wersji) */
+(function(){
+  let ver = null;
+  async function chk(){
+    try {
+      const r = await fetch(location.pathname + '?v=' + Date.now(), {method: 'HEAD', cache: 'no-store'});
+      const v = r.headers.get('etag') || r.headers.get('last-modified'); if (!v) return;
+      if (ver === null) { ver = v; return; }
+      if (v === ver) return;
+      let last = 0; try { last = +sessionStorage.getItem('overlay_reload') || 0; } catch (e) {}
+      if (Date.now() - last < 300000 || $('adwrap').classList.contains('on')) return; /* bez pętli i nie w trakcie reklamy */
+      try { sessionStorage.setItem('overlay_reload', String(Date.now())); } catch (e) {}
+      location.reload();
+    } catch (e) {}
+  }
+  setTimeout(chk, 5000); setInterval(chk, 60000);
+})();
 
 /* ---------- wykres kołowy: wyniki ankiety na żywo (odświeżanie co 12 s) ---------- */
 const LP_COL = ['#ff4d5a', '#3b82f6', '#22c55e', '#f59e0b', '#a855f7', '#06b6d4', '#ec4899', '#94a3b8'];
