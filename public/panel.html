@@ -321,7 +321,9 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <div class="sub">
       <h3>Dźwięk do streamu</h3>
       <label class="chk"><input type="checkbox" id="auGame" checked>Dźwięk z okna gry</label>
-      <label class="chk"><input type="checkbox" id="auDc">Dźwięk z Discorda</label>
+      <label class="chk"><input type="checkbox" id="auDc">Dźwięk z Discorda (głosy innych)</label>
+      <label class="chk"><input type="checkbox" id="auMic">Mój mikrofon (Twój głos)</label>
+      <div id="auMicWrap" style="max-width:420px"><label for="auMicDev">Mikrofon</label><select id="auMicDev"><option value="">Domyślny</option></select></div>
       <div class="grid2">
         <div><label for="auMode">Skąd brać dźwięk Discorda</label>
           <select id="auMode"><option value="dev">Urządzenie audio (np. VB-Cable)</option><option value="tab">Karta przeglądarki (discord.com/app)</option></select></div>
@@ -621,10 +623,10 @@ async function lkUnpublish(){
 $('stPub').onclick = lkPublish; $('stUnpub').onclick = lkUnpublish;
 
 /* ---------- dźwięk do streamu: gra i/lub Discord (miks) ---------- */
-let auExtra = null, auCtx = null;
+let auExtra = null, auCtx = null, auMicS = null;
 const auCfgLoad = () => { try { return JSON.parse(localStorage.getItem('jeden_au') || '{}'); } catch (e) { return {}; } };
-const auCfgSave = () => { try { localStorage.setItem('jeden_au', JSON.stringify({game: $('auGame').checked, dc: $('auDc').checked, mode: $('auMode').value, dev: $('auDev').value})); } catch (e) {} };
-(function(){ const c = auCfgLoad(); if (c.game === false) $('auGame').checked = false; if (c.dc) $('auDc').checked = true; if (c.mode) $('auMode').value = c.mode; })();
+const auCfgSave = () => { try { localStorage.setItem('jeden_au', JSON.stringify({game: $('auGame').checked, dc: $('auDc').checked, mic: $('auMic').checked, mode: $('auMode').value, dev: $('auDev').value, micDev: $('auMicDev').value})); } catch (e) {} };
+(function(){ const c = auCfgLoad(); if (c.game === false) $('auGame').checked = false; if (c.dc) $('auDc').checked = true; if (c.mic) $('auMic').checked = true; if (c.mode) $('auMode').value = c.mode; })();
 function auVis(){ $('auDevWrap').style.display = $('auMode').value === 'dev' ? '' : 'none'; }
 async function auDevices(ask){
   if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
@@ -632,14 +634,18 @@ async function auDevices(ask){
   const list = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'audioinput' && d.deviceId !== 'default' && d.deviceId !== 'communications');
   const sel = $('auDev'), keep = sel.value || auCfgLoad().dev || '';
   sel.innerHTML = '<option value="">Domyślne</option>' + list.map((d, i) => '<option value="' + d.deviceId + '">' + (d.label || 'Urządzenie ' + (i + 1)).replace(/</g, '&lt;') + '</option>').join('');
+  const ms = $('auMicDev'), mk = ms.value || auCfgLoad().micDev || '';
+  ms.innerHTML = '<option value="">Domyślny</option>' + list.map((d, i) => '<option value="' + d.deviceId + '">' + (d.label || 'Urządzenie ' + (i + 1)).replace(/</g, '&lt;') + '</option>').join('');
+  if ([...ms.options].some(o => o.value === mk)) ms.value = mk;
   if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
   else { const cab = [...sel.options].find(o => /cable output|voicemeeter|vb-audio/i.test(o.text)); if (cab && !keep) sel.value = cab.value; }
 }
 $('auRefresh').onclick = () => auDevices(true);
-$('auMode').onchange = () => { auVis(); auCfgSave(); }; $('auDev').onchange = auCfgSave; $('auGame').onchange = auCfgSave; $('auDc').onchange = auCfgSave;
+$('auMode').onchange = () => { auVis(); auCfgSave(); }; $('auDev').onchange = auCfgSave; $('auMicDev').onchange = auCfgSave; $('auMic').onchange = auCfgSave; $('auGame').onchange = auCfgSave; $('auDc').onchange = auCfgSave;
 auVis(); auDevices(false);
 function auCleanup(){
   if (auExtra) { auExtra.getTracks().forEach(t => t.stop()); auExtra = null; }
+  if (auMicS) { auMicS.getTracks().forEach(t => t.stop()); auMicS = null; }
   if (auCtx) { try { auCtx.close(); } catch (e) {} auCtx = null; }
 }
 async function auPrepare(){
@@ -665,16 +671,25 @@ $('auPrep').onclick = async () => {
 };
 async function auBuild(){
   const game = $('auGame').checked && capStream ? capStream.getAudioTracks()[0] : null;
-  let dc = null;
+  let dc = null, mic = null;
   if ($('auDc').checked) { try { dc = await auPrepare(); } catch (e) { say('stMsg', 'Dźwięk Discorda: ' + (e.message || e) + ' – kliknij „Połącz dźwięk Discorda”', false); } }
-  if (game && dc) {
+  if ($('auMic').checked) {
+    try {
+      const id = $('auMicDev').value;
+      if (auMicS) auMicS.getTracks().forEach(t => t.stop());
+      auMicS = await navigator.mediaDevices.getUserMedia({audio: Object.assign({echoCancellation: true, noiseSuppression: true, autoGainControl: true}, id ? {deviceId: {exact: id}} : {})});
+      mic = auMicS.getAudioTracks()[0]; auCfgSave();
+    } catch (e) { say('stMsg', 'Mikrofon: ' + (e.message || e), false); }
+  }
+  const all = [game, dc, mic].filter(Boolean);
+  if (all.length > 1) {
     auCtx = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 48000});
     const dest = auCtx.createMediaStreamDestination();
-    [game, dc].forEach(t => auCtx.createMediaStreamSource(new MediaStream([t])).connect(dest));
+    all.forEach(t => auCtx.createMediaStreamSource(new MediaStream([t])).connect(dest));
     if (auCtx.resume) await auCtx.resume();
     return dest.stream.getAudioTracks()[0];
   }
-  return game || dc || null;
+  return all[0] || null;
 }
 let stLive = 'off', stErr = '';
 function stRender(){
