@@ -23,6 +23,7 @@ export default async function handler(req, res) {
       poll_cmd: cfg.poll_cmd,
       ads: cfg.ads,
       ads_cmd: cfg.ads_cmd,
+      game_pause: cfg.game_pause,
     });
   } catch (e) { fail(res, e); }
 }

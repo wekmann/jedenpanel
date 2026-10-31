@@ -22,6 +22,7 @@ export const DEFAULTS = {
   qr: { visible: false },
   stream: { twitchOn: true, twitchUrl: 'rtmp://live.twitch.tv/app', twitchKey: '', tiktokOn: false, tiktokUrl: '', tiktokKey: '', fps: 60, bitrate: 8000 },
   stream_state: { egressId: '', startedAt: '', operator: '' },
+  game_pause: { paused: false, at: new Date(0).toISOString() },
   flash: { visible: false, label: 'PILNE', text: '', top: 125, hideAfter: 0 },
   age: { visible: false, rating: 12 },
   lower_third: { visible: false, name: '', role: '', hideAfter: 0, guests: [] },

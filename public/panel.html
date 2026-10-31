@@ -140,8 +140,9 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
   </div>
   <div class="capbar">
     <button class="b1" id="capStart">🖥 Wybierz okno / ekran</button>
-    <button class="b3" id="capStop" disabled>■ Zatrzymaj</button>
+    <button class="b3" id="capStop" disabled>■ Przerwij przechwytywanie</button>
     <button class="b2" id="capSwap">⇄ Zamień monitory</button>
+    <button class="b2" id="stPause" title="Zatrzymuje obraz z gry w streamie (przenikanie do czerni, dźwięk gry cichnie – mikrofon i Discord zostają). WZNÓW wraca do gry NA ŻYWO. Skrót: P">⏸ ZATRZYMAJ</button>
     <button class="b2" id="capFs" title="Otwiera osobne okno z PGM albo PVW – to okno udostępniasz na Discordzie">⛶ Pełny ekran (okno na Discorda)</button>
     <span class="hint" id="capMsg">Skróty: 1–8 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)</span>
   </div>
@@ -607,7 +608,7 @@ $('ltSave').onclick = () => save('lower_third', {visible: $('ltVis').checked, na
 /* ---------- stream: publikacja okna gry do LiveKit + start/stop wysyłki na Twitcha/TikToka ---------- */
 function fillStream(){
   const t = cfg.stream; $('stTwOn').checked = t.twitchOn; $('stTwUrl').value = t.twitchUrl; $('stTwKey').value = t.twitchKey;
-  $('stTkOn').checked = t.tiktokOn; $('stTkUrl').value = t.tiktokUrl; $('stTkKey').value = t.tiktokKey; $('stFps').value = String(t.fps); $('stBr').value = String(t.bitrate || 8000); stOpInit(); stRender();
+  $('stTkOn').checked = t.tiktokOn; $('stTkUrl').value = t.tiktokUrl; $('stTkKey').value = t.tiktokKey; $('stFps').value = String(t.fps); $('stBr').value = String(t.bitrate || 8000); stOpInit(); stRender(); if (cfg.game_pause) { gamePaused = !!cfg.game_pause.paused; pauseUi(); }
 }
 const stData = () => ({twitchOn: $('stTwOn').checked, twitchUrl: $('stTwUrl').value, twitchKey: $('stTwKey').value,
   tiktokOn: $('stTkOn').checked, tiktokUrl: $('stTkUrl').value, tiktokKey: $('stTkKey').value, fps: num($('stFps').value), bitrate: num($('stBr').value) || 8000});
@@ -724,7 +725,7 @@ async function auDevices(ask){
 }
 $('auRefresh').onclick = () => auDevices(true);
 $('auMode').onchange = () => { auVis(); auCfgSave(); }; $('auDev').onchange = auCfgSave; $('auMicDev').onchange = () => { auCfgSave(); if ($('auMic').checked) auMicApply(); }; $('auMicProc').onchange = () => { auCfgSave(); if ($('auMic').checked) auMicApply(); }; $('auMic').onchange = () => { auCfgSave(); auMicApply(); }; $('auGame').onchange = auCfgSave; $('auDc').onchange = auCfgSave;
-[['auVg', 'game'], ['auVd', 'dc'], ['auVm', 'mic']].forEach(([id, k]) => { $(id).oninput = () => { $(id + 'T').textContent = $(id).value + '%'; if (auGains[k]) auGains[k].gain.value = +$(id).value / 100; if (k === 'mic') auMicGain(); auCfgSave(); }; });
+[['auVg', 'game'], ['auVd', 'dc'], ['auVm', 'mic']].forEach(([id, k]) => { $(id).oninput = () => { $(id + 'T').textContent = $(id).value + '%'; if (auGains[k] && !(k === 'game' && gamePaused)) auGains[k].gain.value = +$(id).value / 100; if (k === 'mic') auMicGain(); auCfgSave(); }; });
 auVis(); auDevices(false);
 function auCleanup(){
   clearInterval(auMeterT); auMeterT = null; $('auLvl').style.width = '0'; $('auMicLvl').style.width = '0';
@@ -822,7 +823,7 @@ async function auBuild(){
   auAna = auCtx.createAnalyser(); auAna.fftSize = 512; lim.connect(auAna);
   src.forEach(([k, name, track, vol]) => {
     const node = auCtx.createMediaStreamSource(new MediaStream([track])), g = auCtx.createGain();
-    g.gain.value = vol / 100; node.connect(g); g.connect(auMix); auGains[k] = g; auNodes.push(node); used.push(name);
+    g.gain.value = (k === 'game' && gamePaused) ? 0 : vol / 100; node.connect(g); g.connect(auMix); auGains[k] = g; auNodes.push(node); used.push(name);
   });
   if ($('auMic').checked) {
     try { await auMicAdd(); used.push('mikrofon'); auCfgSave(); }
@@ -837,6 +838,23 @@ async function auBuild(){
   }, 100);
   return {track: dest.stream.getAudioTracks()[0], used, errs};
 }
+/* ---------- ZATRZYMAJ / WZNÓW obraz z gry w streamie ---------- */
+let gamePaused = false, pauseLock = 0;
+function pauseUi(){ const b = $('stPause'); b.textContent = gamePaused ? '▶ WZNÓW' : '⏸ ZATRZYMAJ'; b.className = gamePaused ? 'b1' : 'b2'; }
+function auPauseApply(){   // dźwięk gry cichnie / wraca płynnie (0,7 s); mikrofon i Discord bez zmian
+  const g = auGains.game; if (!g || !auCtx) return;
+  const t = auCtx.currentTime, v = gamePaused ? 0 : +$('auVg').value / 100;
+  try { g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(v, t + 0.7); } catch (e) { g.gain.value = v; }
+}
+async function setGamePause(on){
+  if (gamePaused === on) return;
+  gamePaused = on; pauseLock = Date.now() + 6000; pauseUi(); auPauseApply();
+  if (lkRoom) { try { await lkRoom.localParticipant.publishData(new TextEncoder().encode(JSON.stringify({t: 'pause', on})), {reliable: true, topic: 'pause'}); } catch (e) { /* serwer i tak podeśle stan */ } }
+  try { await api('/api/lk', 'POST', {action: 'pause', paused: on}); say('stMsg', on ? 'Obraz z gry zatrzymany ✔ – WZNÓW wraca na żywo' : 'Obraz z gry wznowiony ✔', true); }
+  catch (e) { gamePaused = !on; pauseUi(); auPauseApply(); say('stMsg', 'Nie udało się: ' + e.message, false); }
+}
+$('stPause').onclick = () => setGamePause(!gamePaused);
+if (cfg && cfg.game_pause) gamePaused = !!cfg.game_pause.paused; pauseUi();
 let stLive = 'off', stErr = '', stBy = '';
 function stRender(){
   const m = {off: 'wyłączony', starting: 'uruchamianie…', live: '● NA ŻYWO – wysyłam na Twitcha/TikToka', ending: 'kończenie…'};
@@ -844,7 +862,7 @@ function stRender(){
 }
 async function stPoll(){
   if (!cfg || $('app').hidden) return;
-  try { const r = await api('/api/lk', 'POST', {action: 'status'}); stLive = r.status; stErr = r.error || ''; stBy = r.operator || ''; } catch (e) { /* brak LiveKit / chwilowy błąd */ }
+  try { const r = await api('/api/lk', 'POST', {action: 'status'}); stLive = r.status; stErr = r.error || ''; stBy = r.operator || ''; if (typeof r.paused === 'boolean' && r.paused !== gamePaused && Date.now() > pauseLock) { gamePaused = r.paused; pauseUi(); auPauseApply(); } } catch (e) { /* brak LiveKit / chwilowy błąd */ }
   stRender();
 }
 $('stGo').onclick = async () => {
@@ -1054,6 +1072,7 @@ document.addEventListener('keydown', e => {
   if (!cfg || e.ctrlKey || e.metaKey || e.altKey) return;
   const t = e.target; if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
   if (e.key === ' ') { e.preventDefault(); document.querySelectorAll('#chips .chip.on').forEach(b => b.click()); return; }
+  if (e.key === 'p' || e.key === 'P') { $('stPause').click(); return; }
   if (e.key === 'm' || e.key === 'M') { $('auMicMute').click(); return; }
   if (/^[1-9]$/.test(e.key)) { const b = document.querySelectorAll('#chips .chip')[+e.key - 1]; if (b) b.click(); }
 });

@@ -10,7 +10,7 @@ const httpHost = (u) => u.replace(/^wss:/i, 'https:').replace(/^ws:/i, 'http:');
 
 async function makeToken({ key, secret }, identity, publish) {
   const at = new AccessToken(key, secret, { identity, ttl: '12h' });
-  at.addGrant({ room: ROOM, roomJoin: true, canPublish: publish, canPublishData: false, canSubscribe: true });
+  at.addGrant({ room: ROOM, roomJoin: true, canPublish: publish, canPublishData: publish, canSubscribe: true });
   return at.toJwt();
 }
 const cleanOp = (x) => String(x || '').replace(/[<>"]/g, '').trim().slice(0, 40);
@@ -36,6 +36,14 @@ export default async function handler(req, res) {
     const action = req.body && req.body.action;
     const cfg = await readConfig();
     const eg = new EgressClient(httpHost(e.url), e.key, e.secret);
+
+    // ZATRZYMAJ / WZNÓW obraz z gry w streamie (overlay robi przenikanie do czerni i z powrotem; wysyłka na platformy leci dalej)
+    if (action === 'pause') {
+      const on = !!(req.body && req.body.paused);
+      cfg.game_pause = { paused: on, at: new Date().toISOString() };
+      await writeConfig(cfg);
+      return res.status(200).json({ ok: true, paused: on });
+    }
 
     if (action === 'publisher') {
       const token = await makeToken(e, 'gra', true);
@@ -83,13 +91,15 @@ export default async function handler(req, res) {
       const id = cfg.stream_state.egressId;
       if (id) { try { await eg.stopEgress(id); } catch (x) { /* już zakończony */ } }
       cfg.stream_state = { egressId: '', startedAt: '', operator: '' };
+      cfg.game_pause = { paused: false, at: new Date().toISOString() };   // nowy stream zawsze startuje bez zatrzymania
       await writeConfig(cfg);
       return res.status(200).json({ ok: true });
     }
 
     if (action === 'status') {
       const id = cfg.stream_state.egressId;
-      if (!id) return res.status(200).json({ status: 'off' });
+      const paused = !!(cfg.game_pause && cfg.game_pause.paused);
+      if (!id) return res.status(200).json({ status: 'off', paused });
       const list = await eg.listEgress({ egressId: id });
       const info = list && list[0];
       // 0 STARTING, 1 ACTIVE, 2 ENDING, 3 COMPLETE, 4 FAILED, 5 ABORTED, 6 LIMIT_REACHED
@@ -97,9 +107,9 @@ export default async function handler(req, res) {
         const err = info && info.error ? String(info.error) : '';
         cfg.stream_state = { egressId: '', startedAt: '', operator: '' };
         await writeConfig(cfg);
-        return res.status(200).json({ status: 'off', error: err });
+        return res.status(200).json({ status: 'off', error: err, paused });
       }
-      return res.status(200).json({ status: info.status === 1 ? 'live' : info.status === 2 ? 'ending' : 'starting', startedAt: cfg.stream_state.startedAt, operator: cfg.stream_state.operator || '' });
+      return res.status(200).json({ paused, status: info.status === 1 ? 'live' : info.status === 2 ? 'ending' : 'starting', startedAt: cfg.stream_state.startedAt, operator: cfg.stream_state.operator || '' });
     }
 
     return res.status(400).json({ error: 'Zła akcja' });

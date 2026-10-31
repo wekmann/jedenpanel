@@ -276,6 +276,10 @@ html.pgm #pgmv{display:block}
 /* kolejność warstw: wideo zawsze pod wszystkim; filtr wyłącza sprzętową nakładkę wideo (przez nią znikały elementy) */
 #scene{isolation:isolate}
 #pgmv{z-index:0;filter:brightness(1.001)}
+/* ZATRZYMAJ / WZNÓW: czarna zasłona nad obrazem z gry (pod overlayem) – płynne przenikanie, nie cięcie */
+#pgmcover{display:none;position:absolute;inset:0;background:#000;opacity:0;transition:opacity .9s ease;pointer-events:none;z-index:0}
+html.pgm #pgmcover{display:block}
+#pgmcover.on{opacity:1}
 :where(#scene>*:not(#pgmv)){z-index:1}
 #pgmwait{z-index:0}
 #barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity,translate}
@@ -293,6 +297,7 @@ html.lite #bkp{display:none}
 <body>
 <div id="scene">
   <video id="pgmv" autoplay muted playsinline disablepictureinpicture disableremoteplayback></video>
+  <div id="pgmcover"></div>
   <div id="pgmwait"><div>Czekam na obraz z gry…</div><small>W panelu wybierz okno gry (monitor PVW)</small></div>
 
   <div id="barwrap" class="off">
@@ -852,7 +857,15 @@ function fitLabel(){
 }
 
 let barHide = false;
+/* pauza obrazu z gry: stan z serwera (co 2 s) + natychmiastowy sygnał z panelu przez LiveKit; po sygnale ignorujemy serwer 5 s, żeby nie migało */
+let pausedNow = false, pauseLock = 0;
+function setPause(on, fromData){
+  if (!window.PGM) return;   // zwykły przezroczysty overlay (OBS) nie ma obrazu z gry do zasłonięcia
+  if (fromData) pauseLock = Date.now() + 5000;
+  if (on === pausedNow) return; pausedNow = on; $('pgmcover').classList.toggle('on', on);
+}
 function apply(s){
+  try { if (Date.now() >= pauseLock) setPause(!!(s.game_pause && s.game_pause.paused)); } catch (e) { console.error('pauza', e); }
   skew = Date.parse(s.serverNow) - Date.now();
   // każdy moduł osobno, żeby błąd w jednym nie blokował pozostałych
   try {
@@ -1114,6 +1127,7 @@ async function pgmConnect(){
     });
     [L.RoomEvent.ParticipantConnected, L.RoomEvent.ParticipantDisconnected, L.RoomEvent.TrackPublished, L.RoomEvent.TrackUnpublished].forEach(ev => room.on(ev, () => setTimeout(pgmCheck, 300)));
     room.on(L.RoomEvent.AudioPlaybackStatusChanged, sndHint);
+    room.on(L.RoomEvent.DataReceived, payload => { try { const m = JSON.parse(new TextDecoder().decode(payload)); if (m && m.t === 'pause') setPause(!!m.on, true); } catch (e) {} });
     room.on(L.RoomEvent.Disconnected, () => { if (pgmRoom === room) { pgmRoom = null; pgmv.srcObject = null; sndHint(); pgmMsg('Czekam na obraz z gry…', 'Łączę ponownie…'); setTimeout(pgmConnect, 3000); } });
     await Promise.race([room.connect(j.url, j.token), new Promise((_, no) => setTimeout(() => no(new Error('Przekroczono czas łączenia z serwerem obrazu (sprawdź blokadę WebRTC/VPN)')), 15000))]);
     pgmRoom = room; pgmTry = 0; sndHint(); try { room.startAudio().then(sndHint).catch(() => {}); } catch (e) {}
