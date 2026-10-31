@@ -86,14 +86,14 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #lpfoot{display:flex;justify-content:space-between;gap:10px;padding:12px 22px 14px;font-size:17px;color:#9fb2d4;border-top:1px solid rgba(255,255,255,.08);margin-top:8px;letter-spacing:.5px}
 
 /* ===== QR (nad logiem JEDEN, lewa krawędź i szerokość równo z logiem) ===== */
-#qrwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + var(--fh,0px) + 14px);transition:transform .6s var(--ease),opacity .5s ease,bottom .6s var(--ease)}
+#qrwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + 14px);translate:0 calc(-1 * (var(--bh,214px) + var(--fh,0px)));transition:transform .6s var(--ease),opacity .5s ease,translate .6s var(--ease)}
 #qrwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - 60px))}
 #fqrbox{box-sizing:border-box;width:155px;background:#fff;padding:8px;box-shadow:0 6px 14px rgba(0,0,0,.45);transition:opacity .45s ease,transform .6s var(--ease);transform-origin:50% 100%}
 #fqrbox.hide{opacity:0;transform:translateY(18px) scale(.9);pointer-events:none}
 #fqr{display:block;width:100%;height:auto}
 
 /* ===== PLANSZA ROZMÓWCY (nad paskiem, od lewej; omija QR gdy ten jest widoczny) ===== */
-#ltwrap{position:absolute;left:calc(129px + var(--ox,0px) + var(--lx,0px));bottom:calc(var(--mb,43px) + var(--bh,214px) + var(--fh,0px) + 14px);max-width:940px;transition:transform .6s var(--ease),opacity .5s ease,left .4s var(--ease),bottom .6s var(--ease)}
+#ltwrap{position:absolute;left:calc(129px + var(--ox,0px) + var(--lx,0px));bottom:calc(var(--mb,43px) + 14px);translate:0 calc(-1 * (var(--bh,214px) + var(--fh,0px)));max-width:940px;transition:transform .6s var(--ease),opacity .5s ease,left .4s var(--ease),translate .6s var(--ease)}
 #ltwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - var(--lx,0px) - 60px))}
 #ltbox{display:flex;flex-direction:column;align-items:flex-start;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
 #ltwrap:not(.off) #ltbox{animation:ltin .7s var(--ease)}
@@ -104,9 +104,9 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #ltrole{box-sizing:border-box;max-width:100%;background:linear-gradient(90deg,#0e2347,#16305c);color:#e8eef9;font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;line-height:1.2;padding:9px 40px 9px 30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:6px solid #d60f08;font-family:'Roboto Condensed',Arial,sans-serif}
 
 /* ===== PILNE (pasek newsa przyklejony do góry dolnego paska) ===== */
-#flashwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + var(--bh,214px));width:max-content;max-width:1662px;transition:transform .6s var(--ease),opacity .45s ease,bottom .6s var(--ease)}
+#flashwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:var(--mb,43px);translate:0 calc(-1 * var(--bh,214px));width:max-content;max-width:1662px;transition:transform .6s var(--ease),opacity .45s ease,translate .6s var(--ease)}
 #flashwrap.off{opacity:0;transform:translateY(60px)}
-#flbox{display:grid;grid-template-columns:155px minmax(0,auto);height:62px;filter:drop-shadow(0 -4px 12px rgba(0,0,0,.4))}
+#flbox{display:grid;grid-template-columns:155px minmax(0,auto);height:62px;border-radius:0 18px 0 0;box-shadow:0 -4px 12px rgba(0,0,0,.4)}
 #flashwrap:not(.off) #flbox{animation:flin .6s var(--ease)}
 @keyframes flin{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 #fllabel{display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#d7192a,#a3162a);color:#fff;font:900 36px/1 'Roboto Condensed',Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,.35);position:relative;overflow:hidden;white-space:nowrap}
@@ -114,11 +114,11 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #fltxtwrap{min-width:0;display:flex;align-items:center;overflow:hidden;background:#fff;border-radius:0 18px 0 0;padding:0 40px}
 #flbox.nolabel{grid-template-columns:minmax(0,auto)}
 #fltxt{display:inline-block;white-space:nowrap;color:#b3141f;font:800 38px/1 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:.3px}
-#fltxt.mq{animation:flmq var(--dur,10s) linear 1.2s infinite alternate}
+#fltxt.mq{animation:flmq var(--dur,10s) linear 1.2s infinite alternate;will-change:transform}
 @keyframes flmq{from{transform:translateX(0)}to{transform:translateX(var(--dist,0px))}}
 
 /* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem) ===== */
-#fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + var(--fbh,var(--bh,214px)) + var(--fh,0px) + 14px);display:flex;align-items:flex-end;transition:transform .6s var(--ease),opacity .5s ease,bottom .6s var(--ease)}
+#fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + 14px);translate:0 calc(-1 * (var(--fbh,var(--bh,214px)) + var(--ffh,0px)));display:flex;align-items:flex-end;transition:transform .6s var(--ease),opacity .5s ease,translate .6s var(--ease)}
 #fundwrap.off{opacity:0;transform:translateX(calc(100% + 500px))}
 #fundwrap:not(.off) #fcard{animation:fin .7s var(--ease)}
 @keyframes fin{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
@@ -278,7 +278,7 @@ html.pgm #pgmv{display:block}
 #pgmv{z-index:0;filter:brightness(1.001)}
 :where(#scene>*:not(#pgmv)){z-index:1}
 #pgmwait{z-index:0}
-#barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity}
+#barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity,translate}
 #pgmwait{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;color:#9fb3d1;font:700 40px/1.2 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:2px}
 #pgmwait small{font-size:24px;font-weight:700;color:#6f84a8;letter-spacing:1px}
 html.pgm #pgmwait.on{display:flex}
@@ -286,7 +286,7 @@ html.pgm #pgmwait.on{display:flex}
 
 /* ---- tryb lite (wysyłka z chmury / ?lite=1): wyłączone dekoracyjne pętle animacji, żeby nic nie zwalniało klatek ---- */
 html.lite .ldot,html.lite .lpdot,html.lite #ltname::after,html.lite #fllabel::after,html.lite #ffill::after,html.lite #phead::after,
-html.lite .bk-st,html.lite .bk-sw,html.lite #bkp i,html.lite #bktk,html.lite #fltxt.mq{animation:none !important}
+html.lite .bk-st,html.lite .bk-sw,html.lite #bkp i,html.lite #bktk{animation:none !important}
 html.lite #bkp{display:none}
 </style>
 </head>
@@ -755,7 +755,16 @@ function fitFlash(){
     if (over > 4) { t.style.setProperty('--dist', -(over + 10) + 'px'); t.style.setProperty('--dur', Math.max(4, over / 70) + 's'); t.classList.add('mq'); }
   });
 }
-function setFlH(on){ flH = on ? 62 : 0; $('scene').style.setProperty('--fh', flH + 'px'); try { fitPoll(); if (mapOn) fitMap(); } catch (e) {} }
+const _vc = {};   // zmienne CSS ustawiamy tylko gdy wartość się zmieniła – bez zbędnego przeliczania stylów co 2 s
+function sv(id, k, v){ const key = id + k; if (_vc[key] === v) return; _vc[key] = v; $(id).style.setProperty(k, v); }
+let ffLift = -1;
+/* zbiórka zostaje na swoim poziomie; podnosi się nad pasek PILNE tylko wtedy, gdy pasek faktycznie sięga pod nią */
+function updFundLift(){
+  const fw = $('fundwrap'), fl = $('flashwrap'); let lift = 0;
+  if (flH && fw.offsetWidth && fl.offsetWidth && fl.offsetLeft + fl.offsetWidth > fw.offsetLeft - 10) lift = flH;
+  if (lift !== ffLift) { ffLift = lift; $('scene').style.setProperty('--ffh', lift + 'px'); }
+}
+function setFlH(on){ const h = on ? 62 : 0, ch = h !== flH; flH = h; if (ch) { $('scene').style.setProperty('--fh', h + 'px'); try { fitPoll(); if (mapOn) fitMap(); } catch (e) {} } updFundLift(); }
 function setVis(id, on){ $(id).classList.toggle('off', !on); }
 function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('flashwrap', false); setFlH(false); setVis('pollwrap', false); setVis('mapwrap', false); mapOn = false; setAge(AGE_URL || 0); renderBreak(null); }
 
@@ -811,7 +820,7 @@ function setAge(r){
   if (r && r !== ageShown) ageImg.src = '/assets/wiek_' + r + '.png';
   ageShown = r;
   setVis('agewrap', !!r);
-  $('scene').style.setProperty('--pt', r ? '129px' : '43px');
+  sv('scene', '--pt', r ? '129px' : '43px');
 }
 ageImg.onerror = () => { ageShown = 0; setVis('agewrap', false); $('scene').style.setProperty('--pt', '43px'); };
 
@@ -825,7 +834,7 @@ function fitPoll(){
   const extra = Math.max(qrOn ? $('fqrbox').offsetHeight : 0, ltOn ? $('ltwrap').offsetHeight : 0);
   const reserve = barMb + barBh + flH + (extra ? 14 + extra : 0) + 14;
   const k = Math.max(.5, Math.min(1, (1080 - top - reserve) / h));
-  box.style.transform = k < 1 ? 'scale(' + k.toFixed(3) + ')' : '';
+  const tf = k < 1 ? 'scale(' + k.toFixed(3) + ')' : ''; if (tf !== box._tf) { box._tf = tf; box.style.transform = tf; }
 }
 
 /* biała plakietka obok „NA ŻYWO”: s.live_badge.label albo ?label=... w adresie */
@@ -850,8 +859,8 @@ function apply(s){
     const b = s.bar, sig = JSON.stringify([b.line1, b.line2, b.news, b.speed]);
     const sc = $('scene');
     barMb = +b.marginBottom || 0; barBh = !b.visible ? 0 : b.hideHead ? 57 : 214;
-    sc.style.setProperty('--ox', b.offsetX + 'px'); sc.style.setProperty('--mb', b.marginBottom + 'px');
-    sc.style.setProperty('--bh', barBh + 'px');
+    sv('scene', '--ox', b.offsetX + 'px'); sv('scene', '--mb', b.marginBottom + 'px');
+    sv('scene', '--bh', barBh + 'px');
     $('barwrap').classList.toggle('nohead', !!b.hideHead);
     if (lastNohead !== !!b.hideHead) { lastNohead = !!b.hideHead; if (!b.hideHead) fitHead(); }
     barHide = !!(b.visible && b.hideHead);
@@ -863,8 +872,8 @@ function apply(s){
 
   try {
     const l = s.live_badge;
-    $('ltxt').textContent = l.text;
-    $('livewrap').style.setProperty('--lt', l.top + 'px'); $('livewrap').style.setProperty('--lr', l.right + 'px');
+    if ($('ltxt').textContent !== l.text) $('ltxt').textContent = l.text;
+    sv('livewrap', '--lt', l.top + 'px'); sv('livewrap', '--lr', l.right + 'px');
     setVis('livewrap', !!l.visible);
     const lab = (LABEL_URL || l.label || '').trim();
     $('livewrap').classList.toggle('has', !!lab);
@@ -890,8 +899,8 @@ function apply(s){
   try {
     const l = s.lower_third;
     if (l && l.name) {
-      $('ltname').textContent = l.name;
-      $('ltrole').textContent = l.role || '';
+      if ($('ltname').textContent !== l.name) $('ltname').textContent = l.name;
+      if ($('ltrole').textContent !== (l.role || '')) $('ltrole').textContent = l.role || '';
       $('ltrole').style.display = l.role ? '' : 'none';
       const on = !!l.visible;
       if (on && !ltPrev) {
@@ -900,15 +909,15 @@ function apply(s){
       }
       if (!on) { clearTimeout(ltT); ltForceOff = false; }
       ltPrev = on;
-      setVis('ltwrap', on && !ltForceOff); $('scene').style.setProperty('--fbh', on && !ltForceOff && barHide ? '57px' : '');
-    } else { ltPrev = false; setVis('ltwrap', false); $('scene').style.setProperty('--fbh', ''); }
+      setVis('ltwrap', on && !ltForceOff); sv('scene', '--fbh', on && !ltForceOff && barHide ? '57px' : '');
+    } else { ltPrev = false; setVis('ltwrap', false); sv('scene', '--fbh', ''); }
   } catch (e) { console.error('plansza', e); }
 
 
   try {
     const f = s.flash;
     if (f && f.text) {
-      $('fllabel').textContent = f.label || ''; $('fllabel').style.display = f.label ? '' : 'none';
+      if ($('fllabel').textContent !== (f.label || '')) $('fllabel').textContent = f.label || ''; $('fllabel').style.display = f.label ? '' : 'none';
       $('flbox').classList.toggle('nolabel', !f.label);
       const sig = f.label + '|' + f.text;
       if (sig !== flSig) { flSig = sig; $('fltxt').textContent = f.text; fitFlash(); }
@@ -959,7 +968,7 @@ async function poll(){
     apply(await r.json());
   } catch (e) { /* chwilowy brak sieci – zostawiamy stan jak jest */ }
 }
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { barSig = ''; fundSig = ''; lblSig = ''; flSig = ''; });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { barSig = ''; fundSig = ''; lblSig = ''; flSig = ''; try { updFundLift(); } catch (e) {} });
 poll(); setInterval(poll, 2000);
 
 /* po nowym wdrożeniu na Vercelu overlay sam się przeładowuje (OBS i podgląd w panelu nie zostają na starej wersji) */
@@ -1092,6 +1101,8 @@ async function pgmConnect(){
     pgmMsg('Łączę z obrazem z gry…', 'Łączę z serwerem obrazu');
     const L = window.LivekitClient, room = new L.Room({adaptiveStream: false, dynacast: false});
     room.on(L.RoomEvent.TrackSubscribed, track => {
+      /* wysyłka z chmury: bufor odbioru ~400 ms (ten sam dla obrazu i dźwięku → synchronizacja) – gładszy 60 kl/s bez gubienia klatek; opóźnienie nie ma tu znaczenia */
+      if (EGRESS) { try { if (track.receiver && 'jitterBufferTarget' in track.receiver) track.receiver.jitterBufferTarget = 400; } catch (e) {} }
       if (track.kind === 'video') { track.attach(pgmv); const p = pgmv.play(); if (p && p.catch) p.catch(() => {}); }
       else if (track.kind === 'audio') { const a = track.attach(); a.muted = MUTE; a.volume = 1; a.style.display = 'none'; document.body.appendChild(a); const p = a.play(); if (p && p.catch) p.catch(() => sndHint()); }
       sndHint(); pgmCheck();

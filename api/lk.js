@@ -56,10 +56,12 @@ export default async function handler(req, res) {
       const page = `${proto}://${host}/overlay?key=${encodeURIComponent(cfg.overlayKey)}&egress=1`;
       // jakość wysyłki do Twitcha/TikToka: własne parametry (1080p, 60 kl/s, wyższy bitrate, klatka kluczowa co 2 s)
       const fps = st.fps === 30 ? 30 : 60;
-      const br = Math.min(12000, Math.max(2500, Number(st.bitrate) || 8000));
+      let br = Math.min(12000, Math.max(2500, Number(st.bitrate) || 8000)), clamped = false;
+      // Twitch przyjmuje maks. ok. 8,5 Mb/s (zalecane 6) – przy wysyłce także na Twitcha nie przekraczamy 8000, żeby ingest nie odrzucił strumienia
+      if (st.twitchOn && st.twitchKey && br > 8000) { br = 8000; clamped = true; }
       const enc = {
         width: 1920, height: 1080, depth: 24, framerate: fps,
-        audioCodec: (LK.AudioCodec && LK.AudioCodec.AAC) ?? 2, audioBitrate: 160, audioFrequency: 48000,
+        audioCodec: (LK.AudioCodec && LK.AudioCodec.AAC) ?? 2, audioBitrate: 192, audioFrequency: 48000,
         videoCodec: (LK.VideoCodec && LK.VideoCodec.H264_HIGH) ?? 3, videoBitrate: br, keyFrameInterval: 2,
       };
       const encodingOptions = LK.EncodingOptions ? new LK.EncodingOptions(enc) : enc;
@@ -67,7 +69,7 @@ export default async function handler(req, res) {
       const operator = cleanOp(req.body && req.body.operator);
       cfg.stream_state = { egressId: info.egressId, startedAt: new Date().toISOString(), operator };
       await writeConfig(cfg);
-      return res.status(200).json({ ok: true, egressId: info.egressId, targets: urls.length, fps, bitrate: br });
+      return res.status(200).json({ ok: true, egressId: info.egressId, targets: urls.length, fps, bitrate: br, clamped });
     }
 
     // inny operator przejmuje publikację obrazu/dźwięku (stream na platformach leci dalej bez restartu)

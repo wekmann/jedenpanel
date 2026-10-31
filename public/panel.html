@@ -333,7 +333,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       <label for="stFps">Klatki na sekundę</label>
       <select id="stFps" style="max-width:320px"><option value="60">1080p · 60 kl/s (płynnie – zalecane)</option><option value="30">1080p · 30 kl/s (mniej danych)</option></select>
       <label for="stBr">Bitrate wysyłki na platformy</label>
-      <select id="stBr" style="max-width:320px"><option value="6000">6 000 kb/s (Twitch – bezpiecznie)</option><option value="8000">8 000 kb/s (zalecane do 1080p60)</option><option value="10000">10 000 kb/s (TikTok / własny serwer)</option></select>
+      <select id="stBr" style="max-width:320px"><option value="6000">6 000 kb/s (oficjalne zalecenie Twitcha dla 1080p60)</option><option value="8000">8 000 kb/s (maks. jakość z Twitchem – przyjmuje do ok. 8,5 Mb/s)</option><option value="10000">10 000 kb/s (tylko TikTok – przy włączonym Twitchu zostanie obniżone do 8 000)</option></select>
       <label for="stPubBr">Bitrate obrazu do overlayu (Discord) – zależy od Twojego uploadu</label>
       <select id="stPubBr" style="max-width:420px"><option value="8000">8 Mb/s</option><option value="12000">12 Mb/s – zalecane</option><option value="16000">16 Mb/s</option><option value="20000">20 Mb/s (potrzebny mocny upload)</option></select>
       <label for="stPri">Priorytet obrazu – zależy od Twojego łącza (zapamiętane tylko w tej przeglądarce)</label>
@@ -346,9 +346,9 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       <div class="vol">głośność <input type="range" id="auVg" min="0" max="150" value="100"><b id="auVgT">100%</b></div>
       <label class="chk"><input type="checkbox" id="auDc">Dźwięk z Discorda (głosy innych)</label>
       <div class="vol">głośność <input type="range" id="auVd" min="0" max="150" value="100"><b id="auVdT">100%</b></div>
-      <label class="chk"><input type="checkbox" id="auMic">Mój mikrofon (Twój głos)</label>
+      <label class="chk"><input type="checkbox" id="auMic">Mój mikrofon (Twój głos) – opcjonalnie, można włączyć/wyłączyć na żywo</label>
       <div class="vol">głośność <input type="range" id="auVm" min="0" max="150" value="100"><b id="auVmT">100%</b></div>
-      <div id="auMicWrap" style="max-width:420px"><label for="auMicDev">Mikrofon</label><select id="auMicDev"><option value="">Domyślny</option></select></div>
+      <div id="auMicWrap" style="max-width:420px"><label for="auMicDev">Mikrofon</label><select id="auMicDev"><option value="">Domyślny</option></select><label for="auMicProc">Przetwarzanie głosu</label><select id="auMicProc"><option value="ns">Redukcja szumu + wyrównanie głośności (zalecane ze słuchawkami)</option><option value="full">Pełne: + usuwanie echa (gdy grasz na głośnikach)</option><option value="raw">Surowy dźwięk (mikrofon studyjny)</option></select><div class="meter" title="Poziom Twojego mikrofonu (widać go też po wyciszeniu)"><i id="auMicLvl"></i></div><button class="b2" id="auMicMute" type="button">🎙 Mikrofon: włączony</button> <span class="hint" style="display:inline">skrót: klawisz <b>M</b></span></div>
       <div class="grid2">
         <div><label for="auMode">Skąd brać dźwięk Discorda</label>
           <select id="auMode"><option value="dev">Urządzenie audio (np. VB-Cable)</option><option value="tab">Karta przeglądarki (discord.com/app)</option></select></div>
@@ -358,7 +358,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       <button class="b2" id="auRefresh">↻ Wczytaj listę urządzeń</button>
       <div class="msg" id="auMsg"></div>
       <div class="meter" title="Poziom dźwięku wysyłanego na stream"><i id="auLvl"></i></div>
-      <div class="hint"><b>Poziom</b> pokazuje to, co faktycznie leci na stream (po kliknięciu START STREAM). Zaznaczone źródło, które nie działa, zatrzymuje start – żeby nie wyjść na antenę bez głosów. Mikrofon i Discord muszą być na <b>różnych</b> urządzeniach. <b>Urządzenie:</b> w Discordzie ustaw wyjście na „CABLE Input (VB-Audio)”, tu wybierz „CABLE Output”. <b>Karta:</b> otwórz Discorda w przeglądarce, kliknij „Połącz dźwięk Discorda”, wybierz kartę i zaznacz „Udostępnij dźwięk karty” (zrób to PRZED START STREAM). Zmiana źródeł dźwięku zastosuje się po „Publikuj okno gry” lub przy START STREAM; głośności działają od razu.</div>
+      <div class="hint"><b>Poziom</b> pokazuje to, co faktycznie leci na stream (po kliknięciu START STREAM). Zaznaczone źródło, które nie działa, zatrzymuje start – żeby nie wyjść na antenę bez głosów. Mikrofon i Discord muszą być na <b>różnych</b> urządzeniach. <b>Urządzenie:</b> w Discordzie ustaw wyjście na „CABLE Input (VB-Audio)”, tu wybierz „CABLE Output”. <b>Karta:</b> otwórz Discorda w przeglądarce, kliknij „Połącz dźwięk Discorda”, wybierz kartę i zaznacz „Udostępnij dźwięk karty” (zrób to PRZED START STREAM). Zmiana źródeł dźwięku zastosuje się po „Publikuj okno gry” lub przy START STREAM; głośności oraz mikrofon (włącz / wyłącz / wycisz – klawisz M) działają od razu, na żywo, bez restartu streamu.</div>
     </div>
     <div class="sub">
       <h3>Obraz z gry</h3>
@@ -640,7 +640,7 @@ async function stQualTick(){
 }
 setInterval(stQualTick, 2000);
 let lkBusy = false, stOpName = '', lkAudioErrs = [], lkAuSig = '';
-const auSig = () => JSON.stringify([$('auGame').checked, $('auDc').checked, $('auMic').checked, $('auMode').value, $('auDev').value, $('auMicDev').value]);
+const auSig = () => JSON.stringify([$('auGame').checked, $('auDc').checked, $('auMode').value, $('auDev').value]);
 function stOpInit(){ try { stOpName = localStorage.getItem('jeden_op') || ''; } catch (e) {} if (!$('stOp').value) $('stOp').value = stOpName; }
 $('stOp').onchange = () => { stOpName = $('stOp').value.trim(); try { localStorage.setItem('jeden_op', stOpName); } catch (e) {} };
 // komunikaty publikacji widać zawsze: w zakładce Stream i pod monitorami
@@ -686,7 +686,7 @@ async function lkPublish(opt){
     });
     lkRoom = room; room = null; stRender();
     if (au.errs.length) pubSay( 'Obraz publikowany ✔ w overlayu – ale dźwięk NIE działa: ' + au.errs.join(' · '), false);
-    else pubSay( au.track ? 'Publikuję obraz ✔ i dźwięk ✔ (' + au.used.join(' + ') + ')' : 'Publikuję obraz ✔ (bez dźwięku)', true);
+    else pubSay( au.used.length ? 'Publikuję obraz ✔ i dźwięk ✔ (' + au.used.join(' + ') + ')' : 'Publikuję obraz ✔ (dźwięk: cisza – mikrofon możesz włączyć w każdej chwili)', true);
     return true;
   } catch (e) { if (room) { try { room.disconnect(false); } catch (x) {} } auCleanup(); pubSay( e.message || String(e), false); return false; }
   finally { lkBusy = false; }
@@ -699,13 +699,13 @@ async function lkUnpublish(){
 $('stPub').onclick = async () => { if (lkRoom) await lkUnpublish(); await lkPublish({soft: true}); }; $('stUnpub').onclick = lkUnpublish;
 
 /* ---------- dźwięk do streamu: gra i/lub Discord i/lub mikrofon (miks) – ustawienia operatora tylko w tej przeglądarce ---------- */
-let auExtra = null, auCtx = null, auMicS = null, auGains = {}, auNodes = [], auAna = null, auMeterT = null;
+let auExtra = null, auCtx = null, auMicS = null, auGains = {}, auNodes = [], auAna = null, auMeterT = null, auMix = null, auMicAna = null, auMicNodes = [], auMicMuted = false, auMicBusy = false;
 const auCfgLoad = () => { try { return JSON.parse(localStorage.getItem('jeden_au') || '{}'); } catch (e) { return {}; } };
-const auCfgSave = () => { try { localStorage.setItem('jeden_au', JSON.stringify({game: $('auGame').checked, dc: $('auDc').checked, mic: $('auMic').checked, mode: $('auMode').value, dev: $('auDev').value, micDev: $('auMicDev').value,
+const auCfgSave = () => { try { localStorage.setItem('jeden_au', JSON.stringify({game: $('auGame').checked, dc: $('auDc').checked, mic: $('auMic').checked, mode: $('auMode').value, dev: $('auDev').value, micDev: $('auMicDev').value, proc: $('auMicProc').value,
   vg: +$('auVg').value, vd: +$('auVd').value, vm: +$('auVm').value})); } catch (e) {} };
 (function(){
   const c = auCfgLoad();
-  if (c.game === false) $('auGame').checked = false; if (c.dc) $('auDc').checked = true; if (c.mic) $('auMic').checked = true; if (c.mode) $('auMode').value = c.mode;
+  if (c.game === false) $('auGame').checked = false; if (c.dc) $('auDc').checked = true; if (c.mic) $('auMic').checked = true; if (c.mode) $('auMode').value = c.mode; if (c.proc) $('auMicProc').value = c.proc;
   [['vg', 'auVg'], ['vd', 'auVd'], ['vm', 'auVm']].forEach(([k, id]) => { if (c[k] != null) $(id).value = c[k]; $(id + 'T').textContent = $(id).value + '%'; });
 })();
 function auVis(){ $('auDevWrap').style.display = $('auMode').value === 'dev' ? '' : 'none'; }
@@ -723,16 +723,55 @@ async function auDevices(ask){
   else { const cab = [...sel.options].find(o => /cable output|voicemeeter|vb-audio/i.test(o.text)); if (cab && !keep) sel.value = cab.value; }
 }
 $('auRefresh').onclick = () => auDevices(true);
-$('auMode').onchange = () => { auVis(); auCfgSave(); }; $('auDev').onchange = auCfgSave; $('auMicDev').onchange = auCfgSave; $('auMic').onchange = auCfgSave; $('auGame').onchange = auCfgSave; $('auDc').onchange = auCfgSave;
-[['auVg', 'game'], ['auVd', 'dc'], ['auVm', 'mic']].forEach(([id, k]) => { $(id).oninput = () => { $(id + 'T').textContent = $(id).value + '%'; if (auGains[k]) auGains[k].gain.value = +$(id).value / 100; auCfgSave(); }; });
+$('auMode').onchange = () => { auVis(); auCfgSave(); }; $('auDev').onchange = auCfgSave; $('auMicDev').onchange = () => { auCfgSave(); if ($('auMic').checked) auMicApply(); }; $('auMicProc').onchange = () => { auCfgSave(); if ($('auMic').checked) auMicApply(); }; $('auMic').onchange = () => { auCfgSave(); auMicApply(); }; $('auGame').onchange = auCfgSave; $('auDc').onchange = auCfgSave;
+[['auVg', 'game'], ['auVd', 'dc'], ['auVm', 'mic']].forEach(([id, k]) => { $(id).oninput = () => { $(id + 'T').textContent = $(id).value + '%'; if (auGains[k]) auGains[k].gain.value = +$(id).value / 100; if (k === 'mic') auMicGain(); auCfgSave(); }; });
 auVis(); auDevices(false);
 function auCleanup(){
-  clearInterval(auMeterT); auMeterT = null; $('auLvl').style.width = '0';
+  clearInterval(auMeterT); auMeterT = null; $('auLvl').style.width = '0'; $('auMicLvl').style.width = '0';
   if (auExtra) { auExtra.getTracks().forEach(t => t.stop()); auExtra = null; }
-  if (auMicS) { auMicS.getTracks().forEach(t => t.stop()); auMicS = null; }
+  auMicRemove();
   if (auCtx) { try { auCtx.close(); } catch (e) {} auCtx = null; }
-  auGains = {}; auNodes = []; auAna = null;
+  auGains = {}; auNodes = []; auAna = null; auMix = null;
 }
+/* ----- mikrofon: opcjonalny, dołączany / odłączany do miksu na żywo (bez restartu streamu) ----- */
+function auMicUi(){ const b = $('auMicMute'); b.textContent = auMicMuted ? '🔇 Mikrofon: WYCISZONY' : '🎙 Mikrofon: włączony'; b.style.opacity = auMicMuted ? '.7' : '1'; }
+function auMicGain(){ if (auGains.mic) auGains.mic.gain.value = auMicMuted ? 0 : +$('auVm').value / 100; }
+$('auMicMute').onclick = () => { auMicMuted = !auMicMuted; auMicGain(); auMicUi(); if ($('auMic').checked && !lkRoom) say('auMsg', 'Wyciszenie zadziała od startu publikacji', true); };
+function auMicCons(){
+  const id = $('auMicDev').value, p = $('auMicProc').value;
+  return {audio: Object.assign({channelCount: 1, sampleRate: 48000, echoCancellation: p === 'full', noiseSuppression: p !== 'raw', autoGainControl: p !== 'raw'}, id ? {deviceId: {exact: id}} : {})};
+}
+async function auMicAdd(){
+  const s = await navigator.mediaDevices.getUserMedia(auMicCons()), tr = s.getAudioTracks()[0];
+  auMicS = s;
+  const node = auCtx.createMediaStreamSource(new MediaStream([tr])), hp = auCtx.createBiquadFilter();
+  hp.type = 'highpass'; hp.frequency.value = 80;   // obcina buczenie / uderzenia w stół
+  const g = auCtx.createGain(); g.gain.value = auMicMuted ? 0 : +$('auVm').value / 100;
+  node.connect(hp); hp.connect(g); g.connect(auMix);
+  auMicAna = auCtx.createAnalyser(); auMicAna.fftSize = 512; hp.connect(auMicAna);   // miernik przed wyciszeniem – widzisz, że mówisz do wyciszonego mikrofonu
+  auGains.mic = g; auMicNodes = [node, hp, g, auMicAna];
+  tr.onended = () => { if (auMicS === s) say('auMsg', 'Mikrofon się rozłączył (odpięty?) – wybierz go ponownie', false); };
+  return tr;
+}
+function auMicRemove(){
+  auMicNodes.forEach(n => { try { n.disconnect(); } catch (e) {} }); auMicNodes = []; auMicAna = null; delete auGains.mic;
+  if (auMicS) { auMicS.getTracks().forEach(t => { t.onended = null; t.stop(); }); auMicS = null; }
+  $('auMicLvl').style.width = '0';
+}
+async function auMicApply(){
+  if (!lkRoom || !auCtx || !auMix || auMicBusy) return;   // bez aktywnej publikacji – zastosuje się przy starcie
+  auMicBusy = true;
+  try {
+    auMicRemove();
+    if ($('auMic').checked) {
+      const id = $('auMicDev').value;
+      if (id && id === $('auDev').value && $('auDc').checked && $('auMode').value === 'dev') throw new Error('mikrofon i Discord to to samo urządzenie – wybierz dla nich różne');
+      await auMicAdd(); say('auMsg', 'Mikrofon włączony ✔ – działa na żywo, bez restartu streamu', true);
+    } else say('auMsg', 'Mikrofon wyłączony ✔', true);
+  } catch (e) { $('auMic').checked = false; auCfgSave(); say('auMsg', 'Mikrofon: ' + (e && e.message || e), false); }
+  finally { auMicBusy = false; }
+}
+auMicUi();
 async function auPrepare(){
   if (auExtra && auExtra.getAudioTracks()[0] && auExtra.getAudioTracks()[0].readyState === 'live') return auExtra.getAudioTracks()[0];
   const raw = {echoCancellation: false, noiseSuppression: false, autoGainControl: false};
@@ -769,26 +808,32 @@ async function auBuild(){
   if ($('auMic').checked) {
     const id = $('auMicDev').value;
     if (id && id === $('auDev').value && $('auDc').checked && $('auMode').value === 'dev') errs.push('mikrofon i Discord to to samo urządzenie – wybierz dla nich różne');
-    else try {
-      if (auMicS) auMicS.getTracks().forEach(t => t.stop());
-      auMicS = await navigator.mediaDevices.getUserMedia({audio: Object.assign({channelCount: 2, echoCancellation: true, noiseSuppression: true, autoGainControl: true}, id ? {deviceId: {exact: id}} : {})});
-      src.push(['mic', 'mikrofon', auMicS.getAudioTracks()[0], +$('auVm').value]); auCfgSave();
-    } catch (e) { errs.push('mikrofon: ' + (e.message || e)); }
   }
-  if (errs.length || !src.length) return {track: null, used, errs};
+  if (errs.length) return {track: null, used, errs};
+  // miks zawsze istnieje (nawet bez źródeł) – dzięki temu mikrofon można włączyć w trakcie streamu bez restartu
   const AC = window.AudioContext || window.webkitAudioContext;
   auCtx = new AC({sampleRate: 48000, latencyHint: 'interactive'});
   try { await auCtx.resume(); } catch (e) {}
   const dest = auCtx.createMediaStreamDestination(); dest.channelCount = 2;
-  auAna = auCtx.createAnalyser(); auAna.fftSize = 512;
+  auMix = auCtx.createGain();
+  const lim = auCtx.createDynamicsCompressor();   // limiter na sumie: miks głosu + gry + Discorda nie przesterowuje
+  lim.threshold.value = -3; lim.knee.value = 3; lim.ratio.value = 20; lim.attack.value = 0.002; lim.release.value = 0.15;
+  auMix.connect(lim); lim.connect(dest);
+  auAna = auCtx.createAnalyser(); auAna.fftSize = 512; lim.connect(auAna);
   src.forEach(([k, name, track, vol]) => {
     const node = auCtx.createMediaStreamSource(new MediaStream([track])), g = auCtx.createGain();
-    g.gain.value = vol / 100; node.connect(g); g.connect(dest); g.connect(auAna); auGains[k] = g; auNodes.push(node); used.push(name);
+    g.gain.value = vol / 100; node.connect(g); g.connect(auMix); auGains[k] = g; auNodes.push(node); used.push(name);
   });
-  const buf = new Uint8Array(auAna.fftSize); clearInterval(auMeterT);
+  if ($('auMic').checked) {
+    try { await auMicAdd(); used.push('mikrofon'); auCfgSave(); }
+    catch (e) { errs.push('mikrofon: ' + (e.message || e)); }
+  }
+  if (errs.length) { auMicRemove(); try { auCtx.close(); } catch (e) {} auCtx = null; auMix = null; auAna = null; auGains = {}; auNodes = []; return {track: null, used, errs}; }
+  const buf = new Uint8Array(auAna.fftSize), mbuf = new Uint8Array(512), lvl = (b) => { let m = 0; for (let i = 0; i < b.length; i++) m = Math.max(m, Math.abs(b[i] - 128)); return Math.min(100, Math.round(m / 128 * 140)) + '%'; };
+  clearInterval(auMeterT);
   auMeterT = setInterval(() => {
-    if (!auAna) return; auAna.getByteTimeDomainData(buf);
-    let m = 0; for (let i = 0; i < buf.length; i++) m = Math.max(m, Math.abs(buf[i] - 128)); $('auLvl').style.width = Math.min(100, Math.round(m / 128 * 140)) + '%';
+    if (auAna) { auAna.getByteTimeDomainData(buf); $('auLvl').style.width = lvl(buf); }
+    if (auMicAna) { auMicAna.getByteTimeDomainData(mbuf); $('auMicLvl').style.width = lvl(mbuf); }
   }, 100);
   return {track: dest.stream.getAudioTracks()[0], used, errs};
 }
@@ -816,7 +861,7 @@ $('stGo').onclick = async () => {
     }
     say('stMsg', 'Uruchamiam wysyłkę w chmurze…', true);
     const r = await api('/api/lk', 'POST', {action: 'start', operator: stOpName}); stLive = 'starting'; stErr = ''; stRender();
-    say('stMsg', 'Start ✔ – cele: ' + r.targets + ' · ' + r.fps + ' kl/s · ' + r.bitrate + ' kb/s. Za kilka sekund powinno być widać na platformach.', true);
+    say('stMsg', 'Start ✔ – cele: ' + r.targets + ' · ' + r.fps + ' kl/s · ' + r.bitrate + ' kb/s' + (r.clamped ? ' (obniżone do 8 000 – limit Twitcha)' : '') + '. Za kilka sekund powinno być widać na platformach.', true);
   } catch (e) { say('stMsg', e.message, false); }
 };
 $('stStop').onclick = async () => {
@@ -1009,6 +1054,7 @@ document.addEventListener('keydown', e => {
   if (!cfg || e.ctrlKey || e.metaKey || e.altKey) return;
   const t = e.target; if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
   if (e.key === ' ') { e.preventDefault(); document.querySelectorAll('#chips .chip.on').forEach(b => b.click()); return; }
+  if (e.key === 'm' || e.key === 'M') { $('auMicMute').click(); return; }
   if (/^[1-9]$/.test(e.key)) { const b = document.querySelectorAll('#chips .chip')[+e.key - 1]; if (b) b.click(); }
 });
 
@@ -1019,16 +1065,17 @@ async function capStart(){
   if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) { capSay('Ta przeglądarka nie obsługuje przechwytywania ekranu (użyj Chrome/Edge po HTTPS).', true); return; }
   try {
     const fps = +($('stFps').value) || 60;
-    const st = await navigator.mediaDevices.getDisplayMedia({video: {frameRate: {ideal: fps, max: fps}, width: {ideal: 1920}, height: {ideal: 1080}}, audio: {echoCancellation: false, noiseSuppression: false, autoGainControl: false}});
+    const st = await navigator.mediaDevices.getDisplayMedia({video: {frameRate: {ideal: fps, max: fps}, width: {ideal: 1920, max: 1920}, height: {ideal: 1080, max: 1080}}, audio: {echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: {ideal: 2}, sampleRate: {ideal: 48000}}});
     capStop(); capStream = st;
     ['capA', 'capB'].forEach(id => { $(id).srcObject = st; $(id).play().catch(() => {}); });
     $('prevWrap').classList.add('live'); $('capWrap').classList.add('live');
     $('capStop').disabled = false;
     const tr = st.getVideoTracks()[0]; try { tr.contentHint = 'motion'; } catch (x) {} tr.onended = capStop;
-    try { await tr.applyConstraints({frameRate: {ideal: fps, max: fps}}); } catch (x) {}
+    try { await tr.applyConstraints({frameRate: {ideal: fps, max: fps}, width: {ideal: 1920, max: 1920}, height: {ideal: 1080, max: 1080}}); } catch (x) {}
     const sg = tr.getSettings ? tr.getSettings() : {};
     if (outWin && !outWin.closed) outAttach(outWin, st);
-    capSay('Podgląd: ' + (tr.label || 'okno') + (sg.width ? ' · ' + sg.width + '×' + sg.height : '') + (sg.frameRate ? ' @ ' + Math.round(sg.frameRate) + ' kl/s' : ''), false);
+    const lowRes = sg.height && sg.height < 1000;
+    capSay('Podgląd: ' + (tr.label || 'okno') + (sg.width ? ' · ' + sg.width + '×' + sg.height : '') + (sg.frameRate ? ' @ ' + Math.round(sg.frameRate) + ' kl/s' : '') + (lowRes ? ' · ⚠ okno ma mniej niż 1080p – ustaw grę na 1920×1080 (pełny ekran lub okno bez ramki), inaczej obraz będzie rozciągnięty i miękki' : ''), !!lowRes);
   } catch (e) { capSay(e && e.name === 'NotAllowedError' ? 'Anulowano wybór okna.' : 'Nie udało się: ' + (e && e.message), true); }
 }
 function capStop(){
