@@ -123,7 +123,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
         <label class="mini"><input type="checkbox" id="monFit" checked>dopasuj</label></div>
       <div class="screen" id="capWrap">
         <video id="capB" autoplay muted playsinline></video>
-        <div class="capph" id="capPh"><div>🖥</div><b>Kliknij, aby wybrać okno lub aplikację</b><small>Podgląd tylko w panelu · stream i tak łapie OBS</small></div>
+        <div class="capph" id="capPh"><div>🖥</div><b>Kliknij, aby wybrać okno lub aplikację</b><small>Okno gry · stąd publikujesz obraz do streamu (zakładka Stream)</small></div>
       </div>
     </div>
   </div>
@@ -144,6 +144,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <button data-t="tFund">💰 Zbiórka</button>
     <button data-t="tWidg">🔴 Widżety</button>
     <button data-t="tFlash">🚨 Pilne</button>
+    <button data-t="tStream">📡 Stream</button>
     <button data-t="tBrk">⏸ Przerwa</button>
     <button data-t="tAds">📺 Reklamy</button>
     <button data-t="tOver">🔗 Overlay</button>
@@ -293,6 +294,37 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <div class="hint">Za długi tekst sam się przewija. Pasek można też włączyć i wyłączyć kafelkiem „Pilne” nad zakładkami.</div>
   </div>
 
+  <!-- STREAM -->
+  <div class="tab box" id="tStream" data-sec="stream">
+    <button class="b1" id="stSave">Zapisz</button>
+    <button class="b2" id="stPub">▶ Publikuj okno gry</button>
+    <button class="b3" id="stUnpub">■ Zakończ publikację</button>
+    <button class="b1" id="stGo">● START STREAM</button>
+    <button class="b3" id="stStop">■ STOP STREAM</button>
+    <div class="msg" id="stMsg"></div>
+    <div class="sub">
+      <h3>Cele – stream wysyła strona (chmura), nie Twój komputer</h3>
+      <label class="chk"><input type="checkbox" id="stTwOn">Twitch</label>
+      <div class="grid2">
+        <div><label for="stTwUrl">Serwer (Server URL)</label><input type="text" id="stTwUrl" maxlength="300" placeholder="rtmp://live.twitch.tv/app"></div>
+        <div><label for="stTwKey">Klucz streamu (Stream Key)</label><input type="password" id="stTwKey" maxlength="300" autocomplete="off"></div>
+      </div>
+      <label class="chk"><input type="checkbox" id="stTkOn">TikTok</label>
+      <div class="grid2">
+        <div><label for="stTkUrl">Serwer (Server URL z TikTok LIVE)</label><input type="text" id="stTkUrl" maxlength="300" placeholder="rtmp://…"></div>
+        <div><label for="stTkKey">Klucz streamu (Stream Key)</label><input type="password" id="stTkKey" maxlength="300" autocomplete="off"></div>
+      </div>
+      <label for="stFps">Klatki na sekundę</label>
+      <select id="stFps" style="max-width:200px"><option value="30">1080p · 30 kl/s (stabilnie)</option><option value="60">1080p · 60 kl/s (płynniej, więcej danych)</option></select>
+      <div class="hint">Discord: udostępniasz ręcznie okno <code>/overlay</code> (Udostępnij ekran). Klucze są trzymane tylko w bazie i nigdy nie trafiają do overlayu.</div>
+    </div>
+    <div class="sub">
+      <h3>Obraz z gry</h3>
+      <div class="hint" id="stPubHint">1) Wybierz okno gry (monitor PVW wyżej), 2) kliknij „Publikuj”, 3) kliknij „START STREAM”. Okno gry musi być otwarte w tym panelu przez cały stream.</div>
+      <div class="hint" id="stStat" style="font-weight:800;margin-top:10px">Stream: wyłączony</div>
+    </div>
+  </div>
+
   <!-- PRZERWA -->
   <div class="tab box" id="tBrk" data-sec="break_screen">
     <h3>Przerwa / Zaraz wracamy</h3>
@@ -356,7 +388,7 @@ const $ = id => document.getElementById(id);
 let cfg = null, skew = 0;
 
 /* przyciski akcji (Zapisz / Pokaż / Ukryj + komunikat) zawsze na górze sekcji */
-['barSave','flSave','pSave','mpSave','fSave','lbSave','qrSave','ageSave','ltSave','bkShow','adSave'].forEach(id => {
+['barSave','stSave','flSave','pSave','mpSave','fSave','lbSave','qrSave','ageSave','ltSave','bkShow','adSave'].forEach(id => {
   const first = $(id); if (!first) return;
   const box = first.closest('.sub') || first.closest('.tab'); if (!box) return;
   const bar = document.createElement('div'); bar.className = 'actbar';
@@ -394,7 +426,7 @@ async function start(){
   let r; try { r = await api('/api/config'); } catch (e) { return; }
   cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); $('dbWarn').hidden = !!r.persistent;
   $('login').hidden = true; $('app').hidden = false;
-  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillFlash(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
+  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillFlash(); fillStream(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
 }
 
 /* ---------- zakładki ---------- */
@@ -524,6 +556,76 @@ $('ltSave').onclick = () => save('lower_third', {visible: $('ltVis').checked, na
   guests: ltGuests}, 'ltMsg');
 
 
+
+/* ---------- stream: publikacja okna gry do LiveKit + start/stop wysyłki na Twitcha/TikToka ---------- */
+function fillStream(){
+  const t = cfg.stream; $('stTwOn').checked = t.twitchOn; $('stTwUrl').value = t.twitchUrl; $('stTwKey').value = t.twitchKey;
+  $('stTkOn').checked = t.tiktokOn; $('stTkUrl').value = t.tiktokUrl; $('stTkKey').value = t.tiktokKey; $('stFps').value = String(t.fps); stRender();
+}
+const stData = () => ({twitchOn: $('stTwOn').checked, twitchUrl: $('stTwUrl').value, twitchKey: $('stTwKey').value,
+  tiktokOn: $('stTkOn').checked, tiktokUrl: $('stTkUrl').value, tiktokKey: $('stTkKey').value, fps: num($('stFps').value)});
+$('stSave').onclick = () => save('stream', stData(), 'stMsg');
+
+let lkRoom = null, lkTracks = [], lkLib = null;
+function loadLk(){
+  return lkLib || (lkLib = new Promise((ok, er) => {
+    if (window.LivekitClient) return ok();
+    const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/livekit-client@2.5.7/dist/livekit-client.umd.min.js';
+    sc.onload = ok; sc.onerror = () => { lkLib = null; er(new Error('Nie udało się załadować biblioteki LiveKit (sprawdź internet)')); }; document.head.appendChild(sc);
+  }));
+}
+async function lkPublish(){
+  try {
+    if (!capStream) await capStart();
+    if (!capStream) { say('stMsg', 'Najpierw wybierz okno gry', false); return; }
+    if (lkRoom) { say('stMsg', 'Już publikujesz', true); return; }
+    say('stMsg', 'Łączę z serwerem…', true);
+    const j = await api('/api/lk', 'POST', {action: 'publisher'}); await loadLk();
+    const L = window.LivekitClient, fps = num($('stFps').value) || 30, br = fps === 60 ? 9000000 : 6000000;
+    const room = new L.Room({dynacast: false, adaptiveStream: false});
+    await room.connect(j.url, j.token);
+    const opt = {source: L.Track.Source.ScreenShare, videoCodec: 'h264', simulcast: false, degradationPreference: 'maintain-framerate',
+      videoEncoding: {maxBitrate: br, maxFramerate: fps}, screenShareEncoding: {maxBitrate: br, maxFramerate: fps}};
+    const vt = capStream.getVideoTracks()[0]; try { vt.contentHint = 'motion'; } catch (x) {}
+    const lv = new L.LocalVideoTrack(vt, undefined, false); await room.localParticipant.publishTrack(lv, opt); lkTracks = [lv];
+    const at = capStream.getAudioTracks()[0];
+    if (at) { const la = new L.LocalAudioTrack(at, undefined, false); await room.localParticipant.publishTrack(la, {source: L.Track.Source.ScreenShareAudio, dtx: false, red: false}); lkTracks.push(la); }
+    room.on(L.RoomEvent.Disconnected, () => { if (lkRoom === room) { lkRoom = null; lkTracks = []; stRender(); } });
+    lkRoom = room; stRender();
+    say('stMsg', at ? 'Publikuję obraz i dźwięk z okna ✔' : 'Publikuję obraz ✔ (bez dźwięku – w oknie wyboru zaznacz „Udostępnij dźwięk”, jeśli jest dostępne)', true);
+  } catch (e) { say('stMsg', e.message || String(e), false); }
+}
+async function lkUnpublish(){
+  const r = lkRoom; lkRoom = null;
+  if (r) { try { for (const t of lkTracks) await r.localParticipant.unpublishTrack(t, false); r.disconnect(false); } catch (e) {} }
+  lkTracks = []; if (typeof stRender === 'function' && cfg) stRender();
+}
+$('stPub').onclick = lkPublish; $('stUnpub').onclick = lkUnpublish;
+let stLive = 'off', stErr = '';
+function stRender(){
+  const m = {off: 'wyłączony', starting: 'uruchamianie…', live: '● NA ŻYWO – wysyłam na Twitcha/TikToka', ending: 'kończenie…'};
+  $('stStat').innerHTML = 'Obraz z gry: <b style="color:' + (lkRoom ? 'var(--ok)' : 'var(--er)') + '">' + (lkRoom ? 'publikowany' : 'nie publikowany') + '</b> · Stream: <b style="color:' + (stLive === 'live' ? 'var(--ok)' : '#fff') + '">' + (m[stLive] || stLive) + '</b>' + (stErr ? ' · <span class="er">' + stErr.replace(/</g, '&lt;') + '</span>' : '');
+}
+async function stPoll(){
+  if (!cfg || $('app').hidden) return;
+  try { const r = await api('/api/lk', 'POST', {action: 'status'}); stLive = r.status; stErr = r.error || ''; } catch (e) { /* brak LiveKit / chwilowy błąd */ }
+  stRender();
+}
+$('stGo').onclick = async () => {
+  try {
+    if (!lkRoom) { say('stMsg', 'Najpierw kliknij „Publikuj okno gry”', false); return; }
+    if (!(await save('stream', stData(), 'stMsg'))) return;
+    say('stMsg', 'Uruchamiam wysyłkę w chmurze…', true);
+    const r = await api('/api/lk', 'POST', {action: 'start'}); stLive = 'starting'; stErr = ''; stRender();
+    say('stMsg', 'Start ✔ – cele: ' + r.targets + '. Za kilka sekund powinno być widać na platformach.', true);
+  } catch (e) { say('stMsg', e.message, false); }
+};
+$('stStop').onclick = async () => {
+  try { await api('/api/lk', 'POST', {action: 'stop'}); stLive = 'off'; stErr = ''; stRender(); say('stMsg', 'Stream zatrzymany ✔', true); }
+  catch (e) { say('stMsg', e.message, false); }
+};
+setInterval(stPoll, 5000);
+
 /* ---------- pilne ---------- */
 function fillFlash(){ const f = cfg.flash; $('flVis').checked = f.visible; $('flLabel').value = f.label; $('flText').value = f.text; $('flTop').value = f.top; $('flHide').value = f.hideAfter; }
 const flData = vis => ({visible: vis, label: $('flLabel').value, text: $('flText').value, top: num($('flTop').value), hideAfter: num($('flHide').value)});
@@ -638,8 +740,8 @@ async function scanAds(){
 $('adScan').onclick = scanAds;
 
 /* ---------- żywa synchronizacja z innymi osobami ---------- */
-const FILL = {bar: fillBar, poll: fillPoll, map: fillMap, fund: fillFund, live_badge: fillBadge, qr: fillQr, age: fillAge, lower_third: fillLt, flash: fillFlash, break_screen: fillBrk, ads: fillAds};
-const MSG = {bar: 'barMsg', poll: 'pMsg', map: 'mpMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', age: 'ageMsg', lower_third: 'ltMsg', flash: 'flMsg', break_screen: 'bkMsg', ads: 'adMsg'};
+const FILL = {bar: fillBar, poll: fillPoll, map: fillMap, fund: fillFund, live_badge: fillBadge, qr: fillQr, age: fillAge, lower_third: fillLt, flash: fillFlash, stream: fillStream, break_screen: fillBrk, ads: fillAds};
+const MSG = {bar: 'barMsg', poll: 'pMsg', map: 'mpMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', age: 'ageMsg', lower_third: 'ltMsg', flash: 'flMsg', stream: 'stMsg', break_screen: 'bkMsg', ads: 'adMsg'};
 const NAME = {bar: 'Pasek', map: 'Mapa', fund: 'Zbiórka', live_badge: 'Na żywo', qr: 'QR', age: 'Wiek', lower_third: 'Rozmówca', flash: 'Pilne'};
 const dirty = {};
 const markDirty = e => { const t = e.target.closest && e.target.closest('[data-sec]'); if (t) dirty[t.dataset.sec] = true; };
@@ -712,16 +814,17 @@ const capSay = (m, er) => { const e = $('capMsg'); e.textContent = m; e.style.co
 async function capStart(){
   if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) { capSay('Ta przeglądarka nie obsługuje przechwytywania ekranu (użyj Chrome/Edge po HTTPS).', true); return; }
   try {
-    const st = await navigator.mediaDevices.getDisplayMedia({video: {frameRate: 30}, audio: false});
+    const st = await navigator.mediaDevices.getDisplayMedia({video: {frameRate: {ideal: +($('stFps').value) || 30}, width: {ideal: 1920}, height: {ideal: 1080}}, audio: true});
     capStop(); capStream = st;
     ['capA', 'capB'].forEach(id => { $(id).srcObject = st; $(id).play().catch(() => {}); });
     $('prevWrap').classList.add('live'); $('capWrap').classList.add('live');
     $('capStop').disabled = false;
-    const tr = st.getVideoTracks()[0]; tr.onended = capStop;
+    const tr = st.getVideoTracks()[0]; try { tr.contentHint = 'motion'; } catch (x) {} tr.onended = capStop;
     capSay('Podgląd: ' + (tr.label || 'okno'), false);
   } catch (e) { capSay(e && e.name === 'NotAllowedError' ? 'Anulowano wybór okna.' : 'Nie udało się: ' + (e && e.message), true); }
 }
 function capStop(){
+  lkUnpublish();
   if (capStream) { capStream.getTracks().forEach(t => { t.onended = null; t.stop(); }); capStream = null; }
   ['capA', 'capB'].forEach(id => { $(id).srcObject = null; });
   $('prevWrap').classList.remove('live'); $('capWrap').classList.remove('live'); $('capStop').disabled = true;

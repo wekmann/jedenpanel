@@ -11,6 +11,11 @@
 html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#fff}
 #scene{position:relative;width:1920px;height:1080px;overflow:hidden;background:transparent}
 
+/* ===== OBRAZ Z GRY (LiveKit) ===== */
+#gamev{position:absolute;left:0;top:0;width:1920px;height:1080px;object-fit:contain;background:#000;display:none}
+html.hasvideo,html.hasvideo body{background:#000 !important}
+#sndbtn{position:fixed;right:18px;bottom:18px;z-index:99;display:none;background:#c21c28;color:#fff;border:0;border-radius:10px;padding:12px 18px;font:700 16px Arial,sans-serif;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+
 /* ===== PASEK DOLNY ===== */
 #barwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:var(--mb,43px);transition:transform .6s var(--ease),opacity .5s ease}
 #barwrap.off{opacity:0;transform:translateY(calc(100% + var(--mb,43px) + 30px))}
@@ -255,6 +260,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 </head>
 <body>
 <div id="scene">
+  <video id="gamev" autoplay muted playsinline></video>
   <div id="barwrap" class="off">
     <div id="root">
       <div id="logo"></div>
@@ -419,6 +425,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
   </div>
 </div>
 
+<button id="sndbtn">🔊 Włącz dźwięk</button>
 <script>
 const $ = id => document.getElementById(id);
 const KEY = new URLSearchParams(location.search).get('key') || '';
@@ -984,6 +991,50 @@ async function livePoll(){
   } catch (e) { /* chwilowy brak sieci – zostawiamy jak jest */ }
 }
 livePoll(); setInterval(livePoll, 12000);
+
+/* ---------- obraz z gry (LiveKit): widz, OBS-owa przeglądarka i chmurowy egress na Twitcha/TikToka ---------- */
+(function(){
+  const QS = new URLSearchParams(location.search), EGRESS = QS.get('egress') === '1', PREV = QS.get('preview') === '1';
+  const inObs = !!window.obsstudio;
+  function fitScene(){
+    if (PREV || inObs) return;
+    const k = Math.min(innerWidth / 1920, innerHeight / 1080), sc = $('scene');
+    sc.style.transformOrigin = '0 0'; sc.style.transform = 'translate(' + ((innerWidth - 1920 * k) / 2) + 'px,' + ((innerHeight - 1080 * k) / 2) + 'px) scale(' + k + ')';
+  }
+  addEventListener('resize', fitScene); fitScene();
+  let started = false, signalled = false;
+  const signal = () => { if (EGRESS && !signalled) { signalled = true; console.log('START_RECORDING'); } };
+  if (EGRESS) setTimeout(signal, 8000); // egress nie zawiesi się, nawet gdy nie ma obrazu z gry
+  async function loadLib(){
+    if (window.LivekitClient) return;
+    await new Promise((ok, er) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/livekit-client@2.5.7/dist/livekit-client.umd.min.js'; s.onload = ok; s.onerror = er; document.head.appendChild(s); });
+  }
+  async function join(){
+    if (started || !KEY || PREV || DEMO) return; started = true;
+    try {
+      const r = await fetch('/api/lk?key=' + encodeURIComponent(KEY), {cache: 'no-store'});
+      if (!r.ok) { started = false; return; }               // brak konfiguracji LiveKit – overlay działa jak dotąd
+      const j = await r.json(); await loadLib();
+      const L = window.LivekitClient;
+      const room = new L.Room({adaptiveStream: !EGRESS, dynacast: true});
+      const v = $('gamev'), btn = $('sndbtn'); let auds = [];
+      room.on(L.RoomEvent.TrackSubscribed, (tr, pub) => {
+        if (tr.kind === 'video') { tr.attach(v); v.style.display = 'block'; if (!inObs) document.documentElement.classList.add('hasvideo'); setTimeout(signal, 1200); }
+        else if (tr.kind === 'audio') { const a = tr.attach(); document.body.appendChild(a); auds.push(a); }
+      });
+      room.on(L.RoomEvent.TrackUnsubscribed, (tr) => {
+        if (tr.kind === 'video') { tr.detach(v); v.style.display = 'none'; document.documentElement.classList.remove('hasvideo'); }
+        else if (tr.kind === 'audio') tr.detach().forEach(a => a.remove());
+      });
+      room.on(L.RoomEvent.AudioPlaybackStatusChanged, () => { btn.style.display = (!EGRESS && !room.canPlaybackAudio) ? 'block' : 'none'; });
+      btn.onclick = () => { room.startAudio(); btn.style.display = 'none'; };
+      room.on(L.RoomEvent.Disconnected, () => { v.style.display = 'none'; document.documentElement.classList.remove('hasvideo'); started = false; setTimeout(join, 4000); });
+      await room.connect(j.url, j.token);
+      setTimeout(signal, 2500);
+    } catch (e) { console.error('livekit', e); started = false; setTimeout(join, 8000); }
+  }
+  join();
+})();
 </script>
 </body>
 </html>
