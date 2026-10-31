@@ -26,13 +26,13 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #barwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:var(--mb,43px);transition:transform .6s var(--ease),opacity .5s ease}
 #barwrap.off{opacity:0;transform:translateY(calc(100% + var(--mb,43px) + 30px))}
 #root{position:relative;width:1662px;height:214px;display:grid;grid-template-columns:155px 1507px;grid-template-rows:157px 57px}
-#logo{background:#0a1a2e url(/assets/jeden_logo.png) center/cover no-repeat}
-#clock{background:#081742;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+#logo{background:#0b2e5b url(/assets/jeden_logo.png) center/cover no-repeat}
+#clock{background:linear-gradient(180deg,#0b2e5b,#081d45 55%,#05133b);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 #time{font-size:27px;font-weight:800;letter-spacing:1px;text-shadow:0 2px 4px rgba(0,0,0,.4);color:#fff;font-variant-numeric:tabular-nums}
-#head{box-sizing:border-box;background:linear-gradient(90deg,#8d1123,#a3162a 55%,#c21c28);border-radius:0 18px 0 0;padding:14px 40px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;box-shadow:0 6px 14px rgba(0,0,0,.45)}
+#head{box-sizing:border-box;background:radial-gradient(1100px 190px at 100% 100%,rgba(236,44,44,.34),transparent 72%),linear-gradient(180deg,rgba(255,255,255,.07),rgba(0,0,0,.10)),linear-gradient(90deg,#8d1123,#a3162a 52%,#c21c28);border-radius:0 18px 0 0;padding:14px 40px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;box-shadow:0 6px 14px rgba(0,0,0,.45)}
 #head::after{content:"";position:absolute;bottom:0;left:0;right:0;height:4px;background:#fff}
-.line{color:#fff;font-family:'Roboto Condensed',Arial,sans-serif;font-size:46px;font-weight:700;text-transform:uppercase;letter-spacing:0;line-height:1.15;white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.35)}
-#ticker{background:#fff;overflow:hidden;position:relative;display:flex;align-items:center}
+.line{color:#faf1f1;font-family:'Roboto Condensed',Arial,sans-serif;font-size:46px;font-weight:700;text-transform:uppercase;letter-spacing:0;line-height:1.15;white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.35)}
+#ticker{background:linear-gradient(180deg,#fff,#eef3f7);overflow:hidden;position:relative;display:flex;align-items:center}
 #ticker::before,#ticker::after{content:"";position:absolute;left:0;right:0;height:0;background:none;z-index:2}
 #ticker::before{top:0}#ticker::after{bottom:0}
 #track{display:flex;align-items:center;white-space:nowrap;width:max-content;will-change:transform}
@@ -49,20 +49,20 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 /* ===== PLAKIETKA NA ŻYWO (+ biała plakietka z tekstem po lewej) ===== */
 #livewrap{position:absolute;top:var(--lt,43px);right:var(--lr,53px);height:64px;display:flex;transition:transform .6s var(--ease),opacity .5s ease}
 #livewrap.off{opacity:0;transform:translateX(calc(100% + var(--lr,53px) + 30px))}
-.livebadge{box-sizing:border-box;flex:none;height:100%;padding:0 30px;display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(90deg,#8d1123,#a3162a 55%,#c21c28);border-radius:8px;font-family:Arial,Helvetica,sans-serif;box-shadow:0 6px 14px rgba(0,0,0,.45);position:relative;overflow:hidden}
+.livebadge{box-sizing:border-box;flex:none;height:100%;padding:0 30px;display:flex;align-items:center;justify-content:center;gap:12px;background:radial-gradient(160px 70px at 100% 100%,rgba(236,44,44,.38),transparent 75%),linear-gradient(180deg,rgba(255,255,255,.10),rgba(0,0,0,.10)),linear-gradient(100deg,#93142a,#ab1824 50%,#be1b23);border-radius:8px;font-family:Arial,Helvetica,sans-serif;box-shadow:0 6px 14px rgba(0,0,0,.45);position:relative;overflow:hidden}
 .ldot{width:14px;height:14px;border-radius:50%;background-color:#fff;box-shadow:0 0 8px rgba(255,255,255,.7);flex-shrink:0;animation:ldp 1.2s ease-in-out infinite}
 @keyframes ldp{50%{transform:scale(1.4);opacity:.55}}
 .ltxt{color:#fff;font-size:26px;font-weight:800;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.4)}
-#livelabel{display:none;box-sizing:border-box;height:100%;align-items:center;padding:0 24px;background:#fff;border-radius:8px 0 0 8px;box-shadow:0 6px 14px rgba(0,0,0,.45);max-width:600px}
+#livelabel{display:none;box-sizing:border-box;height:100%;align-items:center;padding:0 24px;background:linear-gradient(180deg,#fbf9f9,#ebe7ea);border-radius:8px 0 0 8px;box-shadow:0 6px 14px rgba(0,0,0,.45);max-width:600px}
 #livewrap.has #livelabel{display:flex}
 #livewrap.has .livebadge{border-radius:0 8px 8px 0}
-#lbltxt{display:block;color:#0b1d4a;font-family:'Roboto Condensed',Arial,sans-serif;font-weight:900;text-transform:uppercase;line-height:1.05;letter-spacing:.3px;text-align:left;text-wrap:balance}
+#lbltxt{display:block;color:#a3112a;font-family:'Roboto Condensed',Arial,sans-serif;font-weight:900;text-transform:uppercase;line-height:1.05;letter-spacing:.3px;text-align:left;text-wrap:balance}
 
 /* ===== WYNIKI ANKIETY NA ŻYWO – wykres kołowy, lewy górny róg ===== */
 #pollwrap{position:absolute;top:var(--pt,43px);left:53px;width:460px;transition:transform .6s var(--ease),opacity .5s ease,top .4s var(--ease)}
 #pollwrap.off{opacity:0;transform:translateX(calc(-100% - 53px - 30px))}
 #lpbox{transform-origin:0 0;background:linear-gradient(170deg,#13233f,#0a1426 70%);border-radius:0 22px 22px 22px;box-shadow:0 14px 34px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.06);overflow:hidden;color:#fff;font-family:'Roboto Condensed',Arial,sans-serif}
-#lphead{background:linear-gradient(90deg,#8d1123,#a3162a 55%,#c21c28);padding:12px 22px;display:flex;align-items:center;gap:12px;font-size:21px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,.35);position:relative}
+#lphead{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(0,0,0,.10)),linear-gradient(90deg,#8d1123,#a3162a 55%,#c21c28);padding:12px 22px;display:flex;align-items:center;gap:12px;font-size:21px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-shadow:0 2px 4px rgba(0,0,0,.35);position:relative}
 #lphead::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:#fff;opacity:.85}
 .lpdot{width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.8);animation:lpp 1.4s ease-in-out infinite}
 #lphead.end .lpdot{animation:none}
@@ -284,6 +284,8 @@ html.pgm #pgmcover{display:block}
 #pgmwait{z-index:0}
 #pgmfreeze{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;z-index:0;pointer-events:none}
 html.pgm #pgmfreeze.on{display:block}
+#pgmlast{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;z-index:0;pointer-events:none}
+html.pgm #pgmlast.on{display:block}
 #barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity,translate}
 #pgmwait{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;color:#9fb3d1;font:700 40px/1.2 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:2px}
 #pgmwait small{font-size:24px;font-weight:700;color:#6f84a8;letter-spacing:1px}
@@ -302,6 +304,7 @@ html.lite #bkp{display:none}
   <div id="pgmcover"></div>
   <div id="pgmwait"><div>Czekam na obraz z gry…</div><small>W panelu wybierz okno gry (monitor PVW)</small></div>
   <canvas id="pgmfreeze"></canvas>
+  <canvas id="pgmlast"></canvas>
 
   <div id="barwrap" class="off">
     <div id="root">
@@ -1149,6 +1152,34 @@ async function pgmConnect(){
 function unlockAudio(){ if (pgmRoom) pgmRoom.startAudio().then(sndHint).catch(() => {}); }
 snd.onclick = unlockAudio; ['pointerdown', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, unlockAudio));
 pgmConnect();
+
+/* ===== OSTATNIA DOBRA KLATKA: gdy przechwytywanie padnie (okno gry zminimalizowane / zamknięte → czerń albo koniec ścieżki), pokazujemy ostatni dobry obraz ===== */
+(function(){
+  if (!window.PGM) return;
+  const probe = document.createElement('canvas'); probe.width = 32; probe.height = 18;
+  const pctx = probe.getContext('2d', {willReadFrequently: true});
+  let bad = 0, tick = 0, hasGood = false;
+  function isBlack(v){
+    try {
+      pctx.drawImage(v, 0, 0, 32, 18);
+      const d = pctx.getImageData(0, 0, 32, 18).data; let sum = 0, mx = 0;
+      for (let i = 0; i < d.length; i += 4) { const m = Math.max(d[i], d[i+1], d[i+2]); sum += m; if (m > mx) mx = m; }
+      return (sum / 576) < 1.5 && mx < 8;      // niemal idealna czerń = awaria przechwytywania, nie scena z gry
+    } catch (e) { return false; }
+  }
+  setInterval(function(){
+    const v = $('pgmv'), last = $('pgmlast'); if (!v || !last) return;
+    const tr = v.srcObject && v.srcObject.getVideoTracks ? v.srcObject.getVideoTracks()[0] : null;
+    const gone = !v.videoWidth || (tr && tr.readyState === 'ended');
+    const black = !gone && isBlack(v);
+    if (pausedNow) { bad = 0; return; }       // pauza ma własną zamrożoną klatkę
+    if (gone || black) bad++; else bad = 0;
+    if (!gone && !black) {                    // dobry obraz – zapamiętaj co sekundę
+      if ((tick++ % 2) === 0) { try { last.width = v.videoWidth; last.height = v.videoHeight; last.getContext('2d').drawImage(v, 0, 0); hasGood = true; } catch (e) {} }
+      last.classList.remove('on');
+    } else if (bad >= 3 && hasGood) last.classList.add('on');
+  }, 500);
+})();
 </script>
 </body>
 </html>

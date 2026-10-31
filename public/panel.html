@@ -854,6 +854,38 @@ function freezeApply(video, on){
     try { c.width = video.videoWidth; c.height = video.videoHeight; c.getContext('2d').drawImage(video, 0, 0); c.style.display = 'block'; c.dataset.f = '1'; host.classList.add('frozen'); } catch (e) { /* ignoruj */ }
   } else { c.style.display = 'none'; c.dataset.f = ''; host.classList.remove('frozen'); }
 }
+/* OSTATNIA DOBRA KLATKA: gdy przechwytywanie padnie (gra zminimalizowana → czerń, albo koniec ścieżki), monitor PGM i okno na Discorda pokazują ostatni dobry obraz zamiast czerni */
+const lastSt = new WeakMap();
+const lastProbe = document.createElement('canvas'); lastProbe.width = 32; lastProbe.height = 18;
+const lastPctx = lastProbe.getContext('2d', {willReadFrequently: true});
+function lastIsBlack(v){
+  try {
+    lastPctx.drawImage(v, 0, 0, 32, 18);
+    const d = lastPctx.getImageData(0, 0, 32, 18).data; let sum = 0, mx = 0;
+    for (let i = 0; i < d.length; i += 4) { const m = Math.max(d[i], d[i+1], d[i+2]); sum += m; if (m > mx) mx = m; }
+    return (sum / 576) < 1.5 && mx < 8;      // niemal idealna czerń = awaria przechwytywania, nie scena z gry
+  } catch (e) { return false; }
+}
+function lastTick(v){
+  if (!v || !v.parentNode) return;
+  const doc = v.ownerDocument, host = v.parentNode;
+  let st = lastSt.get(v); if (!st) { st = {bad: 0, n: 0, has: false}; lastSt.set(v, st); }
+  let c = host.querySelector('canvas.lfz');
+  if (!c) { c = doc.createElement('canvas'); c.className = 'lfz'; c.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;display:none'; v.parentNode.insertBefore(c, v.nextSibling); }
+  if (gamePaused) { st.bad = 0; return; }
+  const tr = v.srcObject && v.srcObject.getVideoTracks ? v.srcObject.getVideoTracks()[0] : null;
+  const gone = !v.videoWidth || (tr && tr.readyState === 'ended');
+  const black = !gone && lastIsBlack(v);
+  if (gone || black) st.bad++; else st.bad = 0;
+  if (!gone && !black) {
+    if ((st.n++ % 2) === 0) { try { c.width = v.videoWidth; c.height = v.videoHeight; c.getContext('2d').drawImage(v, 0, 0); st.has = true; } catch (e) {} }
+    c.style.display = 'none'; if (!host.querySelector('canvas.frz[data-f="1"]')) host.classList.remove('frozen');
+  } else if (st.bad >= 3 && st.has) { c.style.display = 'block'; host.classList.add('frozen'); }
+}
+setInterval(function(){
+  lastTick($('capA'));
+  try { if (outWin && !outWin.closed) lastTick(outWin.document.getElementById('v')); } catch (e) { /* okno wyjściowe jeszcze nie istnieje */ }
+}, 500);
 function localPauseApply(){
   ['capA', 'capB'].forEach(id => freezeApply($(id), gamePaused));
   try { if (outWin && !outWin.closed) freezeApply(outWin.document.getElementById('v'), gamePaused); } catch (e) { /* okno wyjściowe jeszcze nie istnieje / zamknięte */ }
