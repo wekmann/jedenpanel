@@ -81,7 +81,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
 #prevWrap #prevFrame{z-index:2}#prevWrap.noov #prevFrame{display:none}
 .capph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;color:var(--mut);cursor:pointer;background:radial-gradient(circle at 50% 40%,#10203a,#070c15)}
 .capph div{font-size:42px}.capph b{color:#fff;font-size:15px}.capph small{font-size:11px}.capph:hover{color:#fff}
-.screen.live .capph{display:none}
+.screen.live .capph,.screen.frozen .capph{display:none}
 .capbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}.capbar button{margin:0}.capbar .hint{margin:0 0 0 6px}
 .chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
 .chips .chip{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px 10px;border-radius:12px;background:linear-gradient(180deg,#121c30,#0b1322);border:1px solid #223455;position:relative;margin:0;text-align:left;min-height:78px}
@@ -841,11 +841,22 @@ async function auBuild(){
 /* ---------- ZATRZYMAJ / WZNÓW obraz z gry w streamie ---------- */
 let gamePaused = false, pauseLock = 0;
 function pauseUi(){ const b = $('stPause'); b.textContent = gamePaused ? '▶ WZNÓW' : '⏸ ZATRZYMAJ'; b.className = gamePaused ? 'b1' : 'b2'; localPauseApply(); }
-/* ZATRZYMAJ działa też lokalnie: monitory PGM/PVW w panelu i okno „Pełny ekran (okno na Discorda)” przenikają do czerni (overlay zostaje na wierzchu) */
+/* ZATRZYMAJ = zamrożona klatka: w momencie kliknięcia robimy zdjęcie obrazu z gry i pokazujemy je zamiast wideo (overlay zostaje na wierzchu).
+   Klatka zostaje także po przerwaniu przechwytywania / zamknięciu gry, aż do WZNÓW. Dotyczy monitorów PGM/PVW w panelu i okna na Discorda. */
+function freezeApply(video, on){
+  if (!video || !video.parentNode) return;
+  const doc = video.ownerDocument, host = video.parentNode;
+  let c = host.querySelector('canvas.frz');
+  if (!c) { c = doc.createElement('canvas'); c.className = 'frz'; c.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;display:none'; video.parentNode.insertBefore(c, video.nextSibling); }
+  if (on) {
+    if (c.dataset.f === '1') return;                     // już zamrożone – nie podmieniamy klatki na nowszą
+    if (!video.videoWidth) return;                       // brak obrazu do zamrożenia
+    try { c.width = video.videoWidth; c.height = video.videoHeight; c.getContext('2d').drawImage(video, 0, 0); c.style.display = 'block'; c.dataset.f = '1'; host.classList.add('frozen'); } catch (e) { /* ignoruj */ }
+  } else { c.style.display = 'none'; c.dataset.f = ''; host.classList.remove('frozen'); }
+}
 function localPauseApply(){
-  const f = gamePaused ? 'brightness(0)' : 'brightness(1.001)';
-  ['capA', 'capB'].forEach(id => { const v = $(id); if (v) { v.style.transition = 'filter .9s ease'; v.style.filter = f; } });
-  try { if (outWin && !outWin.closed) { const v = outWin.document.getElementById('v'); if (v) v.style.filter = f; } } catch (e) { /* okno wyjściowe jeszcze nie istnieje / zamknięte */ }
+  ['capA', 'capB'].forEach(id => freezeApply($(id), gamePaused));
+  try { if (outWin && !outWin.closed) freezeApply(outWin.document.getElementById('v'), gamePaused); } catch (e) { /* okno wyjściowe jeszcze nie istnieje / zamknięte */ }
 }
 function auPauseApply(){   // dźwięk gry cichnie / wraca płynnie (0,7 s); mikrofon i Discord bez zmian
   const g = auGains.game; if (!g || !auCtx) return;

@@ -282,6 +282,8 @@ html.pgm #pgmcover{display:block}
 #pgmcover.on{opacity:1}
 :where(#scene>*:not(#pgmv)){z-index:1}
 #pgmwait{z-index:0}
+#pgmfreeze{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;z-index:0;pointer-events:none}
+html.pgm #pgmfreeze.on{display:block}
 #barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity,translate}
 #pgmwait{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;color:#9fb3d1;font:700 40px/1.2 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:2px}
 #pgmwait small{font-size:24px;font-weight:700;color:#6f84a8;letter-spacing:1px}
@@ -299,6 +301,7 @@ html.lite #bkp{display:none}
   <video id="pgmv" autoplay muted playsinline disablepictureinpicture disableremoteplayback></video>
   <div id="pgmcover"></div>
   <div id="pgmwait"><div>Czekam na obraz z gry…</div><small>W panelu wybierz okno gry (monitor PVW)</small></div>
+  <canvas id="pgmfreeze"></canvas>
 
   <div id="barwrap" class="off">
     <div id="root">
@@ -862,7 +865,12 @@ let pausedNow = false, pauseLock = 0;
 function setPause(on, fromData){
   if (!window.PGM) return;   // zwykły przezroczysty overlay (OBS) nie ma obrazu z gry do zasłonięcia
   if (fromData) pauseLock = Date.now() + 5000;
-  if (on === pausedNow) return; pausedNow = on; $('pgmcover').classList.toggle('on', on);
+  if (on === pausedNow) return; pausedNow = on;
+  /* ZATRZYMAJ = zamrożona klatka (zdjęcie obrazu z gry w chwili kliknięcia); zostaje, nawet gdy gra / przechwytywanie się zakończy, aż do WZNÓW */
+  const fz = $('pgmfreeze'), v = $('pgmv');
+  if (on) { try { if (v.videoWidth) { fz.width = v.videoWidth; fz.height = v.videoHeight; fz.getContext('2d').drawImage(v, 0, 0); fz.classList.add('on'); } } catch (e) {} }
+  else fz.classList.remove('on');
+  $('pgmcover').classList.toggle('on', on && !fz.classList.contains('on'));   // czarna zasłona tylko, gdy nie było klatki do zamrożenia
 }
 function apply(s){
   try { if (Date.now() >= pauseLock) setPause(!!(s.game_pause && s.game_pause.paused)); } catch (e) { console.error('pauza', e); }
