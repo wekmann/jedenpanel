@@ -316,7 +316,21 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       </div>
       <label for="stFps">Klatki na sekundę</label>
       <select id="stFps" style="max-width:200px"><option value="30">1080p · 30 kl/s (stabilnie)</option><option value="60">1080p · 60 kl/s (płynniej, więcej danych)</option></select>
-      <div class="hint">Discord: udostępniasz ręcznie okno <code>/overlay</code> (Udostępnij ekran). Klucze są trzymane tylko w bazie i nigdy nie trafiają do overlayu.</div>
+      <div class="hint">Discord: udostępniasz ręcznie okno z linkiem PGM <code>/overlay?key=…</code> (zakładka Overlay). Klucze są trzymane tylko w bazie i nigdy nie trafiają do overlayu.</div>
+    </div>
+    <div class="sub">
+      <h3>Dźwięk do streamu</h3>
+      <label class="chk"><input type="checkbox" id="auGame" checked>Dźwięk z okna gry</label>
+      <label class="chk"><input type="checkbox" id="auDc">Dźwięk z Discorda</label>
+      <div class="grid2">
+        <div><label for="auMode">Skąd brać dźwięk Discorda</label>
+          <select id="auMode"><option value="dev">Urządzenie audio (np. VB-Cable)</option><option value="tab">Karta przeglądarki (discord.com/app)</option></select></div>
+        <div id="auDevWrap"><label for="auDev">Urządzenie wejściowe</label><select id="auDev"><option value="">Domyślne</option></select></div>
+      </div>
+      <button class="b2" id="auPrep">🎧 Połącz dźwięk Discorda</button>
+      <button class="b2" id="auRefresh">↻ Wczytaj listę urządzeń</button>
+      <div class="msg" id="auMsg"></div>
+      <div class="hint">Odznacz „dźwięk z okna gry”, a zostanie tylko Discord (obraz dalej z gry). <b>Urządzenie:</b> w Discordzie ustaw wyjście na „CABLE Input (VB-Audio)”, tu wybierz „CABLE Output”. <b>Karta:</b> otwórz Discorda w przeglądarce, tu wybierz tę kartę i zaznacz „Udostępnij dźwięk karty”. Ustaw to PRZED kliknięciem „Publikuj okno gry”.</div>
     </div>
     <div class="sub">
       <h3>Obraz z gry</h3>
@@ -366,16 +380,20 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
 
   <!-- OVERLAY -->
   <div class="tab box" id="tOver">
-    <h3>Link do OBS</h3>
+    <h3>Link PGM (cały obraz: gra + overlay – do udostępnienia na Discordzie)</h3>
     <input type="text" id="ovUrl" readonly>
     <button class="b2" id="ovCopy">Kopiuj</button>
+    <div class="hint">Otwórz w osobnym oknie przeglądarki (Chrome/Edge), kliknij raz w stronę (dźwięk) i udostępnij to okno na Discordzie. Obraz skaluje się do rozmiaru okna. Bez dźwięku z tego okna: dopisz <code>&amp;mute=1</code>.</div>
+    <h3 style="margin-top:18px">Link do OBS (przezroczysty overlay, bez obrazu gry)</h3>
+    <input type="text" id="ovUrlObs" readonly>
+    <button class="b2" id="ovCopyObs">Kopiuj</button>
     <button class="b3" id="ovRegen">Wygeneruj nowy klucz</button>
     <button class="b3" id="bLogout">Wyloguj</button>
     <div class="msg" id="ovMsg"></div>
     <h3 style="margin-top:18px">Instrukcja OBS</h3>
     <ol>
       <li>Dodaj źródło <b>Przeglądarka</b> (Browser).</li>
-      <li>W polu URL wklej powyższy link.</li>
+      <li>W polu URL wklej powyższy „Link do OBS” (z <code>&amp;clean=1</code>, czyli przezroczysty overlay).</li>
       <li>Szerokość <b>1920</b>, wysokość <b>1080</b>.</li>
       <li>Odznacz „Zamykaj źródło, gdy nie jest widoczne” i „Odśwież, gdy scena staje się aktywna”.</li>
       <li>Ułóż źródło na wierzchu sceny. Po wygenerowaniu nowego klucza wklej w OBS nowy link — stary przestaje działać.</li>
@@ -588,19 +606,76 @@ async function lkPublish(){
       videoEncoding: {maxBitrate: br, maxFramerate: fps}, screenShareEncoding: {maxBitrate: br, maxFramerate: fps}};
     const vt = capStream.getVideoTracks()[0]; try { vt.contentHint = 'motion'; } catch (x) {}
     const lv = new L.LocalVideoTrack(vt, undefined, false); await room.localParticipant.publishTrack(lv, opt); lkTracks = [lv];
-    const at = capStream.getAudioTracks()[0];
+    const at = await auBuild();
     if (at) { const la = new L.LocalAudioTrack(at, undefined, false); await room.localParticipant.publishTrack(la, {source: L.Track.Source.ScreenShareAudio, dtx: false, red: false}); lkTracks.push(la); }
     room.on(L.RoomEvent.Disconnected, () => { if (lkRoom === room) { lkRoom = null; lkTracks = []; stRender(); } });
     lkRoom = room; stRender();
-    say('stMsg', at ? 'Publikuję obraz i dźwięk z okna ✔' : 'Publikuję obraz ✔ (bez dźwięku – w oknie wyboru zaznacz „Udostępnij dźwięk”, jeśli jest dostępne)', true);
+    say('stMsg', at ? 'Publikuję obraz i dźwięk ✔' : 'Publikuję obraz ✔ (bez dźwięku – w oknie wyboru zaznacz „Udostępnij dźwięk”, jeśli jest dostępne)', true);
   } catch (e) { say('stMsg', e.message || String(e), false); }
 }
 async function lkUnpublish(){
-  const r = lkRoom; lkRoom = null;
+  const r = lkRoom; lkRoom = null; if (r) auCleanup();
   if (r) { try { for (const t of lkTracks) await r.localParticipant.unpublishTrack(t, false); r.disconnect(false); } catch (e) {} }
   lkTracks = []; if (typeof stRender === 'function' && cfg) stRender();
 }
 $('stPub').onclick = lkPublish; $('stUnpub').onclick = lkUnpublish;
+
+/* ---------- dźwięk do streamu: gra i/lub Discord (miks) ---------- */
+let auExtra = null, auCtx = null;
+const auCfgLoad = () => { try { return JSON.parse(localStorage.getItem('jeden_au') || '{}'); } catch (e) { return {}; } };
+const auCfgSave = () => { try { localStorage.setItem('jeden_au', JSON.stringify({game: $('auGame').checked, dc: $('auDc').checked, mode: $('auMode').value, dev: $('auDev').value})); } catch (e) {} };
+(function(){ const c = auCfgLoad(); if (c.game === false) $('auGame').checked = false; if (c.dc) $('auDc').checked = true; if (c.mode) $('auMode').value = c.mode; })();
+function auVis(){ $('auDevWrap').style.display = $('auMode').value === 'dev' ? '' : 'none'; }
+async function auDevices(ask){
+  if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+  if (ask) { try { const t = await navigator.mediaDevices.getUserMedia({audio: true}); t.getTracks().forEach(x => x.stop()); } catch (e) { say('auMsg', 'Brak zgody na dostęp do urządzeń audio', false); } }
+  const list = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'audioinput' && d.deviceId !== 'default' && d.deviceId !== 'communications');
+  const sel = $('auDev'), keep = sel.value || auCfgLoad().dev || '';
+  sel.innerHTML = '<option value="">Domyślne</option>' + list.map((d, i) => '<option value="' + d.deviceId + '">' + (d.label || 'Urządzenie ' + (i + 1)).replace(/</g, '&lt;') + '</option>').join('');
+  if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
+  else { const cab = [...sel.options].find(o => /cable output|voicemeeter|vb-audio/i.test(o.text)); if (cab && !keep) sel.value = cab.value; }
+}
+$('auRefresh').onclick = () => auDevices(true);
+$('auMode').onchange = () => { auVis(); auCfgSave(); }; $('auDev').onchange = auCfgSave; $('auGame').onchange = auCfgSave; $('auDc').onchange = auCfgSave;
+auVis(); auDevices(false);
+function auCleanup(){
+  if (auExtra) { auExtra.getTracks().forEach(t => t.stop()); auExtra = null; }
+  if (auCtx) { try { auCtx.close(); } catch (e) {} auCtx = null; }
+}
+async function auPrepare(){
+  if (auExtra && auExtra.getAudioTracks()[0] && auExtra.getAudioTracks()[0].readyState === 'live') return auExtra.getAudioTracks()[0];
+  const raw = {echoCancellation: false, noiseSuppression: false, autoGainControl: false};
+  let s;
+  if ($('auMode').value === 'tab') {
+    s = await navigator.mediaDevices.getDisplayMedia({video: true, audio: raw, selfBrowserSurface: 'exclude', systemAudio: 'exclude'});
+    s.getVideoTracks().forEach(t => t.stop());
+    if (!s.getAudioTracks()[0]) { s.getTracks().forEach(t => t.stop()); throw new Error('Nie zaznaczono „Udostępnij dźwięk karty” – wybierz kartę z Discordem i zaznacz dźwięk'); }
+  } else {
+    const id = $('auDev').value;
+    s = await navigator.mediaDevices.getUserMedia({audio: Object.assign({channelCount: 2}, raw, id ? {deviceId: {exact: id}} : {})});
+    await auDevices(false);
+  }
+  if (auExtra) auExtra.getTracks().forEach(t => t.stop());
+  auExtra = s; auCfgSave();
+  return s.getAudioTracks()[0];
+}
+$('auPrep').onclick = async () => {
+  try { $('auDc').checked = true; const t = await auPrepare(); say('auMsg', 'Discord podłączony ✔ (' + (t.label || 'dźwięk') + ')', true); }
+  catch (e) { say('auMsg', e && e.name === 'NotAllowedError' ? 'Anulowano wybór.' : (e.message || String(e)), false); }
+};
+async function auBuild(){
+  const game = $('auGame').checked && capStream ? capStream.getAudioTracks()[0] : null;
+  let dc = null;
+  if ($('auDc').checked) { try { dc = await auPrepare(); } catch (e) { say('stMsg', 'Dźwięk Discorda: ' + (e.message || e) + ' – kliknij „Połącz dźwięk Discorda”', false); } }
+  if (game && dc) {
+    auCtx = new (window.AudioContext || window.webkitAudioContext)({sampleRate: 48000});
+    const dest = auCtx.createMediaStreamDestination();
+    [game, dc].forEach(t => auCtx.createMediaStreamSource(new MediaStream([t])).connect(dest));
+    if (auCtx.resume) await auCtx.resume();
+    return dest.stream.getAudioTracks()[0];
+  }
+  return game || dc || null;
+}
 let stLive = 'off', stErr = '';
 function stRender(){
   const m = {off: 'wyłączony', starting: 'uruchamianie…', live: '● NA ŻYWO – wysyłam na Twitcha/TikToka', ending: 'kończenie…'};
@@ -787,10 +862,15 @@ setInterval(sync, 2500);
 document.addEventListener('visibilitychange', sync);
 
 /* ---------- overlay / klucz ---------- */
-function fillOverlay(){ $('ovUrl').value = location.origin + '/overlay?key=' + cfg.overlayKey; setPreview(); }
+function fillOverlay(){ $('ovUrl').value = location.origin + '/overlay?key=' + cfg.overlayKey; $('ovUrlObs').value = location.origin + '/overlay?key=' + cfg.overlayKey + '&clean=1'; setPreview(); }
 $('ovCopy').onclick = async () => {
   try { await navigator.clipboard.writeText($('ovUrl').value); }
   catch (e) { $('ovUrl').select(); document.execCommand('copy'); }
+  say('ovMsg', 'Skopiowano ✔', true);
+};
+$('ovCopyObs').onclick = async () => {
+  try { await navigator.clipboard.writeText($('ovUrlObs').value); }
+  catch (e) { $('ovUrlObs').select(); document.execCommand('copy'); }
   say('ovMsg', 'Skopiowano ✔', true);
 };
 $('ovRegen').onclick = async () => {

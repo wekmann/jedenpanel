@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="robots" content="noindex,nofollow">
+<script>
+/* tryb PGM = obraz z gry + overlay, wyskalowane do okna. Przezroczysty overlay (OBS): dopisz &clean=1 do adresu */
+(function(){var q=new URLSearchParams(location.search),f=false;try{f=window.top!==window.self}catch(e){f=true}
+window.EGRESS=q.has('egress');
+window.PGM=window.EGRESS||!(q.get('clean')==='1'||q.has('transparent')||q.has('preview')||q.has('demo')||f);
+if(window.PGM)document.documentElement.className='pgm'})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Roboto+Condensed:wght@700;900&display=swap" rel="stylesheet">
 <title>JEDEN overlay</title>
@@ -256,10 +263,23 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 .mbar i{display:block;height:100%;width:0;border-radius:4px;background:var(--c);box-shadow:0 0 10px var(--c);transition:width 1.2s var(--ease)}
 #mfoot{display:flex;justify-content:space-between;gap:20px;padding:14px 52px 24px;border-top:1px solid rgba(255,255,255,.08);font-size:18px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#cfd9ee}
 #mnote,#mcnt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ===== PGM: obraz z gry pod overlayem, całość skalowana do okna ===== */
+html.pgm,html.pgm body{background:#000 !important;width:100%;height:100%;cursor:none}
+html.pgm #scene{position:absolute;left:50%;top:50%;margin:-540px 0 0 -960px;transform:scale(var(--sc,1));transform-origin:50% 50%;background:#000}
+#pgmv{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+html.pgm #pgmv{display:block}
+#pgmwait{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;color:#9fb3d1;font:700 40px/1.2 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:2px}
+#pgmwait small{font-size:24px;font-weight:700;color:#6f84a8;letter-spacing:1px}
+html.pgm #pgmwait.on{display:flex}
+#snd{display:none;position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:99;background:#d60f08;color:#fff;font:700 15px Arial,sans-serif;padding:9px 18px;border:0;border-radius:8px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,.5)}
 </style>
 </head>
 <body>
 <div id="scene">
+  <video id="pgmv" autoplay muted playsinline></video>
+  <div id="pgmwait"><div>Czekam na obraz z gry…</div><small>W panelu: wybierz okno gry i kliknij „Publikuj okno gry”</small></div>
+
   <div id="barwrap" class="off">
     <div id="root">
       <div id="logo"></div>
@@ -424,9 +444,18 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
   </div>
 </div>
 
+<button id="snd" type="button">🔊 Kliknij, aby włączyć dźwięk</button>
 <script>
 const $ = id => document.getElementById(id);
 const KEY = new URLSearchParams(location.search).get('key') || '';
+const QS = new URLSearchParams(location.search);
+let SC = 1; /* skala sceny 1920×1080 w oknie (tryb PGM) */
+function fitScene(){
+  if (!window.PGM) return;
+  SC = Math.min(innerWidth / 1920, innerHeight / 1080) || 1;
+  $('scene').style.setProperty('--sc', SC);
+}
+addEventListener('resize', fitScene); fitScene();
 
 /* ---------- zegar (Europe/Warsaw) ---------- */
 const fmt = new Intl.DateTimeFormat('pl-PL', {timeZone:'Europe/Warsaw', hour:'2-digit', minute:'2-digit', hourCycle:'h23'});
@@ -452,7 +481,7 @@ function fitHead(){
   const cs = getComputedStyle(head), LH = 1.15;
   const aw = head.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
   const ah = head.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 4; /* 4px = biała listwa na dole */
-  const tw = () => Math.max(...ls.map(l => { const r = document.createRange(); r.selectNodeContents(l); return r.getBoundingClientRect().width; }));
+  const tw = () => Math.max(...ls.map(l => { const r = document.createRange(); r.selectNodeContents(l); return r.getBoundingClientRect().width / SC; }));
   ls.forEach(l => l.style.fontSize = '100px');
   const w100 = tw() || 1;
   let fs = Math.floor(Math.min(aw / w100 * 100, ah / (ls.length * LH), 130));
@@ -469,11 +498,11 @@ function renderBar(c){
   const news = (c.news && c.news.length) ? c.news : ['—'];
   track.style.animation = 'none';
   track.replaceChildren(mkLap(news));
-  const lw = track.firstChild.getBoundingClientRect().width || 1;
-  const reps = Math.max(1, Math.ceil(win.getBoundingClientRect().width / lw) + 1);
+  const lw = track.firstChild.getBoundingClientRect().width / SC || 1;
+  const reps = Math.max(1, Math.ceil(win.getBoundingClientRect().width / SC / lw) + 1);
   const block = () => { const d = document.createElement('div'); d.className = 'lap'; for (let i = 0; i < reps; i++) d.append(...mkLap(news).childNodes); return d; };
   track.replaceChildren(block(), block());
-  const dur = (track.getBoundingClientRect().width / 2) / (+c.speed || 106);
+  const dur = (track.getBoundingClientRect().width / SC / 2) / (+c.speed || 106);
   void track.offsetWidth;
   track.style.animation = 'sc ' + dur + 's linear infinite';
 }
@@ -991,6 +1020,57 @@ async function livePoll(){
   } catch (e) { /* chwilowy brak sieci – zostawiamy jak jest */ }
 }
 livePoll(); setInterval(livePoll, 12000);
+/* ---------- PGM: obraz i dźwięk z gry (LiveKit) pod overlayem ---------- */
+const MUTE = QS.get('mute') === '1';
+const pgmv = $('pgmv'), snd = $('snd'), pgmwait = $('pgmwait');
+let pgmRoom = null, pgmTry = 0, recSent = false, lkLib = null;
+if (QS.get('fit') === 'cover') pgmv.style.objectFit = 'cover';
+/* tryb egress (wysyłka z chmury na Twitcha/TikToka): sygnał startu nagrywania dla LiveKit */
+function startRec(){ if (!EGRESS || recSent) return; recSent = true; console.log('START_RECORDING'); }
+if (EGRESS) setTimeout(startRec, 20000);
+pgmv.addEventListener('playing', () => setTimeout(startRec, 1500));
+function pgmMsg(t, sub){
+  if (!t) { pgmwait.classList.remove('on'); return; }
+  if (EGRESS) return;
+  pgmwait.firstElementChild.textContent = t; pgmwait.lastElementChild.textContent = sub || ''; pgmwait.classList.add('on');
+}
+function sndHint(){ snd.style.display = (pgmRoom && !pgmRoom.canPlaybackAudio && !MUTE && !EGRESS) ? 'block' : 'none'; }
+function loadLk(){
+  return lkLib || (lkLib = new Promise((ok, er) => {
+    if (window.LivekitClient) return ok();
+    const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/livekit-client@2.5.7/dist/livekit-client.umd.min.js';
+    sc.onload = ok; sc.onerror = () => { lkLib = null; er(new Error('Nie udało się załadować biblioteki LiveKit')); }; document.head.appendChild(sc);
+  }));
+}
+async function pgmConnect(){
+  if (!window.PGM || DEMO || !KEY || pgmRoom) return;
+  let retry = Math.min(15000, 2000 * (++pgmTry));
+  try {
+    pgmMsg('Łączę z obrazem z gry…', '');
+    const r = await fetch('/api/lk?key=' + encodeURIComponent(KEY), {cache: 'no-store'});
+    if (r.status === 503) { pgmMsg('Brak LiveKit na serwerze', 'Ustaw LIVEKIT_URL / LIVEKIT_API_KEY / LIVEKIT_API_SECRET w Vercelu'); return; }
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json(); await loadLk();
+    const L = window.LivekitClient, room = new L.Room({adaptiveStream: false, dynacast: false});
+    room.on(L.RoomEvent.TrackSubscribed, track => {
+      if (track.kind === 'video') { track.attach(pgmv); pgmMsg(''); }
+      else if (track.kind === 'audio') { const a = track.attach(); a.muted = MUTE; a.style.display = 'none'; document.body.appendChild(a); }
+      sndHint();
+    });
+    room.on(L.RoomEvent.TrackUnsubscribed, track => {
+      if (track.kind === 'video') { track.detach(pgmv); pgmv.srcObject = null; pgmMsg('Czekam na obraz z gry…', 'W panelu: wybierz okno gry i kliknij „Publikuj okno gry”'); }
+      else track.detach().forEach(el => el.remove());
+    });
+    room.on(L.RoomEvent.AudioPlaybackStatusChanged, sndHint);
+    room.on(L.RoomEvent.Disconnected, () => { if (pgmRoom === room) { pgmRoom = null; pgmv.srcObject = null; sndHint(); pgmMsg('Czekam na obraz z gry…', ''); setTimeout(pgmConnect, 3000); } });
+    await room.connect(j.url, j.token);
+    pgmRoom = room; pgmTry = 0; sndHint();
+    if (![...room.remoteParticipants.values()].length) pgmMsg('Czekam na obraz z gry…', 'W panelu: wybierz okno gry i kliknij „Publikuj okno gry”');
+  } catch (e) { console.error('pgm', e); pgmRoom = null; setTimeout(pgmConnect, retry); }
+}
+function unlockAudio(){ if (pgmRoom) pgmRoom.startAudio().then(sndHint).catch(() => {}); }
+snd.onclick = unlockAudio; document.addEventListener('pointerdown', unlockAudio);
+pgmConnect();
 </script>
 </body>
 </html>
