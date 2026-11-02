@@ -17,9 +17,11 @@ export const DEFAULTS = {
     offsetX: 0,
     marginBottom: 43,
     hideHead: false,
+    collapsed: false,
   },
   live_badge: { visible: false, text: 'NA ŻYWO', top: 43, right: 53 },
   qr: { visible: false },
+  timer: { visible: false, seconds: 60, endsAt: '', sound: true, volume: 80, hideAfter: 0 },
   stream: { twitchOn: true, twitchUrl: 'rtmp://live.twitch.tv/app', twitchKey: '', tiktokOn: false, tiktokUrl: '', tiktokKey: '', fps: 60, bitrate: 8000 },
   stream_state: { egressId: '', startedAt: '', operator: '' },
   game_pause: { paused: false, at: new Date(0).toISOString() },
@@ -115,6 +117,7 @@ export const SCHEMAS = {
     offsetX: z.number().int().min(-960, 'Przesunięcie min. -960').max(960, 'Przesunięcie max. 960'),
     marginBottom: z.number().int().min(0).max(1080),
     hideHead: z.boolean().default(false),
+    collapsed: z.boolean().default(false),
   }),
   fund: z.object({
     visible: z.boolean(),
@@ -154,6 +157,14 @@ export const SCHEMAS = {
   }),
   qr: z.object({
     visible: z.boolean(),
+  }),
+  timer: z.object({
+    visible: z.boolean(),
+    seconds: z.number({ invalid_type_error: 'Podaj czas odliczania' }).int('Czas w pełnych sekundach').min(1, 'Czas min. 1 sekunda').max(86400, 'Czas max. 24 godziny'),
+    endsAt: z.string().max(40),
+    sound: z.boolean(),
+    volume: z.number({ invalid_type_error: 'Podaj głośność' }).min(0, 'Głośność min. 0').max(100, 'Głośność max. 100'),
+    hideAfter: z.number({ invalid_type_error: 'Podaj sekundy' }).min(0, 'Sekundy min. 0').max(3600, 'Sekundy max. 3600'),
   }),
   age: z.object({
     visible: z.boolean(),
@@ -212,7 +223,7 @@ export const SCHEMAS = {
     }),
   break_screen: z.object({
     visible: z.boolean(),
-    kind: z.enum(['break', 'brb', 'start']),
+    kind: z.enum(['break', 'brb', 'start', 'debate']),
     title: z.string().trim().max(60),
     subtitle: z.string().trim().max(120),
     footer: z.string().trim().max(80),

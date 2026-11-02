@@ -15,7 +15,7 @@ if(window.PGM)document.documentElement.classList.add('pgm');
 if(window.LITE)document.documentElement.classList.add('lite')})();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Roboto+Condensed:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Roboto+Condensed:wght@700;900&family=Montserrat:ital,wght@1,800;1,900&display=swap" rel="stylesheet">
 <title>JEDEN overlay</title>
 <style>
 :root{--ease:cubic-bezier(.16,1,.3,1)}
@@ -45,6 +45,31 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #barwrap:not(.off) #root{animation:barin .7s var(--ease)}
 @keyframes barin{from{filter:brightness(1.6)}to{filter:none}}
 #barwrap.nohead #root{grid-template-rows:57px;height:57px}
+
+
+/* ===== ZWINIĘTE PASKI: zostaje tylko logo + godzina ===== */
+#root{transition:width .7s var(--ease)}
+#barwrap.col #root{width:155px;overflow:hidden}
+#scene.col #flashwrap{left:calc(129px + 155px + 14px + var(--ox,0px));translate:0 0;max-width:1480px}
+#scene.col #ltwrap{left:calc(129px + 155px + 14px + var(--ox,0px));translate:0 calc(-1 * var(--fh,0px))}
+#scene.col #fundwrap{bottom:var(--mb,43px)}
+#scene.col #qrwrap{translate:0 calc(-1 * var(--bh,214px))}
+
+
+/* ===== ODLICZANIE: kula z flagą nad kodem QR ===== */
+#tmwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + 14px);width:155px;display:flex;justify-content:center;translate:0 calc(-1 * (var(--bh,214px) + var(--fh,0px) + var(--tq,0px)));transition:transform .6s var(--ease),opacity .5s ease,translate .6s var(--ease)}
+#tmwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - 60px))}
+#scene.col #tmwrap{translate:0 calc(-1 * (var(--bh,214px) + var(--tq,0px)))}
+#tmball{position:relative;width:140px;height:140px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45))}
+#tmball svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+#tmwave{animation:tmw 2.6s linear infinite}
+@keyframes tmw{to{transform:translateX(-70px)}}
+#tmtxt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font:900 42px/1 'Roboto Condensed',Arial,sans-serif;letter-spacing:.5px;font-variant-numeric:tabular-nums;text-shadow:0 2px 3px rgba(0,0,0,.75),0 0 8px rgba(0,0,0,.45)}
+#tmball.big #tmtxt{font-size:32px}
+#tmball.pulse{animation:tmp .45s ease-out}
+@keyframes tmp{0%{transform:scale(1.14)}100%{transform:scale(1)}}
+#tmball.zero{animation:tmz .9s ease-out}
+@keyframes tmz{0%{transform:scale(1.3) rotate(-4deg)}35%{transform:scale(.94) rotate(3deg)}65%{transform:scale(1.06) rotate(-2deg)}100%{transform:none}}
 
 /* ===== PLAKIETKA NA ŻYWO (+ biała plakietka z tekstem po lewej) ===== */
 #livewrap{position:absolute;top:var(--lt,43px);right:var(--lr,53px);height:64px;display:flex;transition:transform .6s var(--ease),opacity .5s ease}
@@ -180,6 +205,38 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #bkarc{transition:stroke-dashoffset .4s linear;filter:drop-shadow(0 0 18px rgba(255,59,59,.8))}
 #bktk{transform-origin:300px 300px;animation:bkspin 80s linear infinite}@keyframes bkspin{to{transform:rotate(360deg)}}
 
+
+/* ===== DEBATA PREZYDENCKA (powiewająca flaga + napisy) ===== */
+#dbt{display:none;position:absolute;inset:0;overflow:hidden}
+#brk.deb #dbt{display:block}
+#brk.deb .bk-bg,#brk.deb .bk-st,#brk.deb .bk-sw,#brk.deb #bkp,#brk.deb #bkl,#brk.deb #bkr,#brk.deb #bkf{display:none}
+#dbflag{position:absolute;inset:0;width:1920px;height:1080px;display:block}
+#dbshade{position:absolute;inset:0;background:radial-gradient(1400px 800px at 50% 40%,transparent 55%,rgba(40,0,10,.35)),linear-gradient(180deg,rgba(255,255,255,.0) 0,rgba(0,0,0,.0) 60%,rgba(60,0,10,.25) 100%);pointer-events:none}
+#dbstage{position:absolute;left:0;top:0;width:1304px;height:732px;transform:scale(1.4724);transform-origin:0 0;font-family:'Montserrat','Arial Black',Arial,sans-serif;text-transform:uppercase}
+.dbd{position:absolute;height:5px;background:#d4122b;box-shadow:0 1px 3px rgba(0,0,0,.35);opacity:0;transform:translateX(-60px)}
+.dbd.r{transform:translateX(60px)}
+#d1{left:105px;top:224px;width:105px}#d1b{left:218px;top:224px;width:28px}
+#d2{left:915px;top:311px;width:28px}#d2b{left:952px;top:311px;width:110px}
+#d3{left:150px;top:358px;width:105px}
+#dbw{position:absolute;left:180px;top:180px;width:730px;height:158px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.35));opacity:0;transform:translateX(-120px);clip-path:inset(0 100% 0 0)}
+#dbw i{position:absolute;inset:0;background:linear-gradient(180deg,#fff,#f1f3f6 70%,#dfe3ea);clip-path:polygon(0 0,92% 0,100% 98%,5% 100%)}
+#dbwt{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-sizing:border-box;font-size:112px;font-weight:900;font-style:italic;letter-spacing:-2px;white-space:nowrap;color:#17327a;background:linear-gradient(180deg,#2d4fa3 0,#17327a 55%,#0f2259);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;-webkit-text-stroke:2px #fff;paint-order:stroke fill;filter:drop-shadow(0 3px 3px rgba(0,0,40,.35))}
+#dbr{position:absolute;left:283px;top:340px;width:860px;height:130px;filter:drop-shadow(0 10px 16px rgba(0,0,0,.45));opacity:0;transform:translateX(140px);clip-path:inset(0 0 0 100%)}
+#dbr i{position:absolute;inset:0;background:linear-gradient(180deg,#f0344a 0,#d4122b 40%,#a50c20 100%);clip-path:polygon(0 0,93% 0,100% 100%,7% 100%)}
+#dbr b{position:absolute;inset:7px 12px;background:none;border:1.5px solid rgba(255,255,255,.75);clip-path:polygon(0 0,93% 0,100% 100%,7% 100%);box-sizing:border-box;border-radius:0}
+#dbr u{position:absolute;left:10%;right:10%;top:3px;height:6px;background:radial-gradient(ellipse at 50% 50%,#fff,rgba(255,255,255,0) 70%);opacity:.9}
+#dbrt{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:76px;font-weight:900;font-style:italic;letter-spacing:1px;white-space:nowrap;color:#fff;text-shadow:0 3px 6px rgba(0,0,0,.4)}
+#dbn{position:absolute;left:283px;top:490px;width:860px;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;transition:opacity .8s 1.6s}
+#dbat{padding:7px 24px;background:#fff;color:#17327a;font-size:23px;font-weight:900;font-style:italic;letter-spacing:1px;border-radius:0 12px 0 0;box-shadow:0 5px 12px rgba(0,0,0,.35)}
+#dbcd{font-size:44px;font-weight:900;font-style:italic;color:#fff;text-shadow:0 3px 8px rgba(0,0,0,.55);font-variant-numeric:tabular-nums}
+#dbfoot{position:absolute;left:0;right:0;bottom:30px;text-align:center;font-size:30px;font-weight:800;font-style:italic;letter-spacing:4px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.6)}
+#scene.baron #dblogo{display:none}
+#dblogo{position:absolute;right:50px;bottom:50px;width:110px;height:110px;background:#0b2e5b url(/assets/jeden_logo.png) center/cover no-repeat;box-shadow:0 6px 16px rgba(0,0,0,.5)}
+#brk.deb.on .dbd{opacity:1;transform:none;transition:opacity .5s .9s,transform .9s var(--ease) .9s}
+#brk.deb.on #dbw{opacity:1;transform:none;clip-path:inset(-60px -60px -60px -60px);transition:transform .9s var(--ease) .2s,opacity .3s .2s,clip-path .9s var(--ease) .2s}
+#brk.deb.on #dbr{opacity:1;transform:none;clip-path:inset(-60px -60px -60px -60px);transition:transform .9s var(--ease) .55s,opacity .3s .55s,clip-path .9s var(--ease) .55s}
+#brk.deb.on #dbn{opacity:1}
+
 /* ===== SONDAŻ NA PEŁNYM EKRANIE ===== */
 #pstage{position:absolute;inset:0;pointer-events:none}
 #wipe{position:absolute;top:0;bottom:0;left:-40%;width:40%;background:linear-gradient(100deg,transparent,#dc0432 40%,#ff3b3b 60%,transparent);transform:skewX(-20deg);opacity:0}
@@ -288,14 +345,15 @@ html.pgm #pgmcover{display:block}
 html.pgm #pgmfreeze.on{display:block}
 #pgmlast{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;z-index:0;pointer-events:none}
 html.pgm #pgmlast.on{display:block}
-#barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity,translate}
+#scene.dbt #tmwrap,#scene.dbt #barwrap,#scene.dbt #livewrap,#scene.dbt #fundwrap,#scene.dbt #qrwrap,#scene.dbt #ltwrap,#scene.dbt #flashwrap,#scene.dbt #agewrap{z-index:45}
+#tmwrap,#barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity,translate}
 #pgmwait{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;color:#9fb3d1;font:700 40px/1.2 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:2px}
 #pgmwait small{font-size:24px;font-weight:700;color:#6f84a8;letter-spacing:1px}
 html.pgm #pgmwait.on{display:flex}
 #snd{display:none;position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:99;background:#d60f08;color:#fff;font:700 15px Arial,sans-serif;padding:9px 18px;border:0;border-radius:8px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,.5)}
 
 /* ---- tryb lite (wysyłka z chmury / ?lite=1): wyłączone dekoracyjne pętle animacji, żeby nic nie zwalniało klatek ---- */
-html.lite .ldot,html.lite .lpdot,html.lite #ltname::after,html.lite #fllabel::after,html.lite #ffill::after,html.lite #phead::after,
+html.lite #tmwave,html.lite .ldot,html.lite .lpdot,html.lite #ltname::after,html.lite #fllabel::after,html.lite #ffill::after,html.lite #phead::after,
 html.lite .bk-st,html.lite .bk-sw,html.lite #bkp i,html.lite #bktk{animation:none !important}
 html.lite #bkp{display:none}
 </style>
@@ -314,6 +372,28 @@ html.lite #bkp{display:none}
       <div id="head"><div class="line" id="l1"></div><div class="line" id="l2"></div></div>
       <div id="clock"><div id="time">00:00</div></div>
       <div id="ticker"><div id="track"></div></div>
+    </div>
+  </div>
+
+  <div id="tmwrap" class="off">
+    <div id="tmball">
+      <svg viewBox="0 0 140 140" aria-hidden="true">
+        <defs>
+          <clipPath id="tmclip"><circle cx="70" cy="70" r="67"/></clipPath>
+          <linearGradient id="tmW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9ced8"/></linearGradient>
+          <linearGradient id="tmR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ee2a43"/><stop offset=".55" stop-color="#cf0f29"/><stop offset="1" stop-color="#8f0618"/></linearGradient>
+          <radialGradient id="tmSh" cx=".5" cy=".5" r=".5"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".42"/></radialGradient>
+          <radialGradient id="tmGl" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+        </defs>
+        <g clip-path="url(#tmclip)">
+          <rect width="140" height="140" fill="url(#tmW)"/>
+          <g id="tmwave"><path d="M0 74 q17.5 -12 35 0 t35 0 t35 0 t35 0 t35 0 t35 0 t35 0 t35 0 V160 H0Z" fill="url(#tmR)"/></g>
+          <circle cx="70" cy="70" r="67" fill="url(#tmSh)"/>
+          <ellipse cx="46" cy="30" rx="30" ry="15" transform="rotate(-28 46 30)" fill="url(#tmGl)"/>
+        </g>
+        <circle cx="70" cy="70" r="67" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2"/>
+      </svg>
+      <div id="tmtxt">00:00</div>
     </div>
   </div>
 
@@ -470,6 +550,19 @@ html.lite #bkp{display:none}
       <div id="bkd"><div id="bkdig"></div><div id="bklab"></div></div>
     </div>
     <div id="bkf"></div>
+    <div id="dbt">
+      <canvas id="dbflag" width="1280" height="720"></canvas><div id="dbshade"></div>
+      <div id="dbstage">
+        <div class="dbd" id="d1"></div><div class="dbd" id="d1b"></div>
+        <div class="dbd r" id="d2"></div><div class="dbd r" id="d2b"></div>
+        <div class="dbd" id="d3"></div>
+        <div id="dbw"><i></i><div id="dbwt">DEBATA</div></div>
+        <div id="dbr"><i></i><b></b><u></u><div id="dbrt">PREZYDENCKA</div></div>
+        <div id="dbn"><div id="dbat"></div><div id="dbcd"></div></div>
+      </div>
+      <div id="dbfoot"></div>
+      <div id="dblogo"></div>
+    </div>
   </div>
 </div>
 
@@ -724,9 +817,50 @@ function bmGo(want, vol, kind){
     if (Math.abs(t - bmVol) < .001) { clearInterval(bmT); if (!want) { bm.pause(); bmKind = ''; } }
   }, 60);
 }
+
+/* ---------- powiewająca flaga (canvas, paski pionowe z falą i cieniowaniem) ---------- */
+const FLAG = (() => {
+  const cv = $('dbflag'), cx = cv.getContext('2d'), W = 1280, H = 720, AMP = 58, SL = 2;
+  const src = document.createElement('canvas'); src.width = W; src.height = H + AMP * 2 + 40;
+  const sx = src.getContext('2d'), SH = src.height, split = SH * .53;
+  sx.fillStyle = '#f2f3f6'; sx.fillRect(0, 0, W, split);
+  const gw = sx.createLinearGradient(0, 0, 0, split); gw.addColorStop(0, 'rgba(190,196,208,.55)'); gw.addColorStop(.6, 'rgba(255,255,255,0)'); sx.fillStyle = gw; sx.fillRect(0, 0, W, split);
+  const gr = sx.createLinearGradient(0, split, 0, SH); gr.addColorStop(0, '#e2132f'); gr.addColorStop(.55, '#d0102a'); gr.addColorStop(1, '#a3081f'); sx.fillStyle = gr; sx.fillRect(0, split, W, SH - split);
+  let raf = 0, last = 0, on = false;
+  const fy = (x, t) => Math.sin(x * .0064 - t * 1.5) * AMP * .62 + Math.sin(x * .0128 + t * 1.1 + 1.3) * AMP * .26 + Math.sin(x * .003 - t * .7) * AMP * .3;
+  function draw(t){
+    cx.clearRect(0, 0, W, H);
+    for (let x = 0; x < W; x += SL) {
+      const y = fy(x, t), slope = (fy(x + SL, t) - fy(x - SL, t)) / (2 * SL);
+      cx.drawImage(src, x, 0, SL, SH, x, y - AMP - 20, SL, SH);
+      const sh = Math.max(-1, Math.min(1, slope * 1.25));
+      cx.fillStyle = sh > 0 ? 'rgba(40,0,10,' + (sh * .26).toFixed(3) + ')' : 'rgba(255,255,255,' + (-sh * .22).toFixed(3) + ')';
+      cx.fillRect(x, 0, SL, H);
+    }
+  }
+  function loop(ts){
+    if (!on) return;
+    raf = requestAnimationFrame(loop);
+    if (window.LITE && ts - last < 33) return;   // lite / wysyłka z chmury: 30 kl/s
+    last = ts; draw(ts / 1000);
+  }
+  return {
+    start(){ if (on) return; on = true; draw(performance.now() / 1000); raf = requestAnimationFrame(loop); },
+    stop(){ on = false; cancelAnimationFrame(raf); }
+  };
+})();
+
 function renderBreak(k){
   const on = !!(k && k.visible); brk = on ? k : null; $('brk').classList.toggle('on', on);
+  const deb = on && k.kind === 'debate';
+  $('brk').classList.toggle('deb', deb); $('scene').classList.toggle('dbt', deb);
+  if (deb) FLAG.start(); else FLAG.stop();
   if (!on) { bmSig = ''; bmGo(false, 0, ''); $('brk').classList.remove('zero'); return; }
+  if (deb) {
+    $('dbwt').textContent = k.title || 'Debata'; $('dbrt').textContent = k.subtitle || 'Prezydencka'; $('dbfoot').textContent = k.footer || '';
+    const e = k.endsAt ? Date.parse(k.endsAt) : 0;
+    $('dbat').style.display = e ? '' : 'none'; if (e) $('dbat').textContent = 'Wracamy o ' + fmt.format(new Date(e));
+  }
   const start = k.kind === 'start', brb = k.kind === 'brb' || start;
   $('bkt').textContent = k.title || (start ? 'Zaraz zaczynamy' : brb ? 'Zaraz wracamy' : 'Przerwa');
   $('bks').textContent = k.subtitle ? k.subtitle : (start ? 'Już za chwilę startujemy' : brb ? 'Nie odchodź od ekranu' : 'Wrócimy za chwilę');
@@ -744,8 +878,9 @@ function brkTick(){
     $('bkdig').textContent = (h ? h + ':' : '') + p2(m) + ':' + p2(s % 60); $('bkdig').style.fontSize = h ? '120px' : '';
     $('bkarc').style.strokeDashoffset = 1602.2 * (1 - Math.max(0, Math.min(1, rem / brkTotal)));
     $('bklab').textContent = s ? 'odliczanie do godziny ' + fmt.format(new Date(end)) : 'już za chwilę';
-    $('brk').classList.toggle('zero', !s);
+    $('brk').classList.toggle('zero', !s); $('dbcd').textContent = s ? (h ? h + ':' : '') + p2(m) + ':' + p2(s % 60) : '';
   } else {
+    $('dbcd').textContent = '';
     $('bkdig').textContent = fmt.format(new Date()); $('bkdig').style.fontSize = '130px';
     $('bkarc').style.strokeDashoffset = 0; $('bklab').textContent = 'aktualny czas'; $('brk').classList.remove('zero');
   }
@@ -754,6 +889,83 @@ function brkTick(){
 }
 setInterval(brkTick, 250);
 document.addEventListener('pointerdown', () => { bmSig = ''; });
+
+
+/* ---------- ODLICZANIE: kula nad QR, tykanie w ostatnich 5 s, gong na zerze (dźwięki syntezowane, bez plików) ---------- */
+let tmCfg = null, tmEnd = 0, tmLast = null, tmGong = 0, tmCtx = null;
+function tmAudio(){
+  try {
+    if (!tmCtx) tmCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (tmCtx.state === 'suspended') tmCtx.resume().catch(() => {});
+  } catch (e) { return null; }
+  return tmCtx;
+}
+['pointerdown', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, tmAudio));
+function tmNoise(c, dur){
+  const b = c.createBuffer(1, Math.max(1, Math.floor(c.sampleRate * dur)), c.sampleRate), d = b.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  const s = c.createBufferSource(); s.buffer = b; return s;
+}
+function tmTickSnd(vol, alt){
+  const c = tmAudio(); if (!c || vol <= 0) return; const t = c.currentTime;
+  const out = c.createGain(); out.gain.value = vol; out.connect(c.destination);
+  const n = tmNoise(c, .05), bp = c.createBiquadFilter(), ng = c.createGain();
+  bp.type = 'bandpass'; bp.frequency.value = alt ? 3300 : 2500; bp.Q.value = 5;
+  ng.gain.setValueAtTime(1.1, t); ng.gain.exponentialRampToValueAtTime(.001, t + .04);
+  n.connect(bp); bp.connect(ng); ng.connect(out); n.start(t); n.stop(t + .05);
+  const o = c.createOscillator(), og = c.createGain(); o.type = 'sine'; o.frequency.value = alt ? 1900 : 1450;
+  og.gain.setValueAtTime(.35, t); og.gain.exponentialRampToValueAtTime(.001, t + .06);
+  o.connect(og); og.connect(out); o.start(t); o.stop(t + .07);
+}
+function tmGongSnd(vol){
+  const c = tmAudio(); if (!c || vol <= 0) return; const t = c.currentTime;
+  const comp = c.createDynamicsCompressor(), master = c.createGain(); master.gain.value = vol * .9; master.connect(comp); comp.connect(c.destination);
+  const f0 = 96, parts = [[1, 1, 7], [1.47, .75, 6], [2.02, .6, 5.2], [2.5, .5, 4.2], [3.2, .38, 3.4], [4.1, .28, 2.6], [5.6, .16, 1.8], [7.3, .09, 1.2]];
+  const lfo = c.createOscillator(), lg = c.createGain(); lfo.frequency.value = 5.2; lg.gain.value = .12; lfo.connect(lg); lg.connect(master.gain); lfo.start(t); lfo.stop(t + 8);
+  parts.forEach(([r, a, dec]) => [1, 1.0045].forEach((det, k) => {
+    const o = c.createOscillator(), g = c.createGain(); o.type = 'sine';
+    o.frequency.setValueAtTime(f0 * r * det * 1.02, t); o.frequency.exponentialRampToValueAtTime(f0 * r * det, t + .6);
+    g.gain.setValueAtTime(a * .2 / (k + 1), t); g.gain.exponentialRampToValueAtTime(.0001, t + dec);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + dec + .1);
+  }));
+  const n = tmNoise(c, .4), lp = c.createBiquadFilter(), ng = c.createGain();
+  lp.type = 'lowpass'; lp.frequency.value = 3400; ng.gain.setValueAtTime(.55, t); ng.gain.exponentialRampToValueAtTime(.001, t + .35);
+  n.connect(lp); lp.connect(ng); ng.connect(master); n.start(t); n.stop(t + .4);
+}
+function tmFmt(s){
+  const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), p2 = n => String(n).padStart(2, '0');
+  return (h ? h + ':' : '') + p2(m) + ':' + p2(s % 60);
+}
+function updTq(){
+  const qrOn = !$('qrwrap').classList.contains('off') && !$('fqrbox').classList.contains('hide');
+  sv('scene', '--tq', qrOn ? ($('qrwrap').offsetHeight + 14) + 'px' : '0px');
+}
+function tmTick(){
+  const c = tmCfg, ball = $('tmball');
+  if (!c) { setVis('tmwrap', false); return; }
+  const end = c.endsAt ? Date.parse(c.endsAt) : 0, now = Date.now() + skew;
+  const rem = end ? (end - now) / 1000 : (+c.seconds || 0), secs = Math.max(0, Math.ceil(rem));
+  const late = !!(end && rem < 0 && +c.hideAfter > 0 && -rem >= +c.hideAfter);
+  const show = !!c.visible && !late;
+  setVis('tmwrap', show);
+  const txt = tmFmt(secs); if ($('tmtxt').textContent !== txt) $('tmtxt').textContent = txt;
+  ball.classList.toggle('big', secs >= 3600);
+  if (end !== tmEnd) { tmEnd = end; tmLast = null; }
+  if (!end || !show) { tmLast = null; return; }
+  const vol = (c.sound === false ? 0 : (+c.volume || 0)) / 100;
+  if (secs !== tmLast) {
+    if (secs >= 1 && secs <= 5) {
+      tmTickSnd(vol, secs % 2);
+      ball.classList.remove('pulse'); void ball.offsetWidth; ball.classList.add('pulse');
+    }
+    tmLast = secs;
+  }
+  if (rem <= 0 && tmGong !== end) {
+    tmGong = end;
+    if (rem > -4) { tmGongSnd(vol); ball.classList.remove('zero'); void ball.offsetWidth; ball.classList.add('zero'); }
+  }
+}
+setInterval(tmTick, 100);
 
 /* ---------- odpytywanie stanu co 2 s ---------- */
 let barSig = '', lastSeq = null;
@@ -780,7 +992,7 @@ function updFundLift(){
 }
 function setFlH(on){ const h = on ? 62 : 0, ch = h !== flH; flH = h; if (ch) { $('scene').style.setProperty('--fh', h + 'px'); try { fitPoll(); if (mapOn) fitMap(); } catch (e) {} } updFundLift(); }
 function setVis(id, on){ $(id).classList.toggle('off', !on); }
-function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('ltwrap', false); setVis('flashwrap', false); setFlH(false); setVis('pollwrap', false); setVis('mapwrap', false); mapOn = false; setAge(AGE_URL || 0); renderBreak(null); }
+function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('tmwrap', false); tmCfg = null; setVis('ltwrap', false); setVis('flashwrap', false); setFlH(false); setVis('pollwrap', false); setVis('mapwrap', false); mapOn = false; setAge(AGE_URL || 0); renderBreak(null); }
 
 /* ---------- QR: działa niezależnie od zbiórki (s.qr.visible) ---------- */
 let fund = null, qrOk = false, qrCfg = {visible: false}, fundSig = '';
@@ -793,6 +1005,7 @@ function showQr(){
   $('fqrbox').classList.toggle('hide', !on);
   $('fqrcap').textContent = (qrCfg && qrCfg.caption) || 'WESPRZYJ NAS!';
   $('scene').style.setProperty('--lx', on ? '169px' : '0px'); // plansza rozmówcy omija QR
+  try { updTq(); } catch (e) {}
 }
 
 /* ---------- zbiórka: teksty z panelu, dopasowane do szerokości karty ---------- */
@@ -846,7 +1059,9 @@ function fitPoll(){
   const top = ageShown ? 129 : 43;
   const qrOn = !$('qrwrap').classList.contains('off') && !$('fqrbox').classList.contains('hide');
   const ltOn = !$('ltwrap').classList.contains('off');
-  const extra = Math.max(qrOn ? $('qrwrap').offsetHeight : 0, ltOn ? $('ltwrap').offsetHeight : 0);
+  const tmOn = !$('tmwrap').classList.contains('off');
+  const stack = (qrOn ? $('qrwrap').offsetHeight : 0) + (tmOn ? (qrOn ? 14 : 0) + $('tmwrap').offsetHeight : 0);
+  const extra = Math.max(stack, ltOn ? $('ltwrap').offsetHeight : 0);
   const reserve = barMb + barBh + flH + (extra ? 14 + extra : 0) + 14;
   const k = Math.max(.5, Math.min(1, (1080 - top - reserve) / h));
   const tf = k < 1 ? 'scale(' + k.toFixed(3) + ')' : ''; if (tf !== box._tf) { box._tf = tf; box.style.transform = tf; }
@@ -866,7 +1081,9 @@ function fitLabel(){
   }
 }
 
-let barHide = false;
+let barHide = false, barCol = false;
+function updFbh(ltOn){ sv('scene', '--fbh', barCol ? '0px' : (ltOn && barHide ? '57px' : '')); }
+let ltOnNow = false;
 /* pauza obrazu z gry: stan z serwera (co 2 s) + natychmiastowy sygnał z panelu przez LiveKit; po sygnale ignorujemy serwer 5 s, żeby nie migało */
 let pausedNow = false, pauseLock = 0;
 function setPause(on, fromData){
@@ -886,12 +1103,15 @@ function apply(s){
   try {
     const b = s.bar, sig = JSON.stringify([b.line1, b.line2, b.news, b.speed]);
     const sc = $('scene');
-    barMb = +b.marginBottom || 0; barBh = !b.visible ? 0 : b.hideHead ? 57 : 214;
+    barMb = +b.marginBottom || 0; barBh = !b.visible ? 0 : (b.hideHead && !b.collapsed) ? 57 : 214;
     sv('scene', '--ox', b.offsetX + 'px'); sv('scene', '--mb', b.marginBottom + 'px');
     sv('scene', '--bh', barBh + 'px');
     $('barwrap').classList.toggle('nohead', !!b.hideHead);
     if (lastNohead !== !!b.hideHead) { lastNohead = !!b.hideHead; if (!b.hideHead) fitHead(); }
-    barHide = !!(b.visible && b.hideHead);
+    barCol = !!(b.visible && b.collapsed); barHide = !!(b.visible && b.hideHead && !barCol);
+    $('scene').classList.toggle('baron', !!b.visible); $('barwrap').classList.toggle('col', barCol); $('scene').classList.toggle('col', barCol);
+    $('barwrap').classList.toggle('nohead', !!b.hideHead && !barCol);
+    updFbh(ltOnNow);
     if (sig !== barSig) { barSig = sig; renderBar(b); }
     setVis('barwrap', !!b.visible);
   } catch (e) { console.error('pasek', e); }
@@ -920,6 +1140,8 @@ function apply(s){
     showQr();
   } catch (e) { console.error('qr', e); }
 
+  try { tmCfg = s.timer || null; tmTick(); updTq(); } catch (e) { console.error('odliczanie', e); }
+
   try { const a = s.age; setAge(AGE_URL || (a && a.visible ? a.rating : 0)); } catch (e) { console.error('wiek', e); }
 
   try { renderBreak(s.break_screen); } catch (e) { console.error('przerwa', e); }
@@ -933,12 +1155,12 @@ function apply(s){
       const on = !!l.visible;
       if (on && !ltPrev) {
         ltForceOff = false; clearTimeout(ltT);
-        if (+l.hideAfter > 0) ltT = setTimeout(() => { ltForceOff = true; setVis('ltwrap', false); fitPoll(); }, l.hideAfter * 1000);
+        if (+l.hideAfter > 0) ltT = setTimeout(() => { ltForceOff = true; ltOnNow = false; updFbh(false); setVis('ltwrap', false); fitPoll(); }, l.hideAfter * 1000);
       }
       if (!on) { clearTimeout(ltT); ltForceOff = false; }
       ltPrev = on;
-      setVis('ltwrap', on && !ltForceOff); sv('scene', '--fbh', on && !ltForceOff && barHide ? '57px' : '');
-    } else { ltPrev = false; setVis('ltwrap', false); sv('scene', '--fbh', ''); }
+      setVis('ltwrap', on && !ltForceOff); ltOnNow = on && !ltForceOff; updFbh(ltOnNow);
+    } else { ltPrev = false; setVis('ltwrap', false); ltOnNow = false; updFbh(false); }
   } catch (e) { console.error('plansza', e); }
 
 
@@ -988,7 +1210,7 @@ function apply(s){
   try { fitPoll(); } catch (e) { console.error('dopasowanie ankiety', e); }
 }
 async function poll(){
-  if (DEMO) { if (!brk) renderBreak({visible: true, kind: DEMO === 'brb' ? 'brb' : 'break', endsAt: new Date(Date.now() + 300000).toISOString(), footer: 'jeden.tv'}); return; }
+  if (DEMO) { if (!brk) renderBreak({visible: true, kind: DEMO === 'brb' ? 'brb' : DEMO === 'debate' ? 'debate' : 'break', endsAt: new Date(Date.now() + 300000).toISOString(), footer: 'jeden.tv'}); return; }
   if (!KEY) { clearAll(); return; }
   try {
     const r = await fetch('/api/state?key=' + encodeURIComponent(KEY), {cache: 'no-store'});

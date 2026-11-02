@@ -144,7 +144,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <button class="b2" id="capSwap">⇄ Zamień monitory</button>
     <button class="b2" id="stPause" title="Zatrzymuje obraz z gry w streamie (przenikanie do czerni, dźwięk gry cichnie – mikrofon i Discord zostają). WZNÓW wraca do gry NA ŻYWO. Skrót: P">⏸ ZATRZYMAJ</button>
     <button class="b2" id="capFs" title="Otwiera osobne okno z PGM albo PVW – to okno udostępniasz na Discordzie">⛶ Pełny ekran (okno na Discorda)</button>
-    <span class="hint" id="capMsg">Skróty: 1–8 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)</span>
+    <span class="hint" id="capMsg">Skróty: 1–9 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)</span>
   </div>
 
   <div class="chips" id="chips"><div style="grid-column:1/-1;color:var(--mut);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase">Na antenie – kliknij lub użyj klawiszy</div></div>
@@ -165,6 +165,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
   <!-- PASEK -->
   <div class="tab on box" id="tBar" data-sec="bar">
     <label class="chk"><input type="checkbox" id="barVis">Pasek widoczny</label>
+    <label class="chk"><input type="checkbox" id="barCollapse">Zwiń wszystkie paski (zostaje tylko logo i godzina; zbiórka, PILNE i plansza rozmówcy obniżają się)</label>
     <label class="chk"><input type="checkbox" id="barHead">Ukryj czerwony pasek tytułu (zbiórka schodzi na poziom paska z newsami)</label>
     <label for="l1">Linia 1 nagłówka</label><input type="text" id="l1" maxlength="200">
     <label for="l2">Linia 2 nagłówka</label><input type="text" id="l2" maxlength="200">
@@ -258,6 +259,25 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       <label class="chk"><input type="checkbox" id="qrVis">Kod QR widoczny</label>
       <div class="hint">Działa niezależnie od zbiórki. Plansza rozmówcy sama przesuwa się obok QR.</div>
       <button class="b1" id="qrSave">Zapisz</button><div class="msg" id="qrMsg"></div>
+    </div>
+
+    <div class="sub" data-sec="timer">
+      <h3>Odliczanie (kula nad kodem QR)</h3>
+      <div class="grid2">
+        <div><label for="tmMin">Minuty</label><input type="number" id="tmMin" min="0" max="1440" step="1"></div>
+        <div><label for="tmSec">Sekundy</label><input type="number" id="tmSec" min="0" max="59" step="1"></div>
+      </div>
+      <div class="grid2">
+        <div><label for="tmVol">Głośność dźwięków (0–100)</label><input type="number" id="tmVol" min="0" max="100" step="1"></div>
+        <div><label for="tmHide">Ukryj po tylu sekundach od zera (0 = zostaje)</label><input type="number" id="tmHide" min="0" max="3600" step="1"></div>
+      </div>
+      <label class="chk"><input type="checkbox" id="tmSnd">Dźwięki: tykanie w ostatnich 5 s i gong na zerze</label>
+      <div class="hint">START odpala odliczanie od ustawionego czasu i pokazuje kulę. RESET zatrzymuje i pokazuje pełny czas. UKRYJ zdejmuje kulę z anteny. Kula stoi nad kodem QR (a bez QR – tuż nad paskiem).</div>
+      <button class="b1" id="tmStart">▶ START</button>
+      <button class="b2" id="tmReset">↺ RESET</button>
+      <button class="b3" id="tmHideBtn">■ UKRYJ</button>
+      <div class="msg" id="tmMsg"></div>
+      <div style="margin-top:8px">Teraz: <b id="tmNow">—</b></div>
     </div>
 
     <div class="sub" data-sec="age">
@@ -373,7 +393,8 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
   <div class="tab box" id="tBrk" data-sec="break_screen">
     <h3>Przerwa / Zaraz wracamy</h3>
     <label for="bkKind">Rodzaj planszy</label>
-    <select id="bkKind" style="max-width:260px"><option value="break">Przerwa</option><option value="brb">Zaraz wracamy</option><option value="start">Zaraz zaczynamy</option></select>
+    <select id="bkKind" style="max-width:260px"><option value="break">Przerwa</option><option value="brb">Zaraz wracamy</option><option value="start">Zaraz zaczynamy</option><option value="debate">Debata prezydencka (flaga)</option></select>
+    <div class="hint">Dla „Debata prezydencka”: Tytuł = górny napis (domyślnie DEBATA), Podtytuł = dolny napis (domyślnie PREZYDENCKA).</div>
     <label for="bkTitle">Tytuł (puste = domyślny)</label><input type="text" id="bkTitle" maxlength="60">
     <label for="bkSub">Podtytuł (puste = domyślny)</label><input type="text" id="bkSub" maxlength="120">
     <label for="bkFoot">Stopka</label><input type="text" id="bkFoot" maxlength="80">
@@ -436,7 +457,7 @@ const $ = id => document.getElementById(id);
 let cfg = null, skew = 0;
 
 /* przyciski akcji (Zapisz / Pokaż / Ukryj + komunikat) zawsze na górze sekcji */
-['barSave','stSave','flSave','pSave','mpSave','fSave','lbSave','qrSave','ageSave','ltSave','bkShow','adSave'].forEach(id => {
+['barSave','stSave','flSave','pSave','mpSave','fSave','lbSave','qrSave','tmStart','ageSave','ltSave','bkShow','adSave'].forEach(id => {
   const first = $(id); if (!first) return;
   const box = first.closest('.sub') || first.closest('.tab'); if (!box) return;
   const bar = document.createElement('div'); bar.className = 'actbar';
@@ -474,7 +495,7 @@ async function start(){
   let r; try { r = await api('/api/config'); } catch (e) { return; }
   cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); $('dbWarn').hidden = !!r.persistent;
   $('login').hidden = true; $('app').hidden = false;
-  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillAge(); fillLt(); fillFlash(); fillStream(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
+  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillTimer(); fillAge(); fillLt(); fillFlash(); fillStream(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
 }
 
 /* ---------- zakładki ---------- */
@@ -502,7 +523,7 @@ function newsRow(v){
 }
 function fillBar(){
   const b = cfg.bar;
-  $('barVis').checked = b.visible; $('barHead').checked = !!b.hideHead; $('l1').value = b.line1; $('l2').value = b.line2;
+  $('barVis').checked = b.visible; $('barHead').checked = !!b.hideHead; $('barCollapse').checked = !!b.collapsed; $('l1').value = b.line1; $('l2').value = b.line2;
   $('sp').value = b.speed; $('mr').value = b.offsetX; $('mb').value = b.marginBottom;
   $('newsList').innerHTML = ''; b.news.forEach(newsRow);
 }
@@ -512,7 +533,7 @@ async function save(section, data, msgId, auto){
   catch (e) { say(msgId, e.message, false); return false; }
 }
 $('barSave').onclick = () => save('bar', {
-  visible: $('barVis').checked, hideHead: $('barHead').checked, line1: $('l1').value, line2: $('l2').value,
+  visible: $('barVis').checked, hideHead: $('barHead').checked, collapsed: $('barCollapse').checked, line1: $('l1').value, line2: $('l2').value,
   news: [...document.querySelectorAll('#newsList input')].map(i => i.value.trim()).filter(Boolean),
   speed: num($('sp').value), offsetX: num($('mr').value), marginBottom: num($('mb').value)
 }, 'barMsg');
@@ -570,6 +591,27 @@ $('lbSave').onclick = () => save('live_badge', {visible: $('lbVis').checked, tex
 
 /* ---------- widżety: kod QR ---------- */
 function fillQr(){ $('qrVis').checked = cfg.qr.visible; }
+
+/* ---------- widżety: odliczanie ---------- */
+function fillTimer(){
+  const t = cfg.timer, s = +t.seconds || 0;
+  $('tmMin').value = Math.floor(s / 60); $('tmSec').value = s % 60;
+  $('tmSnd').checked = t.sound !== false; $('tmVol').value = t.volume; $('tmHide').value = t.hideAfter;
+}
+function tmData(extra){
+  const m = num($('tmMin').value), s = num($('tmSec').value);
+  return Object.assign({visible: true, seconds: Math.round((isNaN(m) ? 0 : m) * 60 + (isNaN(s) ? 0 : s)), endsAt: cfg.timer.endsAt || '',
+    sound: $('tmSnd').checked, volume: num($('tmVol').value), hideAfter: num($('tmHide').value)}, extra || {});
+}
+$('tmStart').onclick = async () => { if (await save('timer', tmData({endsAt: new Date(Date.now() + skew).toISOString()}), 'tmMsg')) fillTimer(); };
+$('tmReset').onclick = async () => { if (await save('timer', tmData({endsAt: ''}), 'tmMsg')) fillTimer(); };
+$('tmHideBtn').onclick = async () => { if (await save('timer', tmData({visible: false, endsAt: ''}), 'tmMsg')) fillTimer(); };
+setInterval(() => {
+  if (!cfg || !cfg.timer) return; const t = cfg.timer, e = $('tmNow'); if (!e) return;
+  const end = t.endsAt ? Date.parse(t.endsAt) : 0, p2 = n => String(n).padStart(2, '0');
+  const rem = end ? Math.max(0, Math.ceil((end - (Date.now() + skew)) / 1000)) : (+t.seconds || 0);
+  e.textContent = (t.visible ? 'NA ANTENIE · ' : 'ukryte · ') + (end ? (rem ? 'leci ' : 'koniec ') : 'stoi ') + (rem >= 3600 ? Math.floor(rem / 3600) + ':' : '') + p2(Math.floor(rem % 3600 / 60)) + ':' + p2(rem % 60);
+}, 500);
 $('qrSave').onclick = () => save('qr', {visible: $('qrVis').checked}, 'qrMsg');
 
 /* ---------- widżety: ograniczenie wiekowe ---------- */
@@ -1051,9 +1093,9 @@ async function scanAds(){
 $('adScan').onclick = scanAds;
 
 /* ---------- żywa synchronizacja z innymi osobami ---------- */
-const FILL = {bar: fillBar, poll: fillPoll, map: fillMap, fund: fillFund, live_badge: fillBadge, qr: fillQr, age: fillAge, lower_third: fillLt, flash: fillFlash, stream: fillStream, break_screen: fillBrk, ads: fillAds};
-const MSG = {bar: 'barMsg', poll: 'pMsg', map: 'mpMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', age: 'ageMsg', lower_third: 'ltMsg', flash: 'flMsg', stream: 'stMsg', break_screen: 'bkMsg', ads: 'adMsg'};
-const NAME = {bar: 'Pasek', map: 'Mapa', fund: 'Zbiórka', live_badge: 'Na żywo', qr: 'QR', age: 'Wiek', lower_third: 'Rozmówca', flash: 'Pilne'};
+const FILL = {bar: fillBar, poll: fillPoll, map: fillMap, fund: fillFund, live_badge: fillBadge, qr: fillQr, timer: fillTimer, age: fillAge, lower_third: fillLt, flash: fillFlash, stream: fillStream, break_screen: fillBrk, ads: fillAds};
+const MSG = {bar: 'barMsg', poll: 'pMsg', map: 'mpMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', timer: 'tmMsg', age: 'ageMsg', lower_third: 'ltMsg', flash: 'flMsg', stream: 'stMsg', break_screen: 'bkMsg', ads: 'adMsg'};
+const NAME = {bar: 'Pasek', map: 'Mapa', fund: 'Zbiórka', live_badge: 'Na żywo', qr: 'QR', age: 'Wiek', lower_third: 'Rozmówca', flash: 'Pilne', timer: 'Odliczanie'};
 const dirty = {};
 const markDirty = e => { const t = e.target.closest && e.target.closest('[data-sec]'); if (t) dirty[t.dataset.sec] = true; };
 document.addEventListener('input', markDirty);
@@ -1151,7 +1193,7 @@ function capStop(){
   if (capStream) { capStream.getTracks().forEach(t => { t.onended = null; t.stop(); }); capStream = null; }
   ['capA', 'capB'].forEach(id => { $(id).srcObject = null; });
   $('prevWrap').classList.remove('live'); $('capWrap').classList.remove('live'); $('capStop').disabled = true;
-  capSay('Skróty: 1–8 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)', false);
+  capSay('Skróty: 1–9 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)', false);
 }
 $('capStart').onclick = capStart; $('capPh').onclick = capStart; $('capStop').onclick = capStop;
 $('monOv').onchange = () => $('prevWrap').classList.toggle('noov', !$('monOv').checked);
