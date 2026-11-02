@@ -28,5 +28,7 @@ export default async function handler(req, res) {
       ads_cmd: cfg.ads_cmd,
       game_pause: cfg.game_pause,
     });
-  } catch (e) { fail(res, e); }
+  } catch (e) {
+    fail(res, e);
+  }
 }

@@ -26,10 +26,25 @@ export const DEFAULTS = {
     visible: false,
     label: 'TERAZ',
     text: '',
-    list: ['Wystąpienia otwierające | 2:00', 'Pytania wzajemne | 5:00', 'Gospodarka | 5:00', 'Polityka zagraniczna | 5:00', 'Wystąpienia końcowe | 2:00'],
+    list: [
+      'Wystąpienia otwierające | 2:00',
+      'Pytania wzajemne | 5:00',
+      'Gospodarka | 5:00',
+      'Polityka zagraniczna | 5:00',
+      'Wystąpienia końcowe | 2:00',
+    ],
   },
   timer: { visible: false, seconds: 60, endsAt: '', sound: true, volume: 80, hideAfter: 0 },
-  stream: { twitchOn: true, twitchUrl: 'rtmp://live.twitch.tv/app', twitchKey: '', tiktokOn: false, tiktokUrl: '', tiktokKey: '', fps: 60, bitrate: 8000 },
+  stream: {
+    twitchOn: true,
+    twitchUrl: 'rtmp://live.twitch.tv/app',
+    twitchKey: '',
+    tiktokOn: false,
+    tiktokUrl: '',
+    tiktokKey: '',
+    fps: 60,
+    bitrate: 8000,
+  },
   stream_state: { egressId: '', startedAt: '', operator: '' },
   game_pause: { paused: false, at: new Date(0).toISOString() },
   flash: { visible: false, label: 'PILNE', text: '', top: 125, hideAfter: 0 },
@@ -114,6 +129,7 @@ export const DEFAULTS = {
 
 /* ---------- walidacja (zod) ---------- */
 const txt = (max) => z.string().max(max);
+
 export const SCHEMAS = {
   bar: z.object({
     visible: z.boolean(),
@@ -154,13 +170,26 @@ export const SCHEMAS = {
   }),
   stream: z.object({
     twitchOn: z.boolean(),
-    twitchUrl: z.string().trim().max(300).refine((u) => u === '' || /^rtmps?:\/\//i.test(u), 'Adres serwera Twitcha musi zaczynać się od rtmp:// lub rtmps://'),
+    twitchUrl: z
+      .string()
+      .trim()
+      .max(300)
+      .refine((u) => u === '' || /^rtmps?:\/\//i.test(u), 'Adres serwera Twitcha musi zaczynać się od rtmp:// lub rtmps://'),
     twitchKey: z.string().trim().max(300),
     tiktokOn: z.boolean(),
-    tiktokUrl: z.string().trim().max(300).refine((u) => u === '' || /^rtmps?:\/\//i.test(u), 'Adres serwera TikToka musi zaczynać się od rtmp:// lub rtmps://'),
+    tiktokUrl: z
+      .string()
+      .trim()
+      .max(300)
+      .refine((u) => u === '' || /^rtmps?:\/\//i.test(u), 'Adres serwera TikToka musi zaczynać się od rtmp:// lub rtmps://'),
     tiktokKey: z.string().trim().max(300),
     fps: z.number().refine((n) => n === 30 || n === 60, 'Klatki: 30 lub 60'),
-    bitrate: z.number().int().min(2500, 'Bitrate min. 2500 kb/s').max(12000, 'Bitrate max. 12000 kb/s').default(8000),
+    bitrate: z
+      .number()
+      .int()
+      .min(2500, 'Bitrate min. 2500 kb/s')
+      .max(12000, 'Bitrate max. 12000 kb/s')
+      .default(8000),
   }),
   qr: z.object({
     visible: z.boolean(),
@@ -179,11 +208,21 @@ export const SCHEMAS = {
   }),
   timer: z.object({
     visible: z.boolean(),
-    seconds: z.number({ invalid_type_error: 'Podaj czas odliczania' }).int('Czas w pełnych sekundach').min(1, 'Czas min. 1 sekunda').max(86400, 'Czas max. 24 godziny'),
+    seconds: z
+      .number({ invalid_type_error: 'Podaj czas odliczania' })
+      .int('Czas w pełnych sekundach')
+      .min(1, 'Czas min. 1 sekunda')
+      .max(86400, 'Czas max. 24 godziny'),
     endsAt: z.string().max(40),
     sound: z.boolean(),
-    volume: z.number({ invalid_type_error: 'Podaj głośność' }).min(0, 'Głośność min. 0').max(100, 'Głośność max. 100'),
-    hideAfter: z.number({ invalid_type_error: 'Podaj sekundy' }).min(0, 'Sekundy min. 0').max(3600, 'Sekundy max. 3600'),
+    volume: z
+      .number({ invalid_type_error: 'Podaj głośność' })
+      .min(0, 'Głośność min. 0')
+      .max(100, 'Głośność max. 100'),
+    hideAfter: z
+      .number({ invalid_type_error: 'Podaj sekundy' })
+      .min(0, 'Sekundy min. 0')
+      .max(3600, 'Sekundy max. 3600'),
   }),
   age: z.object({
     visible: z.boolean(),
@@ -195,7 +234,12 @@ export const SCHEMAS = {
     role: z.string().trim().max(120),
     hideAfter: z.number().min(0, 'Sekundy min. 0').max(3600, 'Sekundy max. 3600'),
     guests: z
-      .array(z.object({ name: z.string().trim().min(1, 'Gość bez nazwy').max(80), role: z.string().trim().max(120) }))
+      .array(
+        z.object({
+          name: z.string().trim().min(1, 'Gość bez nazwy').max(80),
+          role: z.string().trim().max(120),
+        }),
+      )
       .max(40, 'Maks. 40 gości na liście'),
   }),
   map: z
@@ -214,7 +258,10 @@ export const SCHEMAS = {
             id: z.string().regex(/^[a-z0-9]{1,12}$/, 'Zły identyfikator partii'),
             name: z.string().trim().min(1, 'Partia bez nazwy').max(40),
             color: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Zły kolor'),
-            value: z.number({ invalid_type_error: 'Wynik partii musi być liczbą' }).min(0, 'Wynik min. 0').max(1000, 'Wynik max. 1000'),
+            value: z
+              .number({ invalid_type_error: 'Wynik partii musi być liczbą' })
+              .min(0, 'Wynik min. 0')
+              .max(1000, 'Wynik max. 1000'),
           }),
         )
         .min(1, 'Dodaj co najmniej jedną partię')
@@ -228,7 +275,10 @@ export const SCHEMAS = {
             x: z.number({ invalid_type_error: 'Pozycja X musi być liczbą' }).int().min(0, 'X min. 0').max(14, 'X max. 14'),
             y: z.number({ invalid_type_error: 'Pozycja Y musi być liczbą' }).int().min(0, 'Y min. 0').max(9, 'Y max. 9'),
             party: z.string().max(12),
-            pct: z.number({ invalid_type_error: '% regionu musi być liczbą' }).min(0, '% min. 0').max(100, '% max. 100'),
+            pct: z
+              .number({ invalid_type_error: '% regionu musi być liczbą' })
+              .min(0, '% min. 0')
+              .max(100, '% max. 100'),
           }),
         )
         .min(1, 'Dodaj co najmniej jeden region')
@@ -238,7 +288,8 @@ export const SCHEMAS = {
       const dup = (arr, f) => new Set(arr.map(f)).size !== arr.length;
       if (dup(m.parties, (p) => p.id)) ctx.addIssue({ code: 'custom', message: 'Powtórzony identyfikator partii' });
       if (dup(m.regions, (r) => r.id)) ctx.addIssue({ code: 'custom', message: 'Powtórzony identyfikator regionu' });
-      if (dup(m.regions, (r) => r.x + ',' + r.y)) ctx.addIssue({ code: 'custom', message: 'Dwa regiony stoją na tym samym polu siatki (X, Y)' });
+      if (dup(m.regions, (r) => r.x + ',' + r.y))
+        ctx.addIssue({ code: 'custom', message: 'Dwa regiony stoją na tym samym polu siatki (X, Y)' });
     }),
   break_screen: z.object({
     visible: z.boolean(),
@@ -282,35 +333,53 @@ const mem = (globalThis.__jedenMem ||= {});
 export async function redis(cmd) {
   const r = await fetch(DB_URL(), {
     method: 'POST',
-    headers: { Authorization: `Bearer ${DB_TOKEN()}`, 'Content-Type': 'application/json' },
+    headers: {
+      Authorization: `Bearer ${DB_TOKEN()}`,
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(cmd),
   });
   const j = await r.json().catch(() => ({}));
   if (!r.ok || j.error) throw new Error('Błąd bazy danych');
   return j.result;
 }
+
 export async function redisPipeline(cmds) {
   const r = await fetch(DB_URL().replace(/\/$/, '') + '/pipeline', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${DB_TOKEN()}`, 'Content-Type': 'application/json' },
+    headers: {
+      Authorization: `Bearer ${DB_TOKEN()}`,
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(cmds),
   });
   const j = await r.json().catch(() => null);
   if (!r.ok || !Array.isArray(j)) throw new Error('Błąd bazy danych');
-  return j.map((x) => { if (x.error) throw new Error('Błąd bazy danych'); return x.result; });
+  return j.map((x) => {
+    if (x.error) throw new Error('Błąd bazy danych');
+    return x.result;
+  });
 }
+
 async function dbGet() {
   if (!DB_URL()) return mem[DB_KEY] ? JSON.parse(mem[DB_KEY]) : null;
   const v = await redis(['GET', DB_KEY]);
   return v ? JSON.parse(v) : null;
 }
+
 export const persistent = () => !!DB_URL();
+
 async function dbSet(obj) {
   const s = JSON.stringify(obj);
   if (!DB_URL()) {
     // na Vercelu pamięć funkcji nie jest współdzielona – lepiej zgłosić błąd niż zapisywać „w próżnię”
-    if (process.env.VERCEL) throw new Error('Brak bazy danych: w Vercel → Storage podłącz Upstash Redis do projektu i zrób Redeploy');
-    mem[DB_KEY] = s; return;
+    if (process.env.VERCEL) {
+      throw new Error(
+        'Brak bazy danych: w Vercel → Storage podłącz Upstash Redis do projektu i zrób Redeploy',
+      );
+    }
+    mem[DB_KEY] = s;
+    return;
   }
   await redis(['SET', DB_KEY, s]);
 }
@@ -321,7 +390,9 @@ export function adminPassword() {
   if (!p) throw new Error('Brak zmiennej ADMIN_PASSWORD na serwerze');
   return p;
 }
+
 const hmac = (label) => crypto.createHmac('sha256', adminPassword()).update(label).digest('hex');
+
 // domyślny klucz jest wyliczany z hasła, więc link działa nawet zanim ktokolwiek go wygeneruje
 const derivedKey = () => hmac('overlay-key').slice(0, 32);
 
@@ -333,6 +404,7 @@ export async function readConfig() {
   if (s.stream && s.stream.bitrate === undefined) cfg.stream.fps = 60;
   return cfg;
 }
+
 export async function writeConfig(cfg) {
   cfg.rev = (Number(cfg.rev) || 0) + 1; // numer wersji – panele po nim wykrywają zmiany wprowadzone przez innych
   await dbSet(cfg);
@@ -360,6 +432,7 @@ export function makeSessionCookie(req) {
   const secure = req.headers['x-forwarded-proto'] === 'https' ? '; Secure' : '';
   return `${COOKIE}=${val}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${SESSION_MS / 1000}${secure}`;
 }
+
 export const clearSessionCookie = () => `${COOKIE}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0`;
 
 function getCookie(req, name) {
@@ -369,6 +442,7 @@ function getCookie(req, name) {
   }
   return null;
 }
+
 export function isAdmin(req) {
   try {
     const c = getCookie(req, COOKIE);
@@ -376,8 +450,11 @@ export function isAdmin(req) {
     const [exp, sig] = c.split('.');
     if (!exp || !sig || !(Number(exp) > Date.now())) return false;
     return safeEqual(sig, hmac('session.' + exp));
-  } catch { return false; }
+  } catch {
+    return false;
+  }
 }
+
 export function requireAdmin(req, res) {
   if (isAdmin(req)) return true;
   res.status(401).json({ error: 'Brak dostępu' });
@@ -390,9 +467,11 @@ export function method(req, res, m) {
   res.status(405).json({ error: 'Metoda niedozwolona' });
   return false;
 }
+
 export function fail(res, e) {
-  const msg = e instanceof z.ZodError
-    ? e.issues.map((i) => i.message).join('; ')
-    : (e && e.message) || 'Błąd serwera';
+  const msg =
+    e instanceof z.ZodError
+      ? e.issues.map((i) => i.message).join('; ')
+      : (e && e.message) || 'Błąd serwera';
   res.status(e instanceof z.ZodError ? 400 : 500).json({ error: msg, err: msg });
 }
