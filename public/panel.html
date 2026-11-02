@@ -158,6 +158,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <button data-t="tFlash">🚨 Pilne</button>
     <button data-t="tStream">📡 Stream</button>
     <button data-t="tBrk">⏸ Przerwa</button>
+    <button data-t="tDeb">🎤 Debata</button>
     <button data-t="tAds">📺 Reklamy</button>
     <button data-t="tOver">🔗 Overlay</button>
   </div>
@@ -259,25 +260,6 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       <label class="chk"><input type="checkbox" id="qrVis">Kod QR widoczny</label>
       <div class="hint">Działa niezależnie od zbiórki. Plansza rozmówcy sama przesuwa się obok QR.</div>
       <button class="b1" id="qrSave">Zapisz</button><div class="msg" id="qrMsg"></div>
-    </div>
-
-    <div class="sub" data-sec="timer">
-      <h3>Odliczanie (kula nad kodem QR)</h3>
-      <div class="grid2">
-        <div><label for="tmMin">Minuty</label><input type="number" id="tmMin" min="0" max="1440" step="1"></div>
-        <div><label for="tmSec">Sekundy</label><input type="number" id="tmSec" min="0" max="59" step="1"></div>
-      </div>
-      <div class="grid2">
-        <div><label for="tmVol">Głośność dźwięków (0–100)</label><input type="number" id="tmVol" min="0" max="100" step="1"></div>
-        <div><label for="tmHide">Ukryj po tylu sekundach od zera (0 = zostaje)</label><input type="number" id="tmHide" min="0" max="3600" step="1"></div>
-      </div>
-      <label class="chk"><input type="checkbox" id="tmSnd">Dźwięki: tykanie w ostatnich 5 s i gong na zerze</label>
-      <div class="hint">START odpala odliczanie od ustawionego czasu i pokazuje kulę. RESET zatrzymuje i pokazuje pełny czas. UKRYJ zdejmuje kulę z anteny. Kula stoi nad kodem QR (a bez QR – tuż nad paskiem).</div>
-      <button class="b1" id="tmStart">▶ START</button>
-      <button class="b2" id="tmReset">↺ RESET</button>
-      <button class="b3" id="tmHideBtn">■ UKRYJ</button>
-      <div class="msg" id="tmMsg"></div>
-      <div style="margin-top:8px">Teraz: <b id="tmNow">—</b></div>
     </div>
 
     <div class="sub" data-sec="age">
@@ -393,8 +375,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
   <div class="tab box" id="tBrk" data-sec="break_screen">
     <h3>Przerwa / Zaraz wracamy</h3>
     <label for="bkKind">Rodzaj planszy</label>
-    <select id="bkKind" style="max-width:260px"><option value="break">Przerwa</option><option value="brb">Zaraz wracamy</option><option value="start">Zaraz zaczynamy</option><option value="debate">Debata prezydencka (flaga)</option></select>
-    <div class="hint">Dla „Debata prezydencka”: Tytuł = górny napis (domyślnie DEBATA), Podtytuł = dolny napis (domyślnie PREZYDENCKA).</div>
+    <select id="bkKind" style="max-width:260px"><option value="break">Przerwa</option><option value="brb">Zaraz wracamy</option><option value="start">Zaraz zaczynamy</option></select>
     <label for="bkTitle">Tytuł (puste = domyślny)</label><input type="text" id="bkTitle" maxlength="60">
     <label for="bkSub">Podtytuł (puste = domyślny)</label><input type="text" id="bkSub" maxlength="120">
     <label for="bkFoot">Stopka</label><input type="text" id="bkFoot" maxlength="80">
@@ -407,6 +388,56 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <button class="b1" id="bkShow">▶ POKAŻ</button>
     <button class="b3" id="bkHide">■ UKRYJ</button>
     <div class="msg" id="bkMsg"></div>
+  </div>
+
+  <!-- DEBATA -->
+  <div class="tab box" id="tDeb">
+    <div class="sub" data-sec="debate">
+      <h3>Ekran „Debata prezydencka” (flaga na całym ekranie)</h3>
+      <label for="dbTop">Górny napis</label><input type="text" id="dbTop" maxlength="40" placeholder="DEBATA">
+      <label for="dbBot">Dolny napis</label><input type="text" id="dbBot" maxlength="40" placeholder="PREZYDENCKA">
+      <label for="dbFoot">Stopka (opcjonalnie)</label><input type="text" id="dbFoot" maxlength="80">
+      <div class="hint">Zakrywa obraz z gry. Pasek, QR, zbiórka i odliczanie zostają na wierzchu (zwiń paski w zakładce Pasek, jeśli mają zostać tylko logo i godzina). Ma pierwszeństwo przed zakładką Przerwa.</div>
+      <button class="b1" id="dbShow">▶ POKAŻ</button>
+      <button class="b3" id="dbHideBtn">■ UKRYJ</button>
+      <div class="msg" id="dbMsg"></div>
+    </div>
+
+    <div class="sub" data-sec="segment">
+      <h3>Aktualny segment debaty (belka na górze ekranu)</h3>
+      <div class="grid2">
+        <div><label for="sgLabel">Mała etykieta (puste = bez)</label><input type="text" id="sgLabel" maxlength="24" placeholder="TERAZ"></div>
+        <div><label for="sgText">Tekst segmentu</label><input type="text" id="sgText" maxlength="100" placeholder="np. Pytania wzajemne"></div>
+      </div>
+      <label>Szybki wybór (kliknij, żeby wstawić i pokazać)</label>
+      <div class="adbtns" id="sgBtns"></div>
+      <label for="sgList">Lista segmentów – jeden w linii. Opcjonalnie czas po kresce: „Gospodarka | 5:00” (kliknięcie wpisuje też ten czas do odliczania poniżej, bez startu)</label>
+      <textarea id="sgList" rows="6" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:9px;border:1px solid var(--line);background:#081529;color:#fff;font:inherit;resize:vertical"></textarea>
+      <button class="b1" id="sgShow">▶ POKAŻ</button>
+      <button class="b2" id="sgSaveBtn">Zapisz (bez zmiany widoczności)</button>
+      <button class="b3" id="sgHideBtn">■ UKRYJ</button>
+      <div class="msg" id="sgMsg"></div>
+    </div>
+
+    <div class="sub" data-sec="timer">
+      <h3>Odliczanie (kula nad kodem QR)</h3>
+      <div class="grid2">
+        <div><label for="tmMin">Minuty</label><input type="number" id="tmMin" min="0" max="1440" step="1"></div>
+        <div><label for="tmSec">Sekundy</label><input type="number" id="tmSec" min="0" max="59" step="1"></div>
+      </div>
+      <div class="grid2">
+        <div><label for="tmVol">Głośność dźwięków (0–100)</label><input type="number" id="tmVol" min="0" max="100" step="1"></div>
+        <div><label for="tmHide">Ukryj po tylu sekundach od zera (0 = zostaje)</label><input type="number" id="tmHide" min="0" max="3600" step="1"></div>
+      </div>
+      <label class="chk"><input type="checkbox" id="tmSnd">Dźwięki: tykanie w ostatnich 5 s i gong na zerze</label>
+      <div class="hint">START odpala odliczanie od ustawionego czasu i pokazuje kulę. RESET zatrzymuje i pokazuje pełny czas. UKRYJ zdejmuje kulę z anteny. Kula stoi nad kodem QR (a bez QR – tuż nad paskiem).</div>
+      <button class="b1" id="tmStart">▶ START</button>
+      <button class="b2" id="tmReset">↺ RESET</button>
+      <button class="b3" id="tmHideBtn">■ UKRYJ</button>
+      <div class="msg" id="tmMsg"></div>
+      <div style="margin-top:8px">Teraz: <b id="tmNow">—</b></div>
+    </div>
+
   </div>
 
   <!-- REKLAMY -->
@@ -457,7 +488,7 @@ const $ = id => document.getElementById(id);
 let cfg = null, skew = 0;
 
 /* przyciski akcji (Zapisz / Pokaż / Ukryj + komunikat) zawsze na górze sekcji */
-['barSave','stSave','flSave','pSave','mpSave','fSave','lbSave','qrSave','tmStart','ageSave','ltSave','bkShow','adSave'].forEach(id => {
+['barSave','stSave','flSave','pSave','mpSave','fSave','lbSave','qrSave','dbShow','sgShow','tmStart','ageSave','ltSave','bkShow','adSave'].forEach(id => {
   const first = $(id); if (!first) return;
   const box = first.closest('.sub') || first.closest('.tab'); if (!box) return;
   const bar = document.createElement('div'); bar.className = 'actbar';
@@ -495,7 +526,7 @@ async function start(){
   let r; try { r = await api('/api/config'); } catch (e) { return; }
   cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); $('dbWarn').hidden = !!r.persistent;
   $('login').hidden = true; $('app').hidden = false;
-  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillTimer(); fillAge(); fillLt(); fillFlash(); fillStream(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
+  fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillTimer(); fillDebate(); fillSegment(); fillAge(); fillLt(); fillFlash(); fillStream(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
 }
 
 /* ---------- zakładki ---------- */
@@ -591,6 +622,43 @@ $('lbSave').onclick = () => save('live_badge', {visible: $('lbVis').checked, tex
 
 /* ---------- widżety: kod QR ---------- */
 function fillQr(){ $('qrVis').checked = cfg.qr.visible; }
+
+
+/* ---------- debata: ekran tytułowy ---------- */
+function fillDebate(){ const d = cfg.debate; $('dbTop').value = d.title; $('dbBot').value = d.subtitle; $('dbFoot').value = d.footer || ''; }
+const dbData = v => ({visible: v, title: $('dbTop').value, subtitle: $('dbBot').value, footer: $('dbFoot').value});
+$('dbShow').onclick = () => save('debate', dbData(true), 'dbMsg');
+$('dbHideBtn').onclick = () => save('debate', dbData(false), 'dbMsg');
+
+/* ---------- debata: aktualny segment ---------- */
+function sgParse(line){
+  const i = line.lastIndexOf('|'); let text = line, sec = 0;
+  if (i >= 0) {
+    const t = line.slice(i + 1).trim(), m = t.match(/^(\d+)(?::(\d{1,2}))?$/);
+    if (m) { text = line.slice(0, i).trim(); sec = m[2] !== undefined ? (+m[1]) * 60 + (+m[2]) : (+m[1]) * 60; }
+  }
+  return {text, sec};
+}
+const sgLines = () => $('sgList').value.split('\n').map(x => x.trim()).filter(Boolean);
+function sgBtns(){
+  const box = $('sgBtns'); box.replaceChildren();
+  sgLines().forEach(l => {
+    const p = sgParse(l), b = document.createElement('button'); b.className = 'b2 sm';
+    b.textContent = p.text + (p.sec ? ' · ' + Math.floor(p.sec / 60) + ':' + String(p.sec % 60).padStart(2, '0') : '');
+    b.onclick = async () => {
+      $('sgText').value = p.text;
+      if (p.sec) { $('tmMin').value = Math.floor(p.sec / 60); $('tmSec').value = p.sec % 60; dirty.timer = true; }
+      await save('segment', sgData(true), 'sgMsg');
+    };
+    box.appendChild(b);
+  });
+}
+function fillSegment(){ const g = cfg.segment; $('sgLabel').value = g.label || ''; $('sgText').value = g.text || ''; $('sgList').value = (g.list || []).join('\n'); sgBtns(); }
+const sgData = v => ({visible: v, label: $('sgLabel').value, text: $('sgText').value, list: sgLines()});
+$('sgList').addEventListener('input', sgBtns);
+$('sgShow').onclick = () => save('segment', sgData(true), 'sgMsg');
+$('sgSaveBtn').onclick = () => save('segment', sgData(!!cfg.segment.visible), 'sgMsg');
+$('sgHideBtn').onclick = () => save('segment', sgData(false), 'sgMsg');
 
 /* ---------- widżety: odliczanie ---------- */
 function fillTimer(){
@@ -1093,9 +1161,9 @@ async function scanAds(){
 $('adScan').onclick = scanAds;
 
 /* ---------- żywa synchronizacja z innymi osobami ---------- */
-const FILL = {bar: fillBar, poll: fillPoll, map: fillMap, fund: fillFund, live_badge: fillBadge, qr: fillQr, timer: fillTimer, age: fillAge, lower_third: fillLt, flash: fillFlash, stream: fillStream, break_screen: fillBrk, ads: fillAds};
-const MSG = {bar: 'barMsg', poll: 'pMsg', map: 'mpMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', timer: 'tmMsg', age: 'ageMsg', lower_third: 'ltMsg', flash: 'flMsg', stream: 'stMsg', break_screen: 'bkMsg', ads: 'adMsg'};
-const NAME = {bar: 'Pasek', map: 'Mapa', fund: 'Zbiórka', live_badge: 'Na żywo', qr: 'QR', age: 'Wiek', lower_third: 'Rozmówca', flash: 'Pilne', timer: 'Odliczanie'};
+const FILL = {bar: fillBar, poll: fillPoll, map: fillMap, fund: fillFund, live_badge: fillBadge, qr: fillQr, timer: fillTimer, debate: fillDebate, segment: fillSegment, age: fillAge, lower_third: fillLt, flash: fillFlash, stream: fillStream, break_screen: fillBrk, ads: fillAds};
+const MSG = {bar: 'barMsg', poll: 'pMsg', map: 'mpMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', timer: 'tmMsg', debate: 'dbMsg', segment: 'sgMsg', age: 'ageMsg', lower_third: 'ltMsg', flash: 'flMsg', stream: 'stMsg', break_screen: 'bkMsg', ads: 'adMsg'};
+const NAME = {bar: 'Pasek', map: 'Mapa', fund: 'Zbiórka', live_badge: 'Na żywo', qr: 'QR', age: 'Wiek', lower_third: 'Rozmówca', flash: 'Pilne', timer: 'Odliczanie', debate: 'Debata', segment: 'Segment'};
 const dirty = {};
 const markDirty = e => { const t = e.target.closest && e.target.closest('[data-sec]'); if (t) dirty[t.dataset.sec] = true; };
 document.addEventListener('input', markDirty);

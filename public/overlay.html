@@ -71,6 +71,17 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #tmball.zero{animation:tmz .9s ease-out}
 @keyframes tmz{0%{transform:scale(1.3) rotate(-4deg)}35%{transform:scale(.94) rotate(3deg)}65%{transform:scale(1.06) rotate(-2deg)}100%{transform:none}}
 
+
+/* ===== BELKA AKTUALNEGO SEGMENTU DEBATY (góra, środek) ===== */
+#sgwrap{position:absolute;top:43px;left:0;right:0;display:flex;justify-content:center;pointer-events:none;z-index:20}
+#sgbox{display:flex;height:70px;max-width:1150px;border-radius:0 18px 0 0;box-shadow:0 6px 16px rgba(0,0,0,.45);transition:transform .6s var(--ease),opacity .5s ease}
+#sgwrap.off #sgbox{opacity:0;transform:translateY(-140px)}
+#sglabel{display:flex;align-items:center;padding:0 26px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(0,0,0,.12)),linear-gradient(90deg,#8d1123,#a3162a 60%,#c21c28);color:#fff;font:800 30px/1 'Roboto Condensed',Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;position:relative}
+#sglabel::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:#fff;opacity:.9}
+#sgtext{display:flex;align-items:center;min-width:0;padding:0 40px;background:linear-gradient(180deg,#fff,#eef3f7);border-radius:0 18px 0 0;color:#082850;font:800 44px/1 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;white-space:nowrap}
+#sgtext span{overflow:hidden;text-overflow:ellipsis}
+#sgbox.nolabel #sgtext{border-radius:18px 18px 0 0}
+
 /* ===== PLAKIETKA NA ŻYWO (+ biała plakietka z tekstem po lewej) ===== */
 #livewrap{position:absolute;top:var(--lt,43px);right:var(--lr,53px);height:64px;display:flex;transition:transform .6s var(--ease),opacity .5s ease}
 #livewrap.off{opacity:0;transform:translateX(calc(100% + var(--lr,53px) + 30px))}
@@ -345,7 +356,7 @@ html.pgm #pgmcover{display:block}
 html.pgm #pgmfreeze.on{display:block}
 #pgmlast{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;z-index:0;pointer-events:none}
 html.pgm #pgmlast.on{display:block}
-#scene.dbt #tmwrap,#scene.dbt #barwrap,#scene.dbt #livewrap,#scene.dbt #fundwrap,#scene.dbt #qrwrap,#scene.dbt #ltwrap,#scene.dbt #flashwrap,#scene.dbt #agewrap{z-index:45}
+#scene.dbt #sgwrap,#scene.dbt #tmwrap,#scene.dbt #barwrap,#scene.dbt #livewrap,#scene.dbt #fundwrap,#scene.dbt #qrwrap,#scene.dbt #ltwrap,#scene.dbt #flashwrap,#scene.dbt #agewrap{z-index:45}
 #tmwrap,#barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity,translate}
 #pgmwait{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;color:#9fb3d1;font:700 40px/1.2 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:2px}
 #pgmwait small{font-size:24px;font-weight:700;color:#6f84a8;letter-spacing:1px}
@@ -374,6 +385,8 @@ html.lite #bkp{display:none}
       <div id="ticker"><div id="track"></div></div>
     </div>
   </div>
+
+  <div id="sgwrap" class="off"><div id="sgbox"><div id="sglabel"></div><div id="sgtext"><span></span></div></div></div>
 
   <div id="tmwrap" class="off">
     <div id="tmball">
@@ -992,7 +1005,7 @@ function updFundLift(){
 }
 function setFlH(on){ const h = on ? 62 : 0, ch = h !== flH; flH = h; if (ch) { $('scene').style.setProperty('--fh', h + 'px'); try { fitPoll(); if (mapOn) fitMap(); } catch (e) {} } updFundLift(); }
 function setVis(id, on){ $(id).classList.toggle('off', !on); }
-function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('tmwrap', false); tmCfg = null; setVis('ltwrap', false); setVis('flashwrap', false); setFlH(false); setVis('pollwrap', false); setVis('mapwrap', false); mapOn = false; setAge(AGE_URL || 0); renderBreak(null); }
+function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('tmwrap', false); setVis('sgwrap', false); tmCfg = null; setVis('ltwrap', false); setVis('flashwrap', false); setFlH(false); setVis('pollwrap', false); setVis('mapwrap', false); mapOn = false; setAge(AGE_URL || 0); renderBreak(null); }
 
 /* ---------- QR: działa niezależnie od zbiórki (s.qr.visible) ---------- */
 let fund = null, qrOk = false, qrCfg = {visible: false}, fundSig = '';
@@ -1144,7 +1157,21 @@ function apply(s){
 
   try { const a = s.age; setAge(AGE_URL || (a && a.visible ? a.rating : 0)); } catch (e) { console.error('wiek', e); }
 
-  try { renderBreak(s.break_screen); } catch (e) { console.error('przerwa', e); }
+  try {
+    const d = s.debate;   // ekran „Debata prezydencka” (zakładka Debata) ma pierwszeństwo przed przerwą
+    renderBreak(d && d.visible ? {visible: true, kind: 'debate', title: d.title, subtitle: d.subtitle, footer: d.footer, endsAt: '', startedAt: '', music: false, volume: 0} : s.break_screen);
+  } catch (e) { console.error('przerwa', e); }
+
+  try {
+    const g = s.segment, txt = g ? (g.text || '').trim() : '';
+    if (g && txt) {
+      const lab = (g.label || '').trim();
+      if ($('sglabel').textContent !== lab) $('sglabel').textContent = lab;
+      $('sglabel').style.display = lab ? '' : 'none'; $('sgbox').classList.toggle('nolabel', !lab);
+      const sp = $('sgtext').firstChild; if (sp.textContent !== txt) sp.textContent = txt;
+      setVis('sgwrap', !!g.visible);
+    } else setVis('sgwrap', false);
+  } catch (e) { console.error('segment', e); }
 
   try {
     const l = s.lower_third;

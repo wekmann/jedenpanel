@@ -21,6 +21,13 @@ export const DEFAULTS = {
   },
   live_badge: { visible: false, text: 'NA ŻYWO', top: 43, right: 53 },
   qr: { visible: false },
+  debate: { visible: false, title: 'DEBATA', subtitle: 'PREZYDENCKA', footer: '' },
+  segment: {
+    visible: false,
+    label: 'TERAZ',
+    text: '',
+    list: ['Wystąpienia otwierające | 2:00', 'Pytania wzajemne | 5:00', 'Gospodarka | 5:00', 'Polityka zagraniczna | 5:00', 'Wystąpienia końcowe | 2:00'],
+  },
   timer: { visible: false, seconds: 60, endsAt: '', sound: true, volume: 80, hideAfter: 0 },
   stream: { twitchOn: true, twitchUrl: 'rtmp://live.twitch.tv/app', twitchKey: '', tiktokOn: false, tiktokUrl: '', tiktokKey: '', fps: 60, bitrate: 8000 },
   stream_state: { egressId: '', startedAt: '', operator: '' },
@@ -157,6 +164,18 @@ export const SCHEMAS = {
   }),
   qr: z.object({
     visible: z.boolean(),
+  }),
+  debate: z.object({
+    visible: z.boolean(),
+    title: z.string().trim().max(40),
+    subtitle: z.string().trim().max(40),
+    footer: z.string().trim().max(80),
+  }),
+  segment: z.object({
+    visible: z.boolean(),
+    label: z.string().trim().max(24),
+    text: z.string().trim().max(100),
+    list: z.array(z.string().trim().min(1).max(130)).max(60, 'Maks. 60 segmentów'),
   }),
   timer: z.object({
     visible: z.boolean(),

@@ -14,6 +14,8 @@ export default async function handler(req, res) {
       live_badge: cfg.live_badge,
       qr: cfg.qr,
       timer: cfg.timer,
+      debate: cfg.debate,
+      segment: cfg.segment,
       flash: cfg.flash,
       age: cfg.age,
       lower_third: cfg.lower_third,
