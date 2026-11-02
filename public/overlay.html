@@ -7,9 +7,9 @@
 /* tryb PGM = obraz z gry + overlay, wyskalowane do okna. Przezroczysty overlay (OBS): dopisz &clean=1 do adresu */
 (function(){var q=new URLSearchParams(location.search),f=false;try{f=window.top!==window.self}catch(e){f=true}
 window.EGRESS=q.has('egress');
-/* PGM (obraz z gry w chmurze) tylko dla wysyĹki na platformy (&egress=1) albo po dopisaniu &pgm=1; zwykĹy link to przezroczysty overlay (OBS) */
+/* PGM (obraz z gry w chmurze) tylko dla wysyłki na platformy (&egress=1) albo po dopisaniu &pgm=1; zwykły link to przezroczysty overlay (OBS) */
 window.PGM=window.EGRESS||(q.get('pgm')==='1'&&!f);
-/* lite (bez dekoracyjnych pÄtli animacji) domyĹlnie w PGM i wysyĹce z chmury â pĹynniejszy obraz; &lite=0 wyĹÄcza */
+/* lite (bez dekoracyjnych pętli animacji) domyślnie w PGM i wysyłce z chmury – płynniejszy obraz; &lite=0 wyłącza */
 window.LITE=q.get('lite')==='1'||((window.EGRESS||window.PGM)&&q.get('lite')!=='0');
 if(window.PGM)document.documentElement.classList.add('pgm');
 if(window.LITE)document.documentElement.classList.add('lite')})();
@@ -47,7 +47,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #barwrap.nohead #root{grid-template-rows:57px;height:57px}
 
 
-/* ===== ZWINIÄTE PASKI: zostaje tylko logo + godzina ===== */
+/* ===== ZWINIĘTE PASKI: zostaje tylko logo + godzina ===== */
 #root{transition:width .7s var(--ease)}
 #barwrap.col #root{width:155px;overflow:hidden}
 #scene.col #flashwrap{left:calc(129px + 155px + 14px + var(--ox,0px));translate:0 0;max-width:1480px}
@@ -56,7 +56,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #scene.col #qrwrap{translate:0 calc(-1 * var(--bh,214px))}
 
 
-/* ===== ODLICZANIE: kula z flagÄ nad kodem QR ===== */
+/* ===== ODLICZANIE: kula z flagą nad kodem QR ===== */
 #tmwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + 14px);width:155px;display:flex;justify-content:center;translate:0 calc(-1 * (var(--bh,214px) + var(--fh,0px) + var(--tq,0px)));transition:transform .6s var(--ease),opacity .5s ease,translate .6s var(--ease)}
 #tmwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - 60px))}
 #scene.col #tmwrap{translate:0 calc(-1 * (var(--bh,214px) + var(--tq,0px)))}
@@ -72,7 +72,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes tmz{0%{transform:scale(1.3) rotate(-4deg)}35%{transform:scale(.94) rotate(3deg)}65%{transform:scale(1.06) rotate(-2deg)}100%{transform:none}}
 
 
-/* ===== BELKA AKTUALNEGO SEGMENTU DEBATY (gĂłra, Ĺrodek) ===== */
+/* ===== BELKA AKTUALNEGO SEGMENTU DEBATY (góra, środek) ===== */
 #sgwrap{position:absolute;top:43px;left:0;right:0;display:flex;justify-content:center;pointer-events:none;z-index:20}
 #sgbox{display:flex;height:70px;max-width:1150px;border-radius:0 18px 0 0;box-shadow:0 6px 16px rgba(0,0,0,.45);transition:transform .6s var(--ease),opacity .5s ease}
 #sgwrap.off #sgbox{opacity:0;transform:translateY(-140px)}
@@ -82,7 +82,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #sgtext span{overflow:hidden;text-overflow:ellipsis}
 #sgbox.nolabel #sgtext{border-radius:18px 18px 0 0}
 
-/* ===== PLAKIETKA NA ĹťYWO (+ biaĹa plakietka z tekstem po lewej) ===== */
+/* ===== PLAKIETKA NA ŻYWO (+ biała plakietka z tekstem po lewej) ===== */
 #livewrap{position:absolute;top:var(--lt,43px);right:var(--lr,53px);height:64px;display:flex;transition:transform .6s var(--ease),opacity .5s ease}
 #livewrap.off{opacity:0;transform:translateX(calc(100% + var(--lr,53px) + 30px))}
 .livebadge{box-sizing:border-box;flex:none;height:100%;padding:0 26px;display:flex;align-items:center;justify-content:center;gap:10px;background:radial-gradient(130px 60px at 100% 100%,rgba(232,38,40,.75),transparent 78%),linear-gradient(180deg,rgba(255,255,255,.07),rgba(0,0,0,.14)),linear-gradient(100deg,#8e1125,#9a1522 55%,#a91a22);border-radius:2px;font-family:Arial,Helvetica,sans-serif;box-shadow:0 4px 10px rgba(0,0,0,.35);position:relative;overflow:hidden}
@@ -94,7 +94,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #livewrap.has .livebadge{border-radius:0 2px 2px 0}
 #lbltxt{display:block;color:#a3112a;font-family:'Roboto Condensed',Arial,sans-serif;font-weight:900;text-transform:uppercase;line-height:1.05;letter-spacing:.3px;text-align:left;text-wrap:balance}
 
-/* ===== WYNIKI ANKIETY NA ĹťYWO â wykres koĹowy, lewy gĂłrny rĂłg ===== */
+/* ===== WYNIKI ANKIETY NA ŻYWO – wykres kołowy, lewy górny róg ===== */
 #pollwrap{position:absolute;top:var(--pt,43px);left:53px;width:460px;transition:transform .6s var(--ease),opacity .5s ease,top .4s var(--ease)}
 #pollwrap.off{opacity:0;transform:translateX(calc(-100% - 53px - 30px))}
 #lpbox{transform-origin:0 0;background:linear-gradient(170deg,#13233f,#0a1426 70%);border-radius:0 22px 22px 22px;box-shadow:0 14px 34px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.06);overflow:hidden;color:#fff;font-family:'Roboto Condensed',Arial,sans-serif}
@@ -121,7 +121,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 .lpbar i{display:block;height:100%;width:0;border-radius:4px;transition:width 1s var(--ease)}
 #lpfoot{display:flex;justify-content:space-between;gap:10px;padding:12px 22px 14px;font-size:17px;color:#9fb2d4;border-top:1px solid rgba(255,255,255,.08);margin-top:8px;letter-spacing:.5px}
 
-/* ===== QR (nad logiem JEDEN, lewa krawÄdĹş i szerokoĹÄ rĂłwno z logiem) ===== */
+/* ===== QR (nad logiem JEDEN, lewa krawędź i szerokość równo z logiem) ===== */
 #qrwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + 14px);translate:0 calc(-1 * (var(--bh,214px) + var(--fh,0px)));transition:transform .6s var(--ease),opacity .5s ease,translate .6s var(--ease)}
 #qrwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - 60px))}
 #fqrbox{box-sizing:border-box;width:155px;background:#fff;padding:8px;box-shadow:0 6px 14px rgba(0,0,0,.45);transition:opacity .45s ease,transform .6s var(--ease);transform-origin:50% 100%}
@@ -130,7 +130,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #fqrbox.hide + #fqrcap{opacity:0;transform:translateY(18px)}
 #fqr{display:block;width:100%;height:auto}
 
-/* ===== PLANSZA ROZMĂWCY (nad paskiem, od lewej; omija QR gdy ten jest widoczny) ===== */
+/* ===== PLANSZA ROZMÓWCY (nad paskiem, od lewej; omija QR gdy ten jest widoczny) ===== */
 #ltwrap{position:absolute;left:calc(129px + var(--ox,0px) + var(--lx,0px));bottom:calc(var(--mb,43px) + 14px);translate:0 calc(-1 * (var(--bh,214px) + var(--fh,0px)));max-width:940px;transition:transform .6s var(--ease),opacity .5s ease,left .4s var(--ease),translate .6s var(--ease)}
 #ltwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - var(--lx,0px) - 60px))}
 #ltbox{display:flex;flex-direction:column;align-items:flex-start;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
@@ -141,7 +141,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes ltshine{0%{left:-90px}50%,100%{left:110%}}
 #ltrole{box-sizing:border-box;max-width:100%;background:linear-gradient(90deg,#0e2347,#16305c);color:#e8eef9;font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;line-height:1.2;padding:9px 40px 9px 30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:6px solid #d60f08;font-family:'Roboto Condensed',Arial,sans-serif}
 
-/* ===== PILNE (pasek newsa przyklejony do gĂłry dolnego paska) ===== */
+/* ===== PILNE (pasek newsa przyklejony do góry dolnego paska) ===== */
 #flashwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:var(--mb,43px);translate:0 calc(-1 * var(--bh,214px));width:max-content;max-width:1662px;transition:transform .6s var(--ease),opacity .45s ease,translate .6s var(--ease)}
 #flashwrap.off{opacity:0;transform:translateY(60px)}
 #flbox{display:grid;grid-template-columns:155px minmax(0,auto);height:62px;border-radius:0 18px 0 0;box-shadow:0 -4px 12px rgba(0,0,0,.4)}
@@ -155,7 +155,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #fltxt.mq{animation:flmq var(--dur,10s) linear 1.2s infinite alternate;will-change:transform}
 @keyframes flmq{from{transform:translateX(0)}to{transform:translateX(var(--dist,0px))}}
 
-/* ===== ZBIĂRKA (nad paskiem, prawa krawÄdĹş rĂłwno z paskiem) ===== */
+/* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem) ===== */
 #fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + 14px);translate:0 calc(-1 * (var(--fbh,var(--bh,214px)) + var(--ffh,0px)));display:flex;align-items:flex-end;transition:transform .6s var(--ease),opacity .5s ease,translate .6s var(--ease)}
 #fundwrap.off{opacity:0;transform:translateX(calc(100% + 500px))}
 #fundwrap:not(.off) #fcard{animation:fin .7s var(--ease)}
@@ -217,7 +217,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #bktk{transform-origin:300px 300px;animation:bkspin 80s linear infinite}@keyframes bkspin{to{transform:rotate(360deg)}}
 
 
-/* ===== DEBATA PREZYDENCKA (powiewajÄca flaga + napisy) ===== */
+/* ===== DEBATA PREZYDENCKA (powiewająca flaga + napisy) ===== */
 #dbt{display:none;position:absolute;inset:0;overflow:hidden}
 #brk.deb #dbt{display:block}
 #brk.deb .bk-bg,#brk.deb .bk-st,#brk.deb .bk-sw,#brk.deb #bkp,#brk.deb #bkl,#brk.deb #bkr,#brk.deb #bkf{display:none}
@@ -248,24 +248,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #brk.deb.on #dbr{opacity:1;transform:none;clip-path:inset(-60px -60px -60px -60px);transition:transform .9s var(--ease) .55s,opacity .3s .55s,clip-path .9s var(--ease) .55s}
 #brk.deb.on #dbn{opacity:1}
 
-
-/* ===== PLANSZA DEBATY: ramĂłwka i regulamin ===== */
-#dbinfo{position:absolute;left:115px;right:115px;top:690px;display:grid;grid-template-columns:1fr 1.08fr;gap:18px;font-family:'Roboto Condensed',Arial,sans-serif;color:#fff;text-transform:none}
-.dbcard{min-width:0;background:linear-gradient(155deg,rgba(8,19,42,.97),rgba(5,11,24,.96));border:1px solid rgba(255,255,255,.24);border-top:7px solid #d4122b;box-shadow:0 14px 35px rgba(0,0,0,.58);padding:14px 18px}
-.dbcard h2{margin:0 0 10px;font:900 23px/1 'Roboto Condensed',Arial,sans-serif;letter-spacing:1.3px;text-transform:uppercase;color:#fff}
-.dbcard table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.08}
-.dbcard th{text-align:left;color:#aebfdf;font-size:13px;text-transform:uppercase;letter-spacing:.8px;padding:3px 5px;border-bottom:1px solid #52627b}
-.dbcard td{padding:3px 5px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top}
-.dbcard td:last-child,.dbcard th:last-child{text-align:right;white-space:nowrap}
-.dbcard tr:last-child td{border-bottom:0;font-weight:900;color:#fff}
-.db-rules{display:grid;grid-template-columns:1fr 1fr;gap:9px 14px}
-.db-rule{font-size:14px;line-height:1.22;color:#e8edf7}
-.db-rule b{display:block;color:#fff;font-size:15px;letter-spacing:.35px;margin-bottom:3px;text-transform:uppercase}
-.db-rule ul{margin:0;padding-left:17px}.db-rule li{margin:0 0 2px}
-#brk.deb #dbfoot{display:none}
-@media(max-width:1000px){#dbinfo{left:50px;right:50px;top:650px;gap:10px}.dbcard{padding:10px 12px}.dbcard table{font-size:12px}.db-rule{font-size:11px}.db-rule b{font-size:12px}.dbcard h2{font-size:18px}}
-
-/* ===== SONDAĹť NA PEĹNYM EKRANIE ===== */
+/* ===== SONDAŻ NA PEŁNYM EKRANIE ===== */
 #pstage{position:absolute;inset:0;pointer-events:none}
 #wipe{position:absolute;top:0;bottom:0;left:-40%;width:40%;background:linear-gradient(100deg,transparent,#dc0432 40%,#ff3b3b 60%,transparent);transform:skewX(-20deg);opacity:0}
 #pstage.on #wipe{animation:wipe 1.1s var(--ease) forwards}
@@ -314,7 +297,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes fl{0%{opacity:.45}100%{opacity:0}}
 #pstage.off #pcard{opacity:0;transform:translate(-50%,-56%) scale(.96);clip-path:inset(0 0 0 100% round 22px);transition:all .7s ease-in}
 
-/* ===== MAPA WYNIKĂW (Polska z wojewĂłdztw + lista partii) ===== */
+/* ===== MAPA WYNIKÓW (Polska z województw + lista partii) ===== */
 #mapwrap{position:absolute;inset:0;z-index:15;pointer-events:none;transition:opacity .5s ease}
 #mapwrap.off{opacity:0}
 #mcard{position:absolute;left:50%;top:var(--mtop,50%);width:1480px;transform:translate(-50%,-50%) scale(var(--mk,1));border-radius:38px;overflow:hidden;font-family:'Roboto Condensed',Arial,sans-serif;color:#fff;
@@ -355,15 +338,15 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #mfoot{display:flex;justify-content:space-between;gap:20px;padding:14px 52px 24px;border-top:1px solid rgba(255,255,255,.08);font-size:18px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#cfd9ee}
 #mnote,#mcnt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* ===== PGM: obraz z gry pod overlayem, caĹoĹÄ skalowana do okna ===== */
+/* ===== PGM: obraz z gry pod overlayem, całość skalowana do okna ===== */
 html.pgm,html.pgm body{background:#000 !important;width:100%;height:100%;cursor:none}
 html.pgm #scene{position:absolute;left:50%;top:50%;margin:-540px 0 0 -960px;transform:scale(var(--sc,1));transform-origin:50% 50%;background:#000}
 #pgmv{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
 html.pgm #pgmv{display:block}
-/* kolejnoĹÄ warstw: wideo zawsze pod wszystkim; filtr wyĹÄcza sprzÄtowÄ nakĹadkÄ wideo (przez niÄ znikaĹy elementy) */
+/* kolejność warstw: wideo zawsze pod wszystkim; filtr wyłącza sprzętową nakładkę wideo (przez nią znikały elementy) */
 #scene{isolation:isolate}
 #pgmv{z-index:0;filter:brightness(1.001)}
-/* ZATRZYMAJ / WZNĂW: czarna zasĹona nad obrazem z gry (pod overlayem) â pĹynne przenikanie, nie ciÄcie */
+/* ZATRZYMAJ / WZNÓW: czarna zasłona nad obrazem z gry (pod overlayem) – płynne przenikanie, nie cięcie */
 #pgmcover{display:none;position:absolute;inset:0;background:#000;opacity:0;transition:opacity .9s ease;pointer-events:none;z-index:0}
 html.pgm #pgmcover{display:block}
 #pgmcover.on{opacity:1}
@@ -380,7 +363,7 @@ html.pgm #pgmlast.on{display:block}
 html.pgm #pgmwait.on{display:flex}
 #snd{display:none;position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:99;background:#d60f08;color:#fff;font:700 15px Arial,sans-serif;padding:9px 18px;border:0;border-radius:8px;cursor:pointer;box-shadow:0 6px 14px rgba(0,0,0,.5)}
 
-/* ---- tryb lite (wysyĹka z chmury / ?lite=1): wyĹÄczone dekoracyjne pÄtle animacji, Ĺźeby nic nie zwalniaĹo klatek ---- */
+/* ---- tryb lite (wysyłka z chmury / ?lite=1): wyłączone dekoracyjne pętle animacji, żeby nic nie zwalniało klatek ---- */
 html.lite #tmwave,html.lite .ldot,html.lite .lpdot,html.lite #ltname::after,html.lite #fllabel::after,html.lite #ffill::after,html.lite #phead::after,
 html.lite .bk-st,html.lite .bk-sw,html.lite #bkp i,html.lite #bktk{animation:none !important}
 html.lite #bkp{display:none}
@@ -390,7 +373,7 @@ html.lite #bkp{display:none}
 <div id="scene">
   <video id="pgmv" autoplay muted playsinline disablepictureinpicture disableremoteplayback></video>
   <div id="pgmcover"></div>
-  <div id="pgmwait"><div>Czekam na obraz z gryâŚ</div><small>W panelu wybierz okno gry (monitor PVW)</small></div>
+  <div id="pgmwait"><div>Czekam na obraz z gry…</div><small>W panelu wybierz okno gry (monitor PVW)</small></div>
   <canvas id="pgmfreeze"></canvas>
   <canvas id="pgmlast"></canvas>
 
@@ -534,8 +517,8 @@ html.lite #bkp{display:none}
         <use href="#wheel" transform="translate(470 164)"/>
         <use href="#wheel" transform="translate(526 164)"/>
       </svg>
-      <div id="frow"><span id="fl1">Potrzebujemy</span><span id="fam">5 500 000<small>zĹ</small></span></div>
-      <div id="fl2">Na wĂłz transmisyjny</div>
+      <div id="frow"><span id="fl1">Potrzebujemy</span><span id="fam">5 500 000<small>zł</small></span></div>
+      <div id="fl2">Na wóz transmisyjny</div>
       <div id="fstrip"><div id="ftrack"><div id="ffill"></div><div id="fpct">0%</div></div></div>
     </div>
   </div>
@@ -545,7 +528,7 @@ html.lite #bkp{display:none}
   <div id="agewrap" class="off"><img id="ageimg" alt=""></div>
 
   <div id="pollwrap" class="off"><div id="lpbox">
-    <div id="lphead"><div class="lpdot"></div><span id="lpstat">Wyniki na Ĺźywo</span></div>
+    <div id="lphead"><div class="lpdot"></div><span id="lpstat">Wyniki na żywo</span></div>
     <div id="lptitle"></div>
     <div id="lpchart"><svg id="lppie" viewBox="-4 -4 208 208" aria-hidden="true"><g transform="rotate(-90 100 100)" id="lpslices"></g><g transform="rotate(-90 100 100)" id="lplabels"></g><circle cx="100" cy="100" r="100" fill="#0a1426" stroke="rgba(255,255,255,.18)" stroke-width="2"/></svg></div>
     <div id="lplegend"></div>
@@ -555,7 +538,7 @@ html.lite #bkp{display:none}
   <div id="pstage">
     <div id="wipe"></div>
     <div id="pcard">
-      <div id="phead"><div id="ptitle"></div><div id="psub"></div><div class="pbadge">ZWYCIÄZCA</div></div>
+      <div id="phead"><div id="ptitle"></div><div id="psub"></div><div class="pbadge">ZWYCIĘZCA</div></div>
       <div id="prows"></div>
       <div id="flash"></div>
     </div>
@@ -590,29 +573,18 @@ html.lite #bkp{display:none}
         <div id="dbr"><i></i><b></b><u></u><div id="dbrt">PREZYDENCKA</div></div>
         <div id="dbn"><div id="dbat"></div><div id="dbcd"></div></div>
       </div>
-<div id="dbinfo" aria-label="Plan i zasady debaty">
-        <section class="dbcard"><h2>Plan debaty Âˇ 90 minut</h2><table><thead><tr><th>Etap</th><th>Temat</th><th>Czas</th></tr></thead><tbody>
-        <tr><td>1</td><td>Otwarcie i przedstawienie zasad</td><td>3 min</td></tr><tr><td>2</td><td>Przedstawienie kandydatĂłw</td><td>6 min</td></tr><tr><td>3</td><td>Runda I Âˇ PaĹstwo i polityka (3 pytania)</td><td>14 min</td></tr><tr><td>4</td><td>Runda II Âˇ Gospodarka (3 pytania)</td><td>13 min</td></tr><tr><td>5</td><td>Runda III Âˇ BezpieczeĹstwo (3 pytania)</td><td>13 min</td></tr><tr><td>6</td><td>Runda IV Âˇ SpoĹeczeĹstwo i edukacja (3 pytania)</td><td>13 min</td></tr><tr><td>7</td><td>Runda V Âˇ Pytania miÄdzy kandydatami</td><td>13 min</td></tr><tr><td>8</td><td>Runda VI Âˇ Pytania niespodzianki</td><td>7 min</td></tr><tr><td>9</td><td>Ostatnie sĹowo kandydatĂłw</td><td>6 min</td></tr><tr><td>10</td><td>ZakoĹczenie</td><td>2 min</td></tr><tr><td colspan="2">ĹÄcznie</td><td>90 min</td></tr>
-        </tbody></table></section>
-        <section class="dbcard"><h2>Zasady debaty</h2><div class="db-rules">
-          <div class="db-rule"><b>Uczestnicy</b><ul><li>UdziaĹ bierze czterech kandydatĂłw.</li><li>RĂłwne prawa i czas wypowiedzi.</li><li>KaĹźdy przestrzega regulaminu.</li></ul></div>
-          <div class="db-rule"><b>Czas wypowiedzi</b><ul><li>OdpowiedĹş moderatorowi: 45 s.</li><li>Pytanie do kandydata: 30 s.</li><li>OdpowiedĹş kandydatowi: 90 s.</li><li>Riposta: 30 s.</li><li>Pytanie niespodzianka: 60 s.</li><li>Ostatnie sĹowo: 90 s.</li></ul></div>
-          <div class="db-rule"><b>Zachowanie</b><ul><li>Bez obraĹźania, wulgaryzmĂłw i przerywania.</li><li>Dozwolona krytyka poglÄdĂłw i programĂłw.</li><li>Szacunek dla kultury osobistej.</li></ul></div>
-          <div class="db-rule"><b>Moderator i organizacja</b><ul><li>Pilnuje czasu, udziela gĹosu i pozostaje bezstronny.</li><li>MoĹźe upomnieÄ za zĹamanie zasad.</li><li>KolejnoĹÄ przejĹÄ ustala moderator zgodnie z harmonogramem.</li><li>Te same pytania w rundach tematycznych, kolejnoĹÄ odpowiedzi losowa.</li><li>Pytania niespodzianki nie sÄ wczeĹniej ujawniane.</li><li>Bez dodatkowego czasu; debata trwa maksymalnie 90 minut.</li></ul></div>
-        </div></section>
-      </div>
       <div id="dbfoot"></div>
       <div id="dblogo"></div>
     </div>
   </div>
 </div>
 
-<button id="snd" type="button">đ Kliknij, aby wĹÄczyÄ dĹşwiÄk</button>
+<button id="snd" type="button">🔊 Kliknij, aby włączyć dźwięk</button>
 <script>
 const $ = id => document.getElementById(id);
 const KEY = new URLSearchParams(location.search).get('key') || '';
 const QS = new URLSearchParams(location.search);
-let SC = 1; /* skala sceny 1920Ă1080 w oknie (tryb PGM) */
+let SC = 1; /* skala sceny 1920×1080 w oknie (tryb PGM) */
 function fitScene(){
   if (!window.PGM) return;
   SC = Math.min(innerWidth / 1920, innerHeight / 1080) || 1;
@@ -625,7 +597,7 @@ const fmt = new Intl.DateTimeFormat('pl-PL', {timeZone:'Europe/Warsaw', hour:'2-
 function clock(){ $('time').textContent = fmt.format(new Date()); }
 clock(); setInterval(clock, 1000);
 
-/* ---------- pasek: ticker bez przerw, staĹa prÄdkoĹÄ px/s ---------- */
+/* ---------- pasek: ticker bez przerw, stała prędkość px/s ---------- */
 const track = $('track'), win = $('ticker');
 function mkLap(news){
   const lap = document.createElement('div'); lap.className = 'lap';
@@ -636,14 +608,14 @@ function mkLap(news){
   });
   return lap;
 }
-/* nagĹĂłwek: najwiÄksza czcionka, przy ktĂłrej 1 lub 2 linie mieszczÄ siÄ w czerwonym pasku */
+/* nagłówek: największa czcionka, przy której 1 lub 2 linie mieszczą się w czerwonym pasku */
 function fitHead(){
   const head = $('head'); if (!head.clientWidth) return;
   const ls = [$('l1'), $('l2')].filter(l => l.style.display !== 'none' && l.textContent);
   if (!ls.length) return;
   const cs = getComputedStyle(head), LH = 1.15;
   const aw = head.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-  const ah = head.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 4; /* 4px = biaĹa listwa na dole */
+  const ah = head.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 4; /* 4px = biała listwa na dole */
   const tw = () => Math.max(...ls.map(l => { const r = document.createRange(); r.selectNodeContents(l); return r.getBoundingClientRect().width / SC; }));
   ls.forEach(l => l.style.fontSize = '100px');
   const w100 = tw() || 1;
@@ -658,7 +630,7 @@ function renderBar(c){
   $('l2').textContent = c.line2 || '';
   $('l2').style.display = c.line2 ? '' : 'none';
   fitHead();
-  const news = (c.news && c.news.length) ? c.news : ['â'];
+  const news = (c.news && c.news.length) ? c.news : ['—'];
   track.style.animation = 'none';
   track.replaceChildren(mkLap(news));
   const lw = track.firstChild.getBoundingClientRect().width / SC || 1;
@@ -670,7 +642,7 @@ function renderBar(c){
   track.style.animation = 'sc ' + dur + 's linear infinite';
 }
 
-/* ---------- sondaĹź peĹnoekranowy ---------- */
+/* ---------- sondaż pełnoekranowy ---------- */
 let timers = [], ht;
 function shade(h){const m=/^#?([0-9a-f]{6})$/i.exec(h||'');if(!m)return h;const n=parseInt(m[1],16);
   return 'rgb('+Math.round((n>>16&255)*.7)+','+Math.round((n>>8&255)*.7)+','+Math.round((n&255)*.7)+')'}
@@ -714,9 +686,9 @@ function hidePoll(quiet){
   if ($('pstage').classList.contains('on')) { $('pstage').className = 'off'; timers = [setTimeout(() => {$('pstage').className = ''}, 800)]; }
 }
 
-/* ---------- mapa wynikĂłw: Polska z wojewĂłdztw (bez napisĂłw) + lista partii ---------- */
+/* ---------- mapa wyników: Polska z województw (bez napisów) + lista partii ---------- */
 const POLSKA_PATHS = {"ZP": "M211.6,44.8 L204.0,45.2 L20.1,85.5 L21.2,89.1 L33.6,100.1 L37.1,113.5 L33.0,113.0 L21.1,103.5 L18.9,103.5 L17.0,106.0 L0.8,197.0 L3.2,204.0 L18.9,222.9 L23.3,225.4 L27.0,225.1 L147.0,178.6 L153.3,174.5 L190.3,116.0 L212.0,49.0Z", "PM": "M350.9,21.5 L327.0,3.2 L320.0,1.6 L225.1,41.5 L220.9,46.1 L200.8,109.0 L201.8,115.2 L224.0,127.6 L234.4,120.4 L239.0,119.0 L335.0,123.0 L342.5,122.1 L345.2,117.0 L349.1,54.0 L355.3,43.2 L347.0,45.5 L343.3,44.9 L339.1,28.1 L341.4,24.5 L350.5,23.5Z", "WM": "M617.2,51.3 L614.0,50.0 L358.1,52.3 L354.9,54.5 L354.0,58.0 L352.7,125.0 L356.3,131.0 L389.4,165.7 L394.0,167.9 L510.0,142.6 L524.0,133.4 L614.0,56.3Z", "PD": "M632.3,54.3 L627.0,56.7 L528.0,141.6 L525.7,146.2 L527.6,151.0 L626.3,262.0 L631.0,264.7 L636.0,262.9 L676.9,223.0 L679.8,216.0 L636.2,61.0Z", "KP": "M237.4,129.3 L234.7,133.0 L233.7,139.0 L247.5,224.0 L249.9,229.5 L255.0,233.2 L335.0,263.9 L342.0,263.8 L350.0,258.1 L356.6,249.0 L384.5,180.0 L381.7,172.0 L351.9,136.0 L346.7,131.5 L340.0,130.0 L245.0,126.0Z", "LB": "M123.5,198.5 L39.0,230.4 L30.0,236.4 L31.2,262.0 L36.0,277.0 L34.1,348.0 L37.3,356.0 L51.3,372.1 L58.0,371.9 L149.8,321.2 L148.5,315.0 L120.2,278.0 L118.1,273.0 L125.5,203.0Z", "WP": "M195.5,124.2 L191.7,127.0 L158.2,179.9 L153.0,184.5 L139.1,190.4 L135.3,194.3 L127.0,272.0 L130.0,278.0 L163.2,320.3 L250.0,373.6 L254.5,378.2 L258.0,386.5 L260.2,387.2 L264.4,383.0 L331.0,281.0 L331.9,276.4 L328.0,272.7 L241.8,239.0 L238.6,230.0 L224.6,141.0 L219.0,134.8 L200.0,124.7Z", "MZ": "M397.2,178.0 L392.2,184.0 L362.7,257.9 L363.8,262.2 L451.1,321.5 L453.0,327.0 L447.4,380.0 L449.5,385.5 L524.0,411.4 L529.4,411.4 L532.2,405.0 L543.4,312.5 L548.0,308.7 L618.0,273.7 L620.5,271.2 L619.8,267.0 L519.6,155.0 L515.0,151.7 L510.0,151.2Z", "LD": "M356.0,269.4 L351.0,271.6 L338.5,285.0 L268.6,392.0 L265.8,398.5 L270.0,401.8 L315.0,411.5 L382.0,438.2 L388.0,435.0 L435.9,386.0 L437.7,381.0 L443.3,329.0 L441.5,324.5 L361.0,270.5Z", "DS": "M159.0,328.5 L55.1,382.1 L49.8,390.0 L39.9,427.9 L41.5,430.4 L45.0,430.2 L51.5,422.1 L55.0,421.7 L107.0,451.4 L140.0,461.2 L148.0,465.4 L150.5,468.5 L150.5,472.1 L140.5,486.0 L139.7,492.0 L162.0,524.0 L168.0,527.4 L186.1,514.7 L187.5,510.0 L186.6,496.0 L189.0,490.0 L250.6,404.0 L252.6,397.0 L248.8,385.0 L243.0,378.2 L165.0,330.3Z", "OP": "M302.9,416.5 L263.0,408.2 L256.5,409.7 L196.8,490.0 L196.2,493.2 L199.0,495.6 L239.0,505.1 L244.1,507.8 L245.5,512.0 L244.8,517.0 L237.7,528.3 L239.6,533.0 L246.5,539.9 L252.0,538.8 L258.5,530.0 L304.9,424.0 L305.5,419.4Z", "SL": "M318.1,420.2 L314.9,421.6 L312.1,426.0 L268.1,532.8 L272.0,538.0 L303.0,555.5 L307.4,575.7 L318.9,585.2 L332.6,610.0 L337.2,612.7 L361.0,594.0 L364.0,588.7 L362.0,584.0 L340.4,557.0 L340.0,551.0 L391.9,494.0 L395.5,485.0 L388.4,453.0 L384.6,447.1Z", "SK": "M441.0,395.2 L412.0,422.0 L396.6,439.0 L396.1,444.0 L405.7,483.9 L411.0,490.7 L444.0,514.7 L450.0,515.3 L493.8,508.9 L499.8,504.0 L541.4,451.0 L543.1,447.0 L542.5,442.0 L534.2,427.0 L528.0,421.2 L447.0,394.6Z", "LU": "M628.9,280.2 L557.0,315.7 L552.4,319.5 L550.6,324.0 L540.7,417.0 L550.7,439.0 L556.2,447.0 L610.0,498.5 L617.0,501.3 L670.0,506.3 L674.5,503.7 L682.5,488.0 L701.9,481.5 L705.1,478.5 L705.8,455.0 L700.9,441.0 L705.9,428.0 L632.9,281.5Z", "MP": "M351.1,551.0 L352.2,558.0 L377.5,590.0 L393.5,631.0 L398.2,635.5 L418.0,635.5 L437.0,621.5 L446.0,618.3 L465.0,614.5 L481.0,619.4 L487.1,616.9 L492.3,609.6 L507.0,610.5 L510.5,608.5 L494.1,521.3 L490.8,518.5 L443.0,523.3 L409.0,500.5 L403.0,499.5Z", "PK": "M549.2,457.5 L545.5,460.0 L504.6,510.0 L502.0,516.0 L520.3,608.0 L525.1,612.7 L550.0,614.2 L622.3,644.0 L623.1,641.0 L619.0,631.0 L619.8,625.0 L668.3,522.0 L669.1,516.7 L665.0,514.3 L607.0,507.0 L556.0,459.7Z"};
-const MAP_KIND = {exit: 'Exit poll', wyniki: 'Wyniki wyborĂłw', sondaz: 'SondaĹź'};
+const MAP_KIND = {exit: 'Exit poll', wyniki: 'Wyniki wyborów', sondaz: 'Sondaż'};
 let mapOn = false, mapSig = '';
 (function(){
   const svg = $('msvg'), NS = 'http://www.w3.org/2000/svg'; let i = 0;
@@ -727,7 +699,7 @@ let mapOn = false, mapSig = '';
   }
 })();
 const mfmt = v => String(+(+v || 0).toFixed(2)).replace('.', ',');
-const regWord = n => n === 1 ? 'region' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 'regiony' : 'regionĂłw';
+const regWord = n => n === 1 ? 'region' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 'regiony' : 'regionów';
 function renderMap(m){
   const sig = JSON.stringify(m); if (sig === mapSig) return; mapSig = sig;
   $('mtitle').textContent = m.title || ''; $('msub').textContent = m.subtitle || ''; $('msub').style.display = m.subtitle ? '' : 'none';
@@ -737,12 +709,12 @@ function renderMap(m){
   const byId = Object.fromEntries(m.parties.map(p => [p.id, p]));
   const regs = m.regions || [], got = regs.filter(r => byId[r.party]);
   $('mcnt').textContent = 'Regiony z wynikiem: ' + got.length + '/' + regs.length;
-  /* wojewĂłdztwa: kolor zwyciÄzcy albo szary (brak danych) */
+  /* województwa: kolor zwycięzcy albo szary (brak danych) */
   document.querySelectorAll('#msvg path:not(.sh)').forEach(pa => {
     const r = regs.find(x => x.id === pa.dataset.id), p = r && byId[r.party];
     pa.style.fill = p ? p.color : '';
   });
-  /* lista partii: wiersze staĹe w czasie, przestawiane transformem */
+  /* lista partii: wiersze stałe w czasie, przestawiane transformem */
   const box = $('mparties'), n = parties.length, gap = n > 8 ? 8 : 14, H = 620;
   const rh = Math.max(40, Math.min(88, Math.floor((H + gap) / n) - gap));
   const top = (H - (n * rh + (n - 1) * gap)) / 2, max = Math.max(0, ...parties.map(p => +p.value || 0));
@@ -752,7 +724,7 @@ function renderMap(m){
     let el = box.querySelector('.mrow[data-id="' + p.id + '"]');
     if (!el) {
       el = document.createElement('div'); el.className = 'mrow'; el.dataset.id = p.id;
-      el.innerHTML = '<div class="mtop"><i class="msq"></i><span class="mname"></span><span class="mwin">ZWYCIÄZCA</span><span class="mreg"></span><span class="mval"><b></b><small></small></span></div><div class="mbar"><i></i></div>';
+      el.innerHTML = '<div class="mtop"><i class="msq"></i><span class="mname"></span><span class="mwin">ZWYCIĘZCA</span><span class="mreg"></span><span class="mval"><b></b><small></small></span></div><div class="mbar"><i></i></div>';
       box.appendChild(el);
     }
     const cnt = regs.filter(r => r.party === p.id).length;
@@ -767,7 +739,7 @@ function renderMap(m){
   });
 }
 function fitMap(){
-  /* mapa mieĹci siÄ nad paskiem dolnym (gdy jest na antenie), a bez paska â na Ĺrodku ekranu */
+  /* mapa mieści się nad paskiem dolnym (gdy jest na antenie), a bez paska – na środku ekranu */
   const card = $('mcard'), h = card.offsetHeight; if (!h) return;
   const top = 30, bottom = barBh ? barMb + barBh + flH + 20 : 30, avail = 1080 - top - bottom;
   const k = Math.min(1, avail / h);
@@ -782,8 +754,8 @@ function setMap(m){
   mapOn = on;
 }
 
-/* ---------- reklamy: pliki /ads/1.mp4, 2.mp4 âŚ (numerycznie) ---------- */
-const PREVIEW = false; // podglÄd w panelu teĹź ma dĹşwiÄk (panel jest w przeglÄdarce, nie w OBS)
+/* ---------- reklamy: pliki /ads/1.mp4, 2.mp4 … (numerycznie) ---------- */
+const PREVIEW = false; // podgląd w panelu też ma dźwięk (panel jest w przeglądarce, nie w OBS)
 let adList = [], adScan = 0, adQueue = [], adCfg = {volume: 100}, adRot = 0, lastAdSeq = null, lastSlot = null;
 try { const v = localStorage.getItem('overlay_ads_seq'); if (v !== null) lastAdSeq = +v; } catch (e) {}
 async function scanAds(force){
@@ -819,9 +791,9 @@ async function autoAd(slot){
   adQueue = [list[(slot - 1) % list.length]]; nextAd();
 }
 
-/* ---------- przerwa / zaraz wracamy (+ podglÄd: ?demo=break lub ?demo=brb) ---------- */
+/* ---------- przerwa / zaraz wracamy (+ podgląd: ?demo=break lub ?demo=brb) ---------- */
 const DEMO = new URLSearchParams(location.search).get('demo');
-let skew = 0; // rĂłĹźnica zegara serwera i przeglÄdarki (ms)
+let skew = 0; // różnica zegara serwera i przeglądarki (ms)
 let brk = null, brkTotal = 1, brkKey = '', bmVol = 0, bmT = null, bmKind = '', bmSig = '';
 const bm = new Audio(); bm.loop = true; bm.muted = PREVIEW;
 let useGen = false, gen = null;
@@ -859,7 +831,7 @@ function bmGo(want, vol, kind){
   }, 60);
 }
 
-/* ---------- powiewajÄca flaga (canvas, paski pionowe z falÄ i cieniowaniem) ---------- */
+/* ---------- powiewająca flaga (canvas, paski pionowe z falą i cieniowaniem) ---------- */
 const FLAG = (() => {
   const cv = $('dbflag'), cx = cv.getContext('2d'), W = 1280, H = 720, AMP = 58, SL = 2;
   const src = document.createElement('canvas'); src.width = W; src.height = H + AMP * 2 + 40;
@@ -882,7 +854,7 @@ const FLAG = (() => {
   function loop(ts){
     if (!on) return;
     raf = requestAnimationFrame(loop);
-    if (window.LITE && ts - last < 33) return;   // lite / wysyĹka z chmury: 30 kl/s
+    if (window.LITE && ts - last < 33) return;   // lite / wysyłka z chmury: 30 kl/s
     last = ts; draw(ts / 1000);
   }
   return {
@@ -904,7 +876,7 @@ function renderBreak(k){
   }
   const start = k.kind === 'start', brb = k.kind === 'brb' || start;
   $('bkt').textContent = k.title || (start ? 'Zaraz zaczynamy' : brb ? 'Zaraz wracamy' : 'Przerwa');
-  $('bks').textContent = k.subtitle ? k.subtitle : (start ? 'JuĹź za chwilÄ startujemy' : brb ? 'Nie odchodĹş od ekranu' : 'WrĂłcimy za chwilÄ');
+  $('bks').textContent = k.subtitle ? k.subtitle : (start ? 'Już za chwilę startujemy' : brb ? 'Nie odchodź od ekranu' : 'Wrócimy za chwilę');
   $('bkf').textContent = k.footer || '';
   const end = k.endsAt ? Date.parse(k.endsAt) : 0, key = (k.endsAt || '') + '|' + (k.startedAt || '');
   if (key !== brkKey) { brkKey = key; brkTotal = end ? Math.max(1, (end - (k.startedAt ? Date.parse(k.startedAt) : Date.now() + skew)) / 1000) : 1; }
@@ -918,7 +890,7 @@ function brkTick(){
     const rem = (end - (Date.now() + skew)) / 1000, s = Math.max(0, Math.ceil(rem)), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), p2 = n => String(n).padStart(2, '0');
     $('bkdig').textContent = (h ? h + ':' : '') + p2(m) + ':' + p2(s % 60); $('bkdig').style.fontSize = h ? '120px' : '';
     $('bkarc').style.strokeDashoffset = 1602.2 * (1 - Math.max(0, Math.min(1, rem / brkTotal)));
-    $('bklab').textContent = s ? 'odliczanie do godziny ' + fmt.format(new Date(end)) : 'juĹź za chwilÄ';
+    $('bklab').textContent = s ? 'odliczanie do godziny ' + fmt.format(new Date(end)) : 'już za chwilę';
     $('brk').classList.toggle('zero', !s); $('dbcd').textContent = s ? (h ? h + ':' : '') + p2(m) + ':' + p2(s % 60) : '';
   } else {
     $('dbcd').textContent = '';
@@ -932,7 +904,7 @@ setInterval(brkTick, 250);
 document.addEventListener('pointerdown', () => { bmSig = ''; });
 
 
-/* ---------- ODLICZANIE: kula nad QR, tykanie w ostatnich 5 s, gong na zerze (dĹşwiÄki syntezowane, bez plikĂłw) ---------- */
+/* ---------- ODLICZANIE: kula nad QR, tykanie w ostatnich 5 s, gong na zerze (dźwięki syntezowane, bez plików) ---------- */
 let tmCfg = null, tmEnd = 0, tmLast = null, tmGong = 0, tmCtx = null;
 function tmAudio(){
   try {
@@ -1022,10 +994,10 @@ function fitFlash(){
     if (over > 4) { t.style.setProperty('--dist', -(over + 10) + 'px'); t.style.setProperty('--dur', Math.max(4, over / 70) + 's'); t.classList.add('mq'); }
   });
 }
-const _vc = {};   // zmienne CSS ustawiamy tylko gdy wartoĹÄ siÄ zmieniĹa â bez zbÄdnego przeliczania stylĂłw co 2 s
+const _vc = {};   // zmienne CSS ustawiamy tylko gdy wartość się zmieniła – bez zbędnego przeliczania stylów co 2 s
 function sv(id, k, v){ const key = id + k; if (_vc[key] === v) return; _vc[key] = v; $(id).style.setProperty(k, v); }
 let ffLift = -1;
-/* zbiĂłrka zostaje na swoim poziomie; podnosi siÄ nad pasek PILNE tylko wtedy, gdy pasek faktycznie siÄga pod niÄ */
+/* zbiórka zostaje na swoim poziomie; podnosi się nad pasek PILNE tylko wtedy, gdy pasek faktycznie sięga pod nią */
 function updFundLift(){
   const fw = $('fundwrap'), fl = $('flashwrap'); let lift = 0;
   if (flH && fw.offsetWidth && fl.offsetWidth && fl.offsetLeft + fl.offsetWidth > fw.offsetLeft - 10) lift = flH;
@@ -1035,7 +1007,7 @@ function setFlH(on){ const h = on ? 62 : 0, ch = h !== flH; flH = h; if (ch) { $
 function setVis(id, on){ $(id).classList.toggle('off', !on); }
 function clearAll(){ setVis('barwrap', false); setVis('livewrap', false); setVis('fundwrap', false); setVis('qrwrap', false); setVis('tmwrap', false); setVis('sgwrap', false); tmCfg = null; setVis('ltwrap', false); setVis('flashwrap', false); setFlH(false); setVis('pollwrap', false); setVis('mapwrap', false); mapOn = false; setAge(AGE_URL || 0); renderBreak(null); }
 
-/* ---------- QR: dziaĹa niezaleĹźnie od zbiĂłrki (s.qr.visible) ---------- */
+/* ---------- QR: działa niezależnie od zbiórki (s.qr.visible) ---------- */
 let fund = null, qrOk = false, qrCfg = {visible: false}, fundSig = '';
 const qr = $('fqr'); let qrTries = 0;
 qr.onload = () => { qrOk = true; showQr(); fitPoll(); };
@@ -1045,11 +1017,11 @@ function showQr(){
   const on = !!(qrCfg && qrCfg.visible && qrOk);
   $('fqrbox').classList.toggle('hide', !on);
   $('fqrcap').textContent = (qrCfg && qrCfg.caption) || 'WESPRZYJ NAS!';
-  $('scene').style.setProperty('--lx', on ? '169px' : '0px'); // plansza rozmĂłwcy omija QR
+  $('scene').style.setProperty('--lx', on ? '169px' : '0px'); // plansza rozmówcy omija QR
   try { updTq(); } catch (e) {}
 }
 
-/* ---------- zbiĂłrka: teksty z panelu, dopasowane do szerokoĹci karty ---------- */
+/* ---------- zbiórka: teksty z panelu, dopasowane do szerokości karty ---------- */
 function fitFund(){
   const W = $('fcard').clientWidth || 416;
   const l1 = $('fl1'), l2 = $('fl2'), am = $('fam'), sm = am.querySelector('small'), row = $('frow');
@@ -1064,9 +1036,9 @@ function applyFundText(f){
   const sig = [f.line1, f.amount, f.line2].join('|');
   if (sig === fundSig) return; fundSig = sig;
   $('fl1').textContent = f.line1 || '';
-  const a = String(f.amount || '').trim(), m = /^(.*?)\s*(zĹ)$/i.exec(a), am = $('fam');
+  const a = String(f.amount || '').trim(), m = /^(.*?)\s*(zł)$/i.exec(a), am = $('fam');
   am.textContent = m ? m[1] : a;
-  if (m) { const s = document.createElement('small'); s.textContent = 'zĹ'; am.appendChild(s); }
+  if (m) { const s = document.createElement('small'); s.textContent = 'zł'; am.appendChild(s); }
   $('fl2').textContent = f.line2 || ''; $('fl2').style.display = f.line2 ? '' : 'none';
   fitFund();
 }
@@ -1093,7 +1065,7 @@ function setAge(r){
 }
 ageImg.onerror = () => { ageShown = 0; setVis('agewrap', false); $('scene').style.setProperty('--pt', '43px'); };
 
-/* ---------- ankieta na Ĺźywo: skalowanie, Ĺźeby nie wchodziĹa na QR / planszÄ / pasek ---------- */
+/* ---------- ankieta na żywo: skalowanie, żeby nie wchodziła na QR / planszę / pasek ---------- */
 let barMb = 43, barBh = 214, flH = 0;
 function fitPoll(){
   const box = $('lpbox'), h = box.offsetHeight; if (!h) return;
@@ -1108,7 +1080,7 @@ function fitPoll(){
   const tf = k < 1 ? 'scale(' + k.toFixed(3) + ')' : ''; if (tf !== box._tf) { box._tf = tf; box.style.transform = tf; }
 }
 
-/* biaĹa plakietka obok âNA ĹťYWOâ: s.live_badge.label albo ?label=... w adresie */
+/* biała plakietka obok „NA ŻYWO”: s.live_badge.label albo ?label=... w adresie */
 const LABEL_URL = (new URLSearchParams(location.search).get('label') || '').trim();
 let lblSig = '';
 function fitLabel(){
@@ -1125,22 +1097,22 @@ function fitLabel(){
 let barHide = false, barCol = false;
 function updFbh(ltOn){ sv('scene', '--fbh', barCol ? '0px' : (ltOn && barHide ? '57px' : '')); }
 let ltOnNow = false;
-/* pauza obrazu z gry: stan z serwera (co 2 s) + natychmiastowy sygnaĹ z panelu przez LiveKit; po sygnale ignorujemy serwer 5 s, Ĺźeby nie migaĹo */
+/* pauza obrazu z gry: stan z serwera (co 2 s) + natychmiastowy sygnał z panelu przez LiveKit; po sygnale ignorujemy serwer 5 s, żeby nie migało */
 let pausedNow = false, pauseLock = 0;
 function setPause(on, fromData){
-  if (!window.PGM) return;   // zwykĹy przezroczysty overlay (OBS) nie ma obrazu z gry do zasĹoniÄcia
+  if (!window.PGM) return;   // zwykły przezroczysty overlay (OBS) nie ma obrazu z gry do zasłonięcia
   if (fromData) pauseLock = Date.now() + 5000;
   if (on === pausedNow) return; pausedNow = on;
-  /* ZATRZYMAJ = zamroĹźona klatka (zdjÄcie obrazu z gry w chwili klikniÄcia); zostaje, nawet gdy gra / przechwytywanie siÄ zakoĹczy, aĹź do WZNĂW */
+  /* ZATRZYMAJ = zamrożona klatka (zdjęcie obrazu z gry w chwili kliknięcia); zostaje, nawet gdy gra / przechwytywanie się zakończy, aż do WZNÓW */
   const fz = $('pgmfreeze'), v = $('pgmv');
   if (on) { try { if (v.videoWidth) { fz.width = v.videoWidth; fz.height = v.videoHeight; fz.getContext('2d').drawImage(v, 0, 0); fz.classList.add('on'); } } catch (e) {} }
   else fz.classList.remove('on');
-  $('pgmcover').classList.toggle('on', on && !fz.classList.contains('on'));   // czarna zasĹona tylko, gdy nie byĹo klatki do zamroĹźenia
+  $('pgmcover').classList.toggle('on', on && !fz.classList.contains('on'));   // czarna zasłona tylko, gdy nie było klatki do zamrożenia
 }
 function apply(s){
   try { if (Date.now() >= pauseLock) setPause(!!(s.game_pause && s.game_pause.paused)); } catch (e) { console.error('pauza', e); }
   skew = Date.parse(s.serverNow) - Date.now();
-  // kaĹźdy moduĹ osobno, Ĺźeby bĹÄd w jednym nie blokowaĹ pozostaĹych
+  // każdy moduł osobno, żeby błąd w jednym nie blokował pozostałych
   try {
     const b = s.bar, sig = JSON.stringify([b.line1, b.line2, b.news, b.speed]);
     const sc = $('scene');
@@ -1173,7 +1145,7 @@ function apply(s){
     const f = s.fund; fund = f;
     applyFundText(f); renderFund();
     setVis('fundwrap', !!f.visible);
-  } catch (e) { console.error('zbiĂłrka', e); }
+  } catch (e) { console.error('zbiórka', e); }
 
   try {
     qrCfg = s.qr || {visible: false};
@@ -1186,7 +1158,7 @@ function apply(s){
   try { const a = s.age; setAge(AGE_URL || (a && a.visible ? a.rating : 0)); } catch (e) { console.error('wiek', e); }
 
   try {
-    const d = s.debate;   // ekran âDebata prezydenckaâ (zakĹadka Debata) ma pierwszeĹstwo przed przerwÄ
+    const d = s.debate;   // ekran „Debata prezydencka” (zakładka Debata) ma pierwszeństwo przed przerwą
     renderBreak(d && d.visible ? {visible: true, kind: 'debate', title: d.title, subtitle: d.subtitle, footer: d.footer, endsAt: '', startedAt: '', music: false, volume: 0} : s.break_screen);
   } catch (e) { console.error('przerwa', e); }
 
@@ -1244,7 +1216,7 @@ function apply(s){
       if (c.action === 'show' && fresh) showPoll(s.poll);
       else if (c.action === 'hide') hidePoll();
     }
-  } catch (e) { console.error('sondaĹź', e); }
+  } catch (e) { console.error('sondaż', e); }
 
   try {
     const a = s.ads, c = s.ads_cmd; adCfg = a;
@@ -1271,12 +1243,12 @@ async function poll(){
     const r = await fetch('/api/state?key=' + encodeURIComponent(KEY), {cache: 'no-store'});
     if (!r.ok) { clearAll(); return; }
     apply(await r.json());
-  } catch (e) { /* chwilowy brak sieci â zostawiamy stan jak jest */ }
+  } catch (e) { /* chwilowy brak sieci – zostawiamy stan jak jest */ }
 }
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { barSig = ''; fundSig = ''; lblSig = ''; flSig = ''; try { updFundLift(); } catch (e) {} });
 poll(); setInterval(poll, 2000);
 
-/* po nowym wdroĹźeniu na Vercelu overlay sam siÄ przeĹadowuje (OBS i podglÄd w panelu nie zostajÄ na starej wersji) */
+/* po nowym wdrożeniu na Vercelu overlay sam się przeładowuje (OBS i podgląd w panelu nie zostają na starej wersji) */
 (function(){
   let ver = null;
   async function chk(){
@@ -1286,7 +1258,7 @@ poll(); setInterval(poll, 2000);
       if (ver === null) { ver = v; return; }
       if (v === ver) return;
       let last = 0; try { last = +sessionStorage.getItem('overlay_reload') || 0; } catch (e) {}
-      if (Date.now() - last < 300000 || $('adwrap').classList.contains('on')) return; /* bez pÄtli i nie w trakcie reklamy */
+      if (Date.now() - last < 300000 || $('adwrap').classList.contains('on')) return; /* bez pętli i nie w trakcie reklamy */
       try { sessionStorage.setItem('overlay_reload', String(Date.now())); } catch (e) {}
       location.reload();
     } catch (e) {}
@@ -1294,14 +1266,14 @@ poll(); setInterval(poll, 2000);
   setTimeout(chk, 5000); setInterval(chk, 60000);
 })();
 
-/* ---------- wykres koĹowy: wyniki ankiety na Ĺźywo (odĹwieĹźanie co 12 s) ---------- */
+/* ---------- wykres kołowy: wyniki ankiety na żywo (odświeżanie co 12 s) ---------- */
 const LP_COL = ['#ff4d5a', '#3b82f6', '#22c55e', '#f59e0b', '#a855f7', '#06b6d4', '#ec4899', '#94a3b8'];
 const LP_C = 2 * Math.PI * 50;
 const lpEsc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
 const SVGNS = 'http://www.w3.org/2000/svg';
 function lpRender(d){
   let rows = d.rows.slice().sort((a, b) => b.n - a.n);
-  if (rows.length > 8) rows = rows.slice(0, 7).concat({name: 'PozostaĹe', n: rows.slice(7).reduce((s, x) => s + x.n, 0)});
+  if (rows.length > 8) rows = rows.slice(0, 7).concat({name: 'Pozostałe', n: rows.slice(7).reduce((s, x) => s + x.n, 0)});
   const tot = rows.reduce((s, x) => s + x.n, 0), g = $('lpslices'), lab = $('lplabels');
   const slices = tot ? rows : [{name: '', n: 1}];
   while (g.children.length < slices.length) {
@@ -1327,7 +1299,7 @@ function lpRender(d){
     cum += frac;
   });
   $('lptitle').textContent = d.title;
-  $('lpstat').textContent = d.status === 'closed' ? 'Wyniki koĹcowe' : 'Wyniki na Ĺźywo';
+  $('lpstat').textContent = d.status === 'closed' ? 'Wyniki końcowe' : 'Wyniki na żywo';
   $('lphead').classList.toggle('end', d.status === 'closed');
   $('lplegend').innerHTML = rows.map((x, i) => {
     const pc = tot ? Math.round(x.n / tot * 100) : 0, col = LP_COL[i % 8];
@@ -1335,8 +1307,8 @@ function lpRender(d){
       '<div class="lpn" style="color:#fff">' + lpEsc(x.name) + '</div><div class="lpp" style="color:#fff">' + pc + '%</div></div>' +
       '<div class="lpbar"><i style="background:' + col + ';width:' + pc + '%"></i></div></div>';
   }).join('');
-  $('lptot').textContent = 'Oddano gĹosĂłw: ' + tot;
-  $('lpurl').textContent = 'GĹosuj: ' + location.host + '/glosuj';
+  $('lptot').textContent = 'Oddano głosów: ' + tot;
+  $('lpurl').textContent = 'Głosuj: ' + location.host + '/glosuj';
   fitPoll();
 }
 async function livePoll(){
@@ -1346,15 +1318,15 @@ async function livePoll(){
     if (!r.ok) { setVis('pollwrap', false); return; }
     const d = await r.json();
     if (d.show) { lpRender(d); setVis('pollwrap', true); } else setVis('pollwrap', false);
-  } catch (e) { /* chwilowy brak sieci â zostawiamy jak jest */ }
+  } catch (e) { /* chwilowy brak sieci – zostawiamy jak jest */ }
 }
 livePoll(); setInterval(livePoll, 12000);
-/* ---------- PGM: obraz i dĹşwiÄk z gry (LiveKit) pod overlayem ---------- */
+/* ---------- PGM: obraz i dźwięk z gry (LiveKit) pod overlayem ---------- */
 const MUTE = QS.get('mute') === '1';
 const pgmv = $('pgmv'), snd = $('snd'), pgmwait = $('pgmwait');
 let pgmRoom = null, pgmTry = 0, recSent = false, lkLib = null;
 if (QS.get('fit') === 'cover') pgmv.style.objectFit = 'cover';
-/* tryb egress (wysyĹka z chmury na Twitcha/TikToka): sygnaĹ startu nagrywania dla LiveKit */
+/* tryb egress (wysyłka z chmury na Twitcha/TikToka): sygnał startu nagrywania dla LiveKit */
 function startRec(){ if (!EGRESS || recSent) return; recSent = true; console.log('START_RECORDING'); }
 if (EGRESS) setTimeout(startRec, 20000);
 pgmv.addEventListener('playing', () => { setTimeout(startRec, 1500); pgmStuck = 0; pgmMsg(''); });
@@ -1375,38 +1347,38 @@ function loadScriptT(src, ms){
 function loadLk(){
   return lkLib || (lkLib = (async () => {
     if (window.LivekitClient) return;
-    for (const u of LK_URLS) { try { await loadScriptT(u, 10000); if (window.LivekitClient) return; } catch (e) { /* nastÄpny adres */ } }
-    lkLib = null; throw new Error('Nie udaĹo siÄ zaĹadowaÄ moduĹu obrazu (sprawdĹş internet / blokadÄ skryptĂłw w przeglÄdarce)');
+    for (const u of LK_URLS) { try { await loadScriptT(u, 10000); if (window.LivekitClient) return; } catch (e) { /* następny adres */ } }
+    lkLib = null; throw new Error('Nie udało się załadować modułu obrazu (sprawdź internet / blokadę skryptów w przeglądarce)');
   })());
 }
-/* stan obrazu: kto publikuje, czy obraz faktycznie dochodzi; przy zawieszeniu â ponowne poĹÄczenie */
+/* stan obrazu: kto publikuje, czy obraz faktycznie dochodzi; przy zawieszeniu – ponowne połączenie */
 let pgmStuck = 0;
 function pgmHasVideo(){ const t = pgmv.srcObject && pgmv.srcObject.getVideoTracks ? pgmv.srcObject.getVideoTracks() : []; return t.length > 0 && t[0].readyState === 'live'; }
 function pgmCheck(){
   if (!pgmRoom) return;
   if (pgmHasVideo() && pgmv.readyState >= 2) { pgmStuck = 0; pgmMsg(''); return; }
   const pub = [...pgmRoom.remoteParticipants.values()].find(p => p.identity === 'gra');
-  if (!pub) { pgmStuck = 0; pgmMsg('Czekam na obraz z gryâŚ', 'W panelu wybierz okno gry (monitor PVW)'); return; }
+  if (!pub) { pgmStuck = 0; pgmMsg('Czekam na obraz z gry…', 'W panelu wybierz okno gry (monitor PVW)'); return; }
   const vp = [...pub.trackPublications.values()].find(x => x.kind === 'video');
-  if (!vp) { pgmStuck = 0; pgmMsg('Czekam na obraz z gryâŚ', 'Operator jest poĹÄczony, ale nie opublikowaĹ okna gry'); return; }
-  pgmMsg('Obraz z gry nie docieraâŚ', 'Ponawiam poĹÄczenie');
-  if (++pgmStuck >= 4) { pgmStuck = 0; try { pgmRoom.disconnect(); } catch (e) {} }   // Disconnected â automatyczne ponowne ĹÄczenie
+  if (!vp) { pgmStuck = 0; pgmMsg('Czekam na obraz z gry…', 'Operator jest połączony, ale nie opublikował okna gry'); return; }
+  pgmMsg('Obraz z gry nie dociera…', 'Ponawiam połączenie');
+  if (++pgmStuck >= 4) { pgmStuck = 0; try { pgmRoom.disconnect(); } catch (e) {} }   // Disconnected → automatyczne ponowne łączenie
 }
 setInterval(pgmCheck, 2500);
 async function pgmConnect(){
   if (!window.PGM || DEMO || !KEY || pgmRoom) return;
   let retry = Math.min(15000, 2000 * (++pgmTry));
   try {
-    pgmMsg('ĹÄczÄ z obrazem z gryâŚ', 'Pobieram dostÄp');
+    pgmMsg('Łączę z obrazem z gry…', 'Pobieram dostęp');
     const ac = new AbortController(), to = setTimeout(() => ac.abort(), 10000);
     let r; try { r = await fetch('/api/lk?key=' + encodeURIComponent(KEY), {cache: 'no-store', signal: ac.signal}); } finally { clearTimeout(to); }
     if (r.status === 503) { pgmMsg('Brak LiveKit na serwerze', 'Ustaw LIVEKIT_URL / LIVEKIT_API_KEY / LIVEKIT_API_SECRET w Vercelu'); return; }
     if (!r.ok) throw new Error('HTTP ' + r.status);
-    const j = await r.json(); pgmMsg('ĹÄczÄ z obrazem z gryâŚ', 'ĹadujÄ moduĹ obrazu'); await loadLk();
-    pgmMsg('ĹÄczÄ z obrazem z gryâŚ', 'ĹÄczÄ z serwerem obrazu');
+    const j = await r.json(); pgmMsg('Łączę z obrazem z gry…', 'Ładuję moduł obrazu'); await loadLk();
+    pgmMsg('Łączę z obrazem z gry…', 'Łączę z serwerem obrazu');
     const L = window.LivekitClient, room = new L.Room({adaptiveStream: false, dynacast: false});
     room.on(L.RoomEvent.TrackSubscribed, track => {
-      /* wysyĹka z chmury: bufor odbioru ~400 ms (ten sam dla obrazu i dĹşwiÄku â synchronizacja) â gĹadszy 60 kl/s bez gubienia klatek; opĂłĹşnienie nie ma tu znaczenia */
+      /* wysyłka z chmury: bufor odbioru ~400 ms (ten sam dla obrazu i dźwięku → synchronizacja) – gładszy 60 kl/s bez gubienia klatek; opóźnienie nie ma tu znaczenia */
       if (EGRESS) { try { if (track.receiver && 'jitterBufferTarget' in track.receiver) track.receiver.jitterBufferTarget = 400; } catch (e) {} }
       if (track.kind === 'video') { track.attach(pgmv); const p = pgmv.play(); if (p && p.catch) p.catch(() => {}); }
       else if (track.kind === 'audio') { const a = track.attach(); a.muted = MUTE; a.volume = 1; a.style.display = 'none'; document.body.appendChild(a); const p = a.play(); if (p && p.catch) p.catch(() => sndHint()); }
@@ -1420,13 +1392,13 @@ async function pgmConnect(){
     [L.RoomEvent.ParticipantConnected, L.RoomEvent.ParticipantDisconnected, L.RoomEvent.TrackPublished, L.RoomEvent.TrackUnpublished].forEach(ev => room.on(ev, () => setTimeout(pgmCheck, 300)));
     room.on(L.RoomEvent.AudioPlaybackStatusChanged, sndHint);
     room.on(L.RoomEvent.DataReceived, payload => { try { const m = JSON.parse(new TextDecoder().decode(payload)); if (m && m.t === 'pause') setPause(!!m.on, true); } catch (e) {} });
-    room.on(L.RoomEvent.Disconnected, () => { if (pgmRoom === room) { pgmRoom = null; pgmv.srcObject = null; sndHint(); pgmMsg('Czekam na obraz z gryâŚ', 'ĹÄczÄ ponownieâŚ'); setTimeout(pgmConnect, 3000); } });
-    await Promise.race([room.connect(j.url, j.token), new Promise((_, no) => setTimeout(() => no(new Error('Przekroczono czas ĹÄczenia z serwerem obrazu (sprawdĹş blokadÄ WebRTC/VPN)')), 15000))]);
+    room.on(L.RoomEvent.Disconnected, () => { if (pgmRoom === room) { pgmRoom = null; pgmv.srcObject = null; sndHint(); pgmMsg('Czekam na obraz z gry…', 'Łączę ponownie…'); setTimeout(pgmConnect, 3000); } });
+    await Promise.race([room.connect(j.url, j.token), new Promise((_, no) => setTimeout(() => no(new Error('Przekroczono czas łączenia z serwerem obrazu (sprawdź blokadę WebRTC/VPN)')), 15000))]);
     pgmRoom = room; pgmTry = 0; sndHint(); try { room.startAudio().then(sndHint).catch(() => {}); } catch (e) {}
     pgmCheck();
   } catch (e) {
     console.error('pgm', e); pgmRoom = null;
-    pgmMsg('Nie mogÄ poĹÄczyÄ z obrazem z gry', String((e && e.message) || e).slice(0, 120) + ' Âˇ ponawiamâŚ');
+    pgmMsg('Nie mogę połączyć z obrazem z gry', String((e && e.message) || e).slice(0, 120) + ' · ponawiam…');
     setTimeout(pgmConnect, retry);
   }
 }
@@ -1434,7 +1406,7 @@ function unlockAudio(){ if (pgmRoom) pgmRoom.startAudio().then(sndHint).catch(()
 snd.onclick = unlockAudio; ['pointerdown', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, unlockAudio));
 pgmConnect();
 
-/* ===== OSTATNIA DOBRA KLATKA: gdy przechwytywanie padnie (okno gry zminimalizowane / zamkniÄte â czerĹ albo koniec ĹcieĹźki), pokazujemy ostatni dobry obraz ===== */
+/* ===== OSTATNIA DOBRA KLATKA: gdy przechwytywanie padnie (okno gry zminimalizowane / zamknięte → czerń albo koniec ścieżki), pokazujemy ostatni dobry obraz ===== */
 (function(){
   if (!window.PGM) return;
   const probe = document.createElement('canvas'); probe.width = 32; probe.height = 18;
@@ -1445,7 +1417,7 @@ pgmConnect();
       pctx.drawImage(v, 0, 0, 32, 18);
       const d = pctx.getImageData(0, 0, 32, 18).data; let sum = 0, mx = 0;
       for (let i = 0; i < d.length; i += 4) { const m = Math.max(d[i], d[i+1], d[i+2]); sum += m; if (m > mx) mx = m; }
-      return (sum / 576) < 1.5 && mx < 8;      // niemal idealna czerĹ = awaria przechwytywania, nie scena z gry
+      return (sum / 576) < 1.5 && mx < 8;      // niemal idealna czerń = awaria przechwytywania, nie scena z gry
     } catch (e) { return false; }
   }
   setInterval(function(){
@@ -1453,9 +1425,9 @@ pgmConnect();
     const tr = v.srcObject && v.srcObject.getVideoTracks ? v.srcObject.getVideoTracks()[0] : null;
     const gone = !v.videoWidth || (tr && tr.readyState === 'ended');
     const black = !gone && isBlack(v);
-    if (pausedNow) { bad = 0; return; }       // pauza ma wĹasnÄ zamroĹźonÄ klatkÄ
+    if (pausedNow) { bad = 0; return; }       // pauza ma własną zamrożoną klatkę
     if (gone || black) bad++; else bad = 0;
-    if (!gone && !black) {                    // dobry obraz â zapamiÄtaj co sekundÄ
+    if (!gone && !black) {                    // dobry obraz – zapamiętaj co sekundę
       if ((tick++ % 2) === 0) { try { last.width = v.videoWidth; last.height = v.videoHeight; last.getContext('2d').drawImage(v, 0, 0); hasGood = true; } catch (e) {} }
       last.classList.remove('on');
     } else if (bad >= 3 && hasGood) last.classList.add('on');
