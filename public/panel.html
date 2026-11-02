@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>JEDEN – panel streamu</title>
+<title>JEDEN â panel streamu</title>
 <style>
 :root{--red:#a3162a;--red2:#c21c28;--redd:#8d1123;--bg:#060f20;--card:#0e1c33;--line:#22365a;--mut:#8fa5c9;--ok:#4ade80;--er:#ff7b7b}
 *{box-sizing:border-box}
@@ -56,7 +56,7 @@ ol li{margin-bottom:8px;color:#cdd8ec}code{background:#081529;border:1px solid v
 .live{display:inline-flex;align-items:center;gap:8px}.live::before{content:"";width:9px;height:9px;border-radius:50%;background:#ff3b3b;box-shadow:0 0 8px #ff3b3b;animation:pl 1.4s infinite}@keyframes pl{50%{opacity:.3}}
 @media(max-width:700px){.grid2{grid-template-columns:1fr}.tabs button{flex:1 1 auto}}
 
-/* ===== REŻYSERKA ===== */
+/* ===== REĹťYSERKA ===== */
 :root{--bg:#04070d;--card:#0b1220;--line:#1b2a45;--mut:#7f93b8}
 body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60%),radial-gradient(900px 500px at 100% 0,#10316633,transparent 60%),#04070d;font-family:"Segoe UI",Roboto,Arial,sans-serif}
 .top{display:grid;grid-template-columns:1fr auto auto auto;gap:22px;align-items:center;background:linear-gradient(180deg,#0e1626,#080d17);border-bottom:2px solid var(--red);box-shadow:0 10px 30px rgba(0,0,0,.6)}
@@ -100,8 +100,8 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
 <body>
 
 <div id="login" class="box" hidden>
-  <h1>JEDEN · panel transmisji</h1>
-  <label for="pw">Hasło admina</label>
+  <h1>JEDEN Âˇ panel transmisji</h1>
+  <label for="pw">HasĹo admina</label>
   <input type="password" id="pw" autocomplete="current-password">
   <button class="b1" id="bLogin">Zaloguj</button>
   <div class="msg er" id="loginMsg"></div>
@@ -109,7 +109,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
 
 <div class="wrap" id="app" hidden>
 
-  <div class="box" id="dbWarn" hidden style="border-color:#ff6b6b"><b style="color:#ff6b6b">⚠ Brak bazy danych.</b> Ustawienia się nie zapiszą i overlay ich nie zobaczy. W Vercelu: <b>Storage → Upstash Redis</b> → podłącz do projektu, potem <b>Redeploy</b>.</div>
+  <div class="box" id="dbWarn" hidden style="border-color:#ff6b6b"><b style="color:#ff6b6b">â  Brak bazy danych.</b> Ustawienia siÄ nie zapiszÄ i overlay ich nie zobaczy. W Vercelu: <b>Storage â Upstash Redis</b> â podĹÄcz do projektu, potem <b>Redeploy</b>.</div>
 
   <div class="mons">
     <div class="mon">
@@ -117,7 +117,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
         <label class="mini"><input type="checkbox" id="monOv" checked>overlay</label></div>
       <div id="prevWrap" class="screen">
         <video id="capA" autoplay muted playsinline></video>
-        <iframe id="prevFrame" title="Podgląd overlayu"></iframe>
+        <iframe id="prevFrame" title="PodglÄd overlayu"></iframe>
       </div>
     </div>
     <div class="mon">
@@ -125,131 +125,131 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
         <label class="mini"><input type="checkbox" id="monFit" checked>dopasuj</label></div>
       <div class="screen" id="capWrap">
         <video id="capB" autoplay muted playsinline></video>
-        <div class="capph" id="capPh"><div>🖥</div><b>Kliknij, aby wybrać okno lub aplikację</b><small>Okno gry · stąd bierze obraz podgląd, okno na Discorda i stream (zakładka Stream)</small></div>
+        <div class="capph" id="capPh"><div>đĽ</div><b>Kliknij, aby wybraÄ okno lub aplikacjÄ</b><small>Okno gry Âˇ stÄd bierze obraz podglÄd, okno na Discorda i stream (zakĹadka Stream)</small></div>
       </div>
     </div>
   </div>
   <div class="box" id="outPick" hidden style="margin-bottom:12px">
-    <b>Które okno otworzyć?</b> Otworzy się osobne okno – w Discordzie wybierz „Udostępnij ekran” → <b>to okno</b> (maksymalizuj je albo wciśnij F11 / dwuklik).
+    <b>KtĂłre okno otworzyÄ?</b> Otworzy siÄ osobne okno â w Discordzie wybierz âUdostÄpnij ekranâ â <b>to okno</b> (maksymalizuj je albo wciĹnij F11 / dwuklik).
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-      <button class="b1" id="outPgm">PGM – z paskiem i overlayem</button>
-      <button class="b2" id="outPvw">PVW – czyste okno (bez paska)</button>
+      <button class="b1" id="outPgm">PGM â z paskiem i overlayem</button>
+      <button class="b2" id="outPvw">PVW â czyste okno (bez paska)</button>
       <button class="b3" id="outCancel">Anuluj</button>
     </div>
-    <div class="hint" style="margin-top:8px">W otwartym oknie możesz przełączać: <b>P</b> = PGM, <b>V</b> = PVW, <b>F</b> lub dwuklik = pełny ekran. Obraz idzie prosto z przechwytywania (bez chmury), więc jakość jest taka jak w oknie gry.</div>
+    <div class="hint" style="margin-top:8px">W otwartym oknie moĹźesz przeĹÄczaÄ: <b>P</b> = PGM, <b>V</b> = PVW, <b>F</b> lub dwuklik = peĹny ekran. Obraz idzie prosto z przechwytywania (bez chmury), wiÄc jakoĹÄ jest taka jak w oknie gry.</div>
   </div>
   <div class="capbar">
-    <button class="b1" id="capStart">🖥 Wybierz okno / ekran</button>
-    <button class="b3" id="capStop" disabled>■ Przerwij przechwytywanie</button>
-    <button class="b2" id="capSwap">⇄ Zamień monitory</button>
-    <button class="b2" id="stPause" title="Zatrzymuje obraz z gry w streamie (przenikanie do czerni, dźwięk gry cichnie – mikrofon i Discord zostają). WZNÓW wraca do gry NA ŻYWO. Skrót: P">⏸ ZATRZYMAJ</button>
-    <button class="b2" id="capFs" title="Otwiera osobne okno z PGM albo PVW – to okno udostępniasz na Discordzie">⛶ Pełny ekran (okno na Discorda)</button>
-    <span class="hint" id="capMsg">Skróty: 1–9 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)</span>
+    <button class="b1" id="capStart">đĽ Wybierz okno / ekran</button>
+    <button class="b3" id="capStop" disabled>â  Przerwij przechwytywanie</button>
+    <button class="b2" id="capSwap">â ZamieĹ monitory</button>
+    <button class="b2" id="stPause" title="Zatrzymuje obraz z gry w streamie (przenikanie do czerni, dĹşwiÄk gry cichnie â mikrofon i Discord zostajÄ). WZNĂW wraca do gry NA ĹťYWO. SkrĂłt: P">â¸ ZATRZYMAJ</button>
+    <button class="b2" id="capFs" title="Otwiera osobne okno z PGM albo PVW â to okno udostÄpniasz na Discordzie">âś PeĹny ekran (okno na Discorda)</button>
+    <span class="hint" id="capMsg">SkrĂłty: 1â9 przeĹÄczajÄ elementy na antenie Âˇ Spacja = ukryj wszystko (panic)</span>
   </div>
 
-  <div class="chips" id="chips"><div style="grid-column:1/-1;color:var(--mut);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase">Na antenie – kliknij lub użyj klawiszy</div></div>
+  <div class="chips" id="chips"><div style="grid-column:1/-1;color:var(--mut);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase">Na antenie â kliknij lub uĹźyj klawiszy</div></div>
 
   <div class="tabs" id="tabs">
-    <button data-t="tBar" class="on">📰 Pasek</button>
-    <button data-t="tPoll">📊 Sondaż</button>
-    <button data-t="tMap">🗺 Mapa</button>
-    <button data-t="tFund">💰 Zbiórka</button>
-    <button data-t="tWidg">🔴 Widżety</button>
-    <button data-t="tFlash">🚨 Pilne</button>
-    <button data-t="tStream">📡 Stream</button>
-    <button data-t="tBrk">⏸ Przerwa</button>
-    <button data-t="tDeb">🎤 Debata</button>
-    <button data-t="tAds">📺 Reklamy</button>
-    <button data-t="tOver">🔗 Overlay</button>
+    <button data-t="tBar" class="on">đ° Pasek</button>
+    <button data-t="tPoll">đ SondaĹź</button>
+    <button data-t="tMap">đş Mapa</button>
+    <button data-t="tFund">đ° ZbiĂłrka</button>
+    <button data-t="tWidg">đ´ WidĹźety</button>
+    <button data-t="tFlash">đ¨ Pilne</button>
+    <button data-t="tStream">đĄ Stream</button>
+    <button data-t="tBrk">â¸ Przerwa</button>
+    <button data-t="tDeb">đ¤ Debata</button>
+    <button data-t="tAds">đş Reklamy</button>
+    <button data-t="tOver">đ Overlay</button>
   </div>
 
   <!-- PASEK -->
   <div class="tab on box" id="tBar" data-sec="bar">
     <label class="chk"><input type="checkbox" id="barVis">Pasek widoczny</label>
-    <label class="chk"><input type="checkbox" id="barCollapse">Zwiń wszystkie paski (zostaje tylko logo i godzina; zbiórka, PILNE i plansza rozmówcy obniżają się)</label>
-    <label class="chk"><input type="checkbox" id="barHead">Ukryj czerwony pasek tytułu (zbiórka schodzi na poziom paska z newsami)</label>
-    <label for="l1">Linia 1 nagłówka</label><input type="text" id="l1" maxlength="200">
-    <label for="l2">Linia 2 nagłówka</label><input type="text" id="l2" maxlength="200">
+    <label class="chk"><input type="checkbox" id="barCollapse">ZwiĹ wszystkie paski (zostaje tylko logo i godzina; zbiĂłrka, PILNE i plansza rozmĂłwcy obniĹźajÄ siÄ)</label>
+    <label class="chk"><input type="checkbox" id="barHead">Ukryj czerwony pasek tytuĹu (zbiĂłrka schodzi na poziom paska z newsami)</label>
+    <label for="l1">Linia 1 nagĹĂłwka</label><input type="text" id="l1" maxlength="200">
+    <label for="l2">Linia 2 nagĹĂłwka</label><input type="text" id="l2" maxlength="200">
     <label>Newsy w tickerze</label>
     <div id="newsList"></div>
     <button class="b2 sm" id="newsAdd" style="margin-top:8px">+ Dodaj news</button>
     <div class="grid2">
-      <div><label for="sp">Prędkość (px/s)</label><input type="number" id="sp" min="10" max="1000"></div>
+      <div><label for="sp">PrÄdkoĹÄ (px/s)</label><input type="number" id="sp" min="10" max="1000"></div>
       <div></div>
-      <div><label for="mr">Przesunięcie w poziomie od środka (px, + w prawo)</label><input type="number" id="mr" min="-960" max="960"></div>
-      <div><label for="mb">Odstęp od dołu (px)</label><input type="number" id="mb" min="0" max="1080"></div>
+      <div><label for="mr">PrzesuniÄcie w poziomie od Ĺrodka (px, + w prawo)</label><input type="number" id="mr" min="-960" max="960"></div>
+      <div><label for="mb">OdstÄp od doĹu (px)</label><input type="number" id="mb" min="0" max="1080"></div>
     </div>
     <button class="b1" id="barSave">Zapisz</button><div class="msg" id="barMsg"></div>
   </div>
 
-  <!-- SONDAŻ -->
+  <!-- SONDAĹť -->
   <div class="tab box" id="tPoll" data-sec="poll">
     <label for="pT">Pytanie</label><input type="text" id="pT" maxlength="200">
-    <label for="pS">Podpis (źródło)</label><input type="text" id="pS" maxlength="200">
+    <label for="pS">Podpis (ĹşrĂłdĹo)</label><input type="text" id="pS" maxlength="200">
     <label for="pH">Chowaj po (sekundy, 0 = nie chowaj)</label><input type="number" id="pH" min="0" max="3600" style="max-width:160px">
-    <label>Opcje (nazwa · % · kolor · usuń) + logo URL</label>
+    <label>Opcje (nazwa Âˇ % Âˇ kolor Âˇ usuĹ) + logo URL</label>
     <div id="pRows"></div>
-    <button class="b2 sm" id="pAdd" style="margin-top:8px">+ Dodaj słupek</button><br>
+    <button class="b2 sm" id="pAdd" style="margin-top:8px">+ Dodaj sĹupek</button><br>
     <button class="b1" id="pSave">Zapisz</button>
-    <button class="b1" id="pShow">▶ POKAŻ</button>
-    <button class="b3" id="pHide">■ UKRYJ</button>
+    <button class="b1" id="pShow">âś POKAĹť</button>
+    <button class="b3" id="pHide">â  UKRYJ</button>
     <div class="msg" id="pMsg"></div>
   </div>
 
-  <!-- MAPA WYNIKÓW -->
+  <!-- MAPA WYNIKĂW -->
   <div class="tab box" id="tMap" data-sec="map">
     <div class="grid2">
       <div><label for="mpKind">Rodzaj</label>
-        <select id="mpKind"><option value="exit">Exit poll</option><option value="wyniki">Wyniki wyborów</option><option value="sondaz">Sondaż</option></select></div>
-      <div><label for="mpBadge">Własny napis plakietki (puste = wg rodzaju)</label><input type="text" id="mpBadge" maxlength="40"></div>
+        <select id="mpKind"><option value="exit">Exit poll</option><option value="wyniki">Wyniki wyborĂłw</option><option value="sondaz">SondaĹź</option></select></div>
+      <div><label for="mpBadge">WĹasny napis plakietki (puste = wg rodzaju)</label><input type="text" id="mpBadge" maxlength="40"></div>
     </div>
-    <label for="mpTitle">Tytuł</label><input type="text" id="mpTitle" maxlength="120">
-    <label for="mpSub">Podtytuł (źródło / zastrzeżenie)</label><input type="text" id="mpSub" maxlength="160">
-    <label for="mpNote">Dolna linia (np. „Przeliczono 62,4% komisji”)</label><input type="text" id="mpNote" maxlength="120">
+    <label for="mpTitle">TytuĹ</label><input type="text" id="mpTitle" maxlength="120">
+    <label for="mpSub">PodtytuĹ (ĹşrĂłdĹo / zastrzeĹźenie)</label><input type="text" id="mpSub" maxlength="160">
+    <label for="mpNote">Dolna linia (np. âPrzeliczono 62,4% komisjiâ)</label><input type="text" id="mpNote" maxlength="120">
     <div class="grid2">
       <div><label for="mpUnit">Jednostka wyniku partii (% / mandaty / puste)</label><input type="text" id="mpUnit" maxlength="12"></div>
-      <div><label class="chk" style="margin-top:36px"><input type="checkbox" id="mpWinner">Pokaż plakietkę „ZWYCIĘZCA” przy liderze</label></div>
+      <div><label class="chk" style="margin-top:36px"><input type="checkbox" id="mpWinner">PokaĹź plakietkÄ âZWYCIÄZCAâ przy liderze</label></div>
     </div>
 
-    <label>Partie (nazwa · wynik ogólnokrajowy · kolor · usuń)</label>
+    <label>Partie (nazwa Âˇ wynik ogĂłlnokrajowy Âˇ kolor Âˇ usuĹ)</label>
     <div id="mpParties"></div>
-    <button class="b2 sm" id="mpAdd" style="margin-top:8px">+ Dodaj partię</button>
+    <button class="b2 sm" id="mpAdd" style="margin-top:8px">+ Dodaj partiÄ</button>
 
-    <label>Regiony (skrót · nazwa · zwycięzca · % zwycięzcy · usuń)</label>
+    <label>Regiony (skrĂłt Âˇ nazwa Âˇ zwyciÄzca Âˇ % zwyciÄzcy Âˇ usuĹ)</label>
     <div id="mpRegions"></div>
     <button class="b2 sm" id="rgAdd" style="margin-top:8px">+ Dodaj region</button>
-    <button class="b3 sm" id="rgClear" style="margin-top:8px">Wyczyść wyniki regionów</button>
-    <div class="hint">Region bez zwycięzcy świeci na szaro („brak danych”). Gdy mapa jest na antenie, wystarczy kliknąć <b>Zapisz</b> – kafelki same się przekolorują, a legenda przestawi.
-      Własny układ: pola <b>X</b> (kolumna) i <b>Y</b> (wiersz) przy regionie ustawiają kafelek na siatce; co drugi wiersz jest przesunięty o pół kafelka.</div>
+    <button class="b3 sm" id="rgClear" style="margin-top:8px">WyczyĹÄ wyniki regionĂłw</button>
+    <div class="hint">Region bez zwyciÄzcy Ĺwieci na szaro (âbrak danychâ). Gdy mapa jest na antenie, wystarczy kliknÄÄ <b>Zapisz</b> â kafelki same siÄ przekolorujÄ, a legenda przestawi.
+      WĹasny ukĹad: pola <b>X</b> (kolumna) i <b>Y</b> (wiersz) przy regionie ustawiajÄ kafelek na siatce; co drugi wiersz jest przesuniÄty o pĂłĹ kafelka.</div>
 
     <button class="b1" id="mpSave">Zapisz</button>
-    <button class="b1" id="mpShow">▶ POKAŻ</button>
-    <button class="b3" id="mpHide">■ UKRYJ</button>
+    <button class="b1" id="mpShow">âś POKAĹť</button>
+    <button class="b3" id="mpHide">â  UKRYJ</button>
     <div class="msg" id="mpMsg"></div>
   </div>
 
-  <!-- ZBIÓRKA -->
+  <!-- ZBIĂRKA -->
   <div class="tab box" id="tFund" data-sec="fund">
-    <label class="chk"><input type="checkbox" id="fVis">Widżet zbiórki widoczny</label>
-    <label for="fL1">Górna linia</label><input type="text" id="fL1" maxlength="80">
+    <label class="chk"><input type="checkbox" id="fVis">WidĹźet zbiĂłrki widoczny</label>
+    <label for="fL1">GĂłrna linia</label><input type="text" id="fL1" maxlength="80">
     <label for="fAm">Kwota</label><input type="text" id="fAm" maxlength="40">
     <label for="fL2">Dolna linia</label><input type="text" id="fL2" maxlength="160">
     <div class="grid2">
-      <div><label for="fPct">Procent (0–100)</label><input type="number" id="fPct" min="0" max="100" step="1"></div>
-      <div><label for="fEv">Co ile sekund przybywa 1% (0 = nie rośnie)</label><input type="number" id="fEv" min="0" max="86400" step="1"></div>
+      <div><label for="fPct">Procent (0â100)</label><input type="number" id="fPct" min="0" max="100" step="1"></div>
+      <div><label for="fEv">Co ile sekund przybywa 1% (0 = nie roĹnie)</label><input type="number" id="fEv" min="0" max="86400" step="1"></div>
     </div>
     <div style="margin-top:8px">Teraz na streamie: <b id="fNow">0%</b></div>
     <button class="b1" id="fSave">Zapisz</button><div class="msg" id="fMsg"></div>
   </div>
 
-  <!-- WIDŻETY -->
+  <!-- WIDĹťETY -->
   <div class="tab box" id="tWidg">
     <div class="sub" data-sec="live_badge">
-      <h3>Plakietka „NA ŻYWO”</h3>
+      <h3>Plakietka âNA ĹťYWOâ</h3>
       <label class="chk"><input type="checkbox" id="lbVis">Widoczna</label>
       <label for="lbText">Tekst</label><input type="text" id="lbText" maxlength="40">
       <div class="grid2">
-        <div><label for="lbTop">Od góry (px)</label><input type="number" id="lbTop" min="0" max="1080"></div>
+        <div><label for="lbTop">Od gĂłry (px)</label><input type="number" id="lbTop" min="0" max="1080"></div>
         <div><label for="lbRight">Od prawej (px)</label><input type="number" id="lbRight" min="0" max="1920"></div>
       </div>
       <button class="b1" id="lbSave">Zapisz</button><div class="msg" id="lbMsg"></div>
@@ -258,7 +258,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <div class="sub" data-sec="qr">
       <h3>Kod QR</h3>
       <label class="chk"><input type="checkbox" id="qrVis">Kod QR widoczny</label>
-      <div class="hint">Działa niezależnie od zbiórki. Plansza rozmówcy sama przesuwa się obok QR.</div>
+      <div class="hint">DziaĹa niezaleĹźnie od zbiĂłrki. Plansza rozmĂłwcy sama przesuwa siÄ obok QR.</div>
       <button class="b1" id="qrSave">Zapisz</button><div class="msg" id="qrMsg"></div>
     </div>
 
@@ -267,24 +267,24 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       <label class="chk"><input type="checkbox" id="ageVis">Oznaczenie widoczne</label>
       <label for="ageRat">Kategoria wiekowa</label>
       <select id="ageRat" style="max-width:200px"><option value="7">7+</option><option value="12">12+</option><option value="16">16+</option></select>
-      <div class="hint">Pojawia się w lewym górnym rogu. Ankieta na żywo schodzi niżej, żeby nie zasłaniać oznaczenia.</div>
+      <div class="hint">Pojawia siÄ w lewym gĂłrnym rogu. Ankieta na Ĺźywo schodzi niĹźej, Ĺźeby nie zasĹaniaÄ oznaczenia.</div>
       <button class="b1" id="ageSave">Zapisz</button><div class="msg" id="ageMsg"></div>
     </div>
 
     <div class="sub" data-sec="lower_third">
-      <h3>Plansza rozmówcy</h3>
+      <h3>Plansza rozmĂłwcy</h3>
       <label class="chk"><input type="checkbox" id="ltVis">Widoczna</label>
 
-      <label for="ltGuest">Goście z listy</label>
+      <label for="ltGuest">GoĹcie z listy</label>
       <div class="gsrow">
         <select id="ltGuest"></select>
         <button class="b2 sm" id="ltGLoad">Wczytaj</button>
-        <button class="b3 sm" id="ltGAdd">＋ Zapisz na liście</button>
-        <button class="b3 sm" id="ltGDel">✕ Usuń z listy</button>
+        <button class="b3 sm" id="ltGAdd">ďź Zapisz na liĹcie</button>
+        <button class="b3 sm" id="ltGDel">â UsuĹ z listy</button>
       </div>
-      <div class="hint">Lista zapisuje się razem z planszą (przycisk Zapisz). Wczytanie gościa podstawia nazwisko i funkcję.</div>
+      <div class="hint">Lista zapisuje siÄ razem z planszÄ (przycisk Zapisz). Wczytanie goĹcia podstawia nazwisko i funkcjÄ.</div>
 
-      <label for="ltName">Imię i nazwisko</label><input type="text" id="ltName" maxlength="80">
+      <label for="ltName">ImiÄ i nazwisko</label><input type="text" id="ltName" maxlength="80">
       <label for="ltRole">Funkcja / opis (opcjonalnie)</label><input type="text" id="ltRole" maxlength="120">
       <label for="ltHide">Chowaj po (sekundy, 0 = nie chowaj)</label><input type="number" id="ltHide" min="0" max="3600" style="max-width:160px">
       <button class="b1" id="ltSave">Zapisz</button><div class="msg" id="ltMsg"></div>
@@ -295,34 +295,34 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
   <div class="tab box" id="tFlash" data-sec="flash">
     <label class="chk"><input type="checkbox" id="flVis">Pasek PILNE widoczny</label>
     <label for="flLabel">Etykieta (czerwone pole)</label><input type="text" id="flLabel" maxlength="20" list="flLabels" placeholder="PILNE">
-    <datalist id="flLabels"><option value="PILNE"><option value="WAŻNE"><option value="NEWS"><option value="OSTATNIE"></datalist>
-    <label for="flText">Treść</label><input type="text" id="flText" maxlength="220" placeholder="Np. SZEF BBN BĘDZIE GOŚCIEM W PROGRAMIE „W PUNKT”">
+    <datalist id="flLabels"><option value="PILNE"><option value="WAĹťNE"><option value="NEWS"><option value="OSTATNIE"></datalist>
+    <label for="flText">TreĹÄ</label><input type="text" id="flText" maxlength="220" placeholder="Np. SZEF BBN BÄDZIE GOĹCIEM W PROGRAMIE âW PUNKTâ">
     <div class="grid2">
-      <div><label for="flTop">Odstęp od góry (px)</label><input type="number" id="flTop" min="0" max="1080"></div>
+      <div><label for="flTop">OdstÄp od gĂłry (px)</label><input type="number" id="flTop" min="0" max="1080"></div>
       <div><label for="flHide">Chowaj po (sekundy, 0 = nie chowaj)</label><input type="number" id="flHide" min="0" max="3600"></div>
     </div>
     <button class="b1" id="flSave">Zapisz</button>
-    <button class="b1" id="flShow">▶ POKAŻ</button>
-    <button class="b3" id="flHideBtn">■ UKRYJ</button>
+    <button class="b1" id="flShow">âś POKAĹť</button>
+    <button class="b3" id="flHideBtn">â  UKRYJ</button>
     <div class="msg" id="flMsg"></div>
-    <div class="hint">Za długi tekst sam się przewija. Pasek można też włączyć i wyłączyć kafelkiem „Pilne” nad zakładkami.</div>
+    <div class="hint">Za dĹugi tekst sam siÄ przewija. Pasek moĹźna teĹź wĹÄczyÄ i wyĹÄczyÄ kafelkiem âPilneâ nad zakĹadkami.</div>
   </div>
 
   <!-- STREAM -->
   <div class="tab box" id="tStream" data-sec="stream">
     <button class="b1" id="stSave">Zapisz</button>
-    <button class="b2" id="stPub" title="Publikuje obraz i Twój dźwięk do overlayu (dzieje się też automatycznie po wyborze okna)">Publikuj okno gry</button>
-    <button class="b3" id="stUnpub">■ Zakończ publikację</button>
-    <button class="b1" id="stGo">● START STREAM</button>
-    <button class="b3" id="stStop">■ STOP STREAM</button>
+    <button class="b2" id="stPub" title="Publikuje obraz i TwĂłj dĹşwiÄk do overlayu (dzieje siÄ teĹź automatycznie po wyborze okna)">Publikuj okno gry</button>
+    <button class="b3" id="stUnpub">â  ZakoĹcz publikacjÄ</button>
+    <button class="b1" id="stGo">â START STREAM</button>
+    <button class="b3" id="stStop">â  STOP STREAM</button>
     <div class="msg" id="stMsg"></div>
     <div class="sub">
       <h3>Operator</h3>
-      <div style="max-width:420px"><label for="stOp">Twoja nazwa (widoczna dla innych operatorów)</label><input type="text" id="stOp" maxlength="40" placeholder="np. Kuba"></div>
-      <div class="hint">Kto wybierze okno gry (albo kliknie <b>START STREAM</b>), ten publikuje obraz i dźwięk <b>ze swoimi ustawieniami dźwięku</b> (poniżej – zapamiętane tylko w tej przeglądarce). Obraz publikuje się do chmury dopiero przy START STREAM (Twitch/TikTok). Na Discordzie używasz przycisku „⛶ Pełny ekran” pod monitorami. Drugi operator może w trakcie streamu kliknąć START STREAM i przejąć publikację – wysyłka na platformy nie jest wtedy restartowana.</div>
+      <div style="max-width:420px"><label for="stOp">Twoja nazwa (widoczna dla innych operatorĂłw)</label><input type="text" id="stOp" maxlength="40" placeholder="np. Kuba"></div>
+      <div class="hint">Kto wybierze okno gry (albo kliknie <b>START STREAM</b>), ten publikuje obraz i dĹşwiÄk <b>ze swoimi ustawieniami dĹşwiÄku</b> (poniĹźej â zapamiÄtane tylko w tej przeglÄdarce). Obraz publikuje siÄ do chmury dopiero przy START STREAM (Twitch/TikTok). Na Discordzie uĹźywasz przycisku ââś PeĹny ekranâ pod monitorami. Drugi operator moĹźe w trakcie streamu kliknÄÄ START STREAM i przejÄÄ publikacjÄ â wysyĹka na platformy nie jest wtedy restartowana.</div>
     </div>
     <div class="sub">
-      <h3>Cele – stream wysyła strona (chmura), nie Twój komputer</h3>
+      <h3>Cele â stream wysyĹa strona (chmura), nie TwĂłj komputer</h3>
       <label class="chk"><input type="checkbox" id="stTwOn">Twitch</label>
       <div class="grid2">
         <div><label for="stTwUrl">Serwer (Server URL)</label><input type="text" id="stTwUrl" maxlength="300" placeholder="rtmp://live.twitch.tv/app"></div>
@@ -330,44 +330,44 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
       </div>
       <label class="chk"><input type="checkbox" id="stTkOn">TikTok</label>
       <div class="grid2">
-        <div><label for="stTkUrl">Serwer (Server URL z TikTok LIVE)</label><input type="text" id="stTkUrl" maxlength="300" placeholder="rtmp://…"></div>
+        <div><label for="stTkUrl">Serwer (Server URL z TikTok LIVE)</label><input type="text" id="stTkUrl" maxlength="300" placeholder="rtmp://âŚ"></div>
         <div><label for="stTkKey">Klucz streamu (Stream Key)</label><input type="password" id="stTkKey" maxlength="300" autocomplete="off"></div>
       </div>
-      <label for="stFps">Klatki na sekundę</label>
-      <select id="stFps" style="max-width:320px"><option value="60">1080p · 60 kl/s (płynnie – zalecane)</option><option value="30">1080p · 30 kl/s (mniej danych)</option></select>
-      <label for="stBr">Bitrate wysyłki na platformy</label>
-      <select id="stBr" style="max-width:320px"><option value="6000">6 000 kb/s (oficjalne zalecenie Twitcha dla 1080p60)</option><option value="8000">8 000 kb/s (maks. jakość z Twitchem – przyjmuje do ok. 8,5 Mb/s)</option><option value="10000">10 000 kb/s (tylko TikTok – przy włączonym Twitchu zostanie obniżone do 8 000)</option></select>
-      <label for="stPubBr">Bitrate obrazu do overlayu (Discord) – zależy od Twojego uploadu</label>
-      <select id="stPubBr" style="max-width:420px"><option value="8000">8 Mb/s</option><option value="12000">12 Mb/s – zalecane</option><option value="16000">16 Mb/s</option><option value="20000">20 Mb/s (potrzebny mocny upload)</option></select>
-      <label for="stPri">Priorytet obrazu – zależy od Twojego łącza (zapamiętane tylko w tej przeglądarce)</label>
-      <select id="stPri" style="max-width:420px"><option value="res">Ostrość obrazu – zalecane (przy słabym łączu spada płynność)</option><option value="bal">Zrównoważony</option><option value="fps">Płynność (przy słabym łączu spada ostrość)</option></select>
-      <div class="hint">Discord: udostępniasz ręcznie okno z linkiem PGM <code>/overlay?key=…</code> (zakładka Overlay). Klucze są trzymane tylko w bazie i nigdy nie trafiają do overlayu. Obraz z okna gry jest przechwytywany w 1080p z wybraną liczbą klatek (wymaga ok. 12–14 Mb/s uploadu u operatora przy 60 kl/s).</div>
+      <label for="stFps">Klatki na sekundÄ</label>
+      <select id="stFps" style="max-width:320px"><option value="60">1080p Âˇ 60 kl/s (pĹynnie â zalecane)</option><option value="30">1080p Âˇ 30 kl/s (mniej danych)</option></select>
+      <label for="stBr">Bitrate wysyĹki na platformy</label>
+      <select id="stBr" style="max-width:320px"><option value="6000">6 000 kb/s (oficjalne zalecenie Twitcha dla 1080p60)</option><option value="8000">8 000 kb/s (maks. jakoĹÄ z Twitchem â przyjmuje do ok. 8,5 Mb/s)</option><option value="10000">10 000 kb/s (tylko TikTok â przy wĹÄczonym Twitchu zostanie obniĹźone do 8 000)</option></select>
+      <label for="stPubBr">Bitrate obrazu do overlayu (Discord) â zaleĹźy od Twojego uploadu</label>
+      <select id="stPubBr" style="max-width:420px"><option value="8000">8 Mb/s</option><option value="12000">12 Mb/s â zalecane</option><option value="16000">16 Mb/s</option><option value="20000">20 Mb/s (potrzebny mocny upload)</option></select>
+      <label for="stPri">Priorytet obrazu â zaleĹźy od Twojego ĹÄcza (zapamiÄtane tylko w tej przeglÄdarce)</label>
+      <select id="stPri" style="max-width:420px"><option value="res">OstroĹÄ obrazu â zalecane (przy sĹabym ĹÄczu spada pĹynnoĹÄ)</option><option value="bal">ZrĂłwnowaĹźony</option><option value="fps">PĹynnoĹÄ (przy sĹabym ĹÄczu spada ostroĹÄ)</option></select>
+      <div class="hint">Discord: udostÄpniasz rÄcznie okno z linkiem PGM <code>/overlay?key=âŚ</code> (zakĹadka Overlay). Klucze sÄ trzymane tylko w bazie i nigdy nie trafiajÄ do overlayu. Obraz z okna gry jest przechwytywany w 1080p z wybranÄ liczbÄ klatek (wymaga ok. 12â14 Mb/s uploadu u operatora przy 60 kl/s).</div>
     </div>
     <div class="sub">
-      <h3>Dźwięk do streamu – Twoje ustawienia</h3>
-      <label class="chk"><input type="checkbox" id="auGame" checked>Dźwięk z okna gry</label>
-      <div class="vol">głośność <input type="range" id="auVg" min="0" max="150" value="100"><b id="auVgT">100%</b></div>
-      <label class="chk"><input type="checkbox" id="auDc">Dźwięk z Discorda (głosy innych)</label>
-      <div class="vol">głośność <input type="range" id="auVd" min="0" max="150" value="100"><b id="auVdT">100%</b></div>
-      <label class="chk"><input type="checkbox" id="auMic">Mój mikrofon (Twój głos) – opcjonalnie, można włączyć/wyłączyć na żywo</label>
-      <div class="vol">głośność <input type="range" id="auVm" min="0" max="150" value="100"><b id="auVmT">100%</b></div>
-      <div id="auMicWrap" style="max-width:420px"><label for="auMicDev">Mikrofon</label><select id="auMicDev"><option value="">Domyślny</option></select><label for="auMicProc">Przetwarzanie głosu</label><select id="auMicProc"><option value="ns">Redukcja szumu + wyrównanie głośności (zalecane ze słuchawkami)</option><option value="full">Pełne: + usuwanie echa (gdy grasz na głośnikach)</option><option value="raw">Surowy dźwięk (mikrofon studyjny)</option></select><div class="meter" title="Poziom Twojego mikrofonu (widać go też po wyciszeniu)"><i id="auMicLvl"></i></div><button class="b2" id="auMicMute" type="button">🎙 Mikrofon: włączony</button> <span class="hint" style="display:inline">skrót: klawisz <b>M</b></span></div>
+      <h3>DĹşwiÄk do streamu â Twoje ustawienia</h3>
+      <label class="chk"><input type="checkbox" id="auGame" checked>DĹşwiÄk z okna gry</label>
+      <div class="vol">gĹoĹnoĹÄ <input type="range" id="auVg" min="0" max="150" value="100"><b id="auVgT">100%</b></div>
+      <label class="chk"><input type="checkbox" id="auDc">DĹşwiÄk z Discorda (gĹosy innych)</label>
+      <div class="vol">gĹoĹnoĹÄ <input type="range" id="auVd" min="0" max="150" value="100"><b id="auVdT">100%</b></div>
+      <label class="chk"><input type="checkbox" id="auMic">MĂłj mikrofon (TwĂłj gĹos) â opcjonalnie, moĹźna wĹÄczyÄ/wyĹÄczyÄ na Ĺźywo</label>
+      <div class="vol">gĹoĹnoĹÄ <input type="range" id="auVm" min="0" max="150" value="100"><b id="auVmT">100%</b></div>
+      <div id="auMicWrap" style="max-width:420px"><label for="auMicDev">Mikrofon</label><select id="auMicDev"><option value="">DomyĹlny</option></select><label for="auMicProc">Przetwarzanie gĹosu</label><select id="auMicProc"><option value="ns">Redukcja szumu + wyrĂłwnanie gĹoĹnoĹci (zalecane ze sĹuchawkami)</option><option value="full">PeĹne: + usuwanie echa (gdy grasz na gĹoĹnikach)</option><option value="raw">Surowy dĹşwiÄk (mikrofon studyjny)</option></select><div class="meter" title="Poziom Twojego mikrofonu (widaÄ go teĹź po wyciszeniu)"><i id="auMicLvl"></i></div><button class="b2" id="auMicMute" type="button">đ Mikrofon: wĹÄczony</button> <span class="hint" style="display:inline">skrĂłt: klawisz <b>M</b></span></div>
       <div class="grid2">
-        <div><label for="auMode">Skąd brać dźwięk Discorda</label>
-          <select id="auMode"><option value="dev">Urządzenie audio (np. VB-Cable)</option><option value="tab">Karta przeglądarki (discord.com/app)</option></select></div>
-        <div id="auDevWrap"><label for="auDev">Urządzenie z dźwiękiem Discorda</label><select id="auDev"><option value="">— wybierz urządzenie —</option></select></div>
+        <div><label for="auMode">SkÄd braÄ dĹşwiÄk Discorda</label>
+          <select id="auMode"><option value="dev">UrzÄdzenie audio (np. VB-Cable)</option><option value="tab">Karta przeglÄdarki (discord.com/app)</option></select></div>
+        <div id="auDevWrap"><label for="auDev">UrzÄdzenie z dĹşwiÄkiem Discorda</label><select id="auDev"><option value="">â wybierz urzÄdzenie â</option></select></div>
       </div>
-      <button class="b2" id="auPrep">🎧 Połącz dźwięk Discorda</button>
-      <button class="b2" id="auRefresh">↻ Wczytaj listę urządzeń</button>
+      <button class="b2" id="auPrep">đ§ PoĹÄcz dĹşwiÄk Discorda</button>
+      <button class="b2" id="auRefresh">âť Wczytaj listÄ urzÄdzeĹ</button>
       <div class="msg" id="auMsg"></div>
-      <div class="meter" title="Poziom dźwięku wysyłanego na stream"><i id="auLvl"></i></div>
-      <div class="hint"><b>Poziom</b> pokazuje to, co faktycznie leci na stream (po kliknięciu START STREAM). Zaznaczone źródło, które nie działa, zatrzymuje start – żeby nie wyjść na antenę bez głosów. Mikrofon i Discord muszą być na <b>różnych</b> urządzeniach. <b>Urządzenie:</b> w Discordzie ustaw wyjście na „CABLE Input (VB-Audio)”, tu wybierz „CABLE Output”. <b>Karta:</b> otwórz Discorda w przeglądarce, kliknij „Połącz dźwięk Discorda”, wybierz kartę i zaznacz „Udostępnij dźwięk karty” (zrób to PRZED START STREAM). Zmiana źródeł dźwięku zastosuje się po „Publikuj okno gry” lub przy START STREAM; głośności oraz mikrofon (włącz / wyłącz / wycisz – klawisz M) działają od razu, na żywo, bez restartu streamu.</div>
+      <div class="meter" title="Poziom dĹşwiÄku wysyĹanego na stream"><i id="auLvl"></i></div>
+      <div class="hint"><b>Poziom</b> pokazuje to, co faktycznie leci na stream (po klikniÄciu START STREAM). Zaznaczone ĹşrĂłdĹo, ktĂłre nie dziaĹa, zatrzymuje start â Ĺźeby nie wyjĹÄ na antenÄ bez gĹosĂłw. Mikrofon i Discord muszÄ byÄ na <b>rĂłĹźnych</b> urzÄdzeniach. <b>UrzÄdzenie:</b> w Discordzie ustaw wyjĹcie na âCABLE Input (VB-Audio)â, tu wybierz âCABLE Outputâ. <b>Karta:</b> otwĂłrz Discorda w przeglÄdarce, kliknij âPoĹÄcz dĹşwiÄk Discordaâ, wybierz kartÄ i zaznacz âUdostÄpnij dĹşwiÄk kartyâ (zrĂłb to PRZED START STREAM). Zmiana ĹşrĂłdeĹ dĹşwiÄku zastosuje siÄ po âPublikuj okno gryâ lub przy START STREAM; gĹoĹnoĹci oraz mikrofon (wĹÄcz / wyĹÄcz / wycisz â klawisz M) dziaĹajÄ od razu, na Ĺźywo, bez restartu streamu.</div>
     </div>
     <div class="sub">
       <h3>Obraz z gry</h3>
-      <div class="hint" id="stPubHint">Twitch/TikTok: 1) wybierz okno gry (monitor PVW), 2) ustaw swój dźwięk powyżej, 3) „START STREAM”. Okno gry musi być przechwytywane w tym panelu przez cały stream. Discord: przycisk „⛶ Pełny ekran” pod monitorami.</div>
-      <div class="hint" id="stStat" style="font-weight:800;margin-top:10px">Stream: wyłączony</div>
-      <div class="hint" id="stQual" style="margin-top:6px">Wysyłka do overlayu: nie publikuję</div>
+      <div class="hint" id="stPubHint">Twitch/TikTok: 1) wybierz okno gry (monitor PVW), 2) ustaw swĂłj dĹşwiÄk powyĹźej, 3) âSTART STREAMâ. Okno gry musi byÄ przechwytywane w tym panelu przez caĹy stream. Discord: przycisk ââś PeĹny ekranâ pod monitorami.</div>
+      <div class="hint" id="stStat" style="font-weight:800;margin-top:10px">Stream: wyĹÄczony</div>
+      <div class="hint" id="stQual" style="margin-top:6px">WysyĹka do overlayu: nie publikujÄ</div>
     </div>
   </div>
 
@@ -376,46 +376,47 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <h3>Przerwa / Zaraz wracamy</h3>
     <label for="bkKind">Rodzaj planszy</label>
     <select id="bkKind" style="max-width:260px"><option value="break">Przerwa</option><option value="brb">Zaraz wracamy</option><option value="start">Zaraz zaczynamy</option></select>
-    <label for="bkTitle">Tytuł (puste = domyślny)</label><input type="text" id="bkTitle" maxlength="60">
-    <label for="bkSub">Podtytuł (puste = domyślny)</label><input type="text" id="bkSub" maxlength="120">
+    <label for="bkTitle">TytuĹ (puste = domyĹlny)</label><input type="text" id="bkTitle" maxlength="60">
+    <label for="bkSub">PodtytuĹ (puste = domyĹlny)</label><input type="text" id="bkSub" maxlength="120">
     <label for="bkFoot">Stopka</label><input type="text" id="bkFoot" maxlength="80">
     <div class="grid2">
       <div><label for="bkTime">Odliczanie do godziny (puste = bez odliczania)</label><input type="time" id="bkTime"></div>
-      <div><label for="bkVol">Głośność muzyki (0–100)</label><input type="number" id="bkVol" min="0" max="100"></div>
+      <div><label for="bkVol">GĹoĹnoĹÄ muzyki (0â100)</label><input type="number" id="bkVol" min="0" max="100"></div>
     </div>
     <label class="chk"><input type="checkbox" id="bkMusic">Muzyka podczas planszy</label>
     <div id="bkNow" class="hint"></div>
-    <button class="b1" id="bkShow">▶ POKAŻ</button>
-    <button class="b3" id="bkHide">■ UKRYJ</button>
+    <button class="b1" id="bkShow">âś POKAĹť</button>
+    <button class="b3" id="bkHide">â  UKRYJ</button>
     <div class="msg" id="bkMsg"></div>
   </div>
 
   <!-- DEBATA -->
   <div class="tab box" id="tDeb">
     <div class="sub" data-sec="debate">
-      <h3>Ekran „Debata prezydencka” (flaga na całym ekranie)</h3>
-      <label for="dbTop">Górny napis</label><input type="text" id="dbTop" maxlength="40" placeholder="DEBATA">
+      <h3>Start debaty Âˇ plan i zasady</h3>
+      <label for="dbTop">GĂłrny napis</label><input type="text" id="dbTop" maxlength="40" placeholder="DEBATA">
       <label for="dbBot">Dolny napis</label><input type="text" id="dbBot" maxlength="40" placeholder="PREZYDENCKA">
       <label for="dbFoot">Stopka (opcjonalnie)</label><input type="text" id="dbFoot" maxlength="80">
-      <div class="hint">Zakrywa obraz z gry. Pasek, QR, zbiórka i odliczanie zostają na wierzchu (zwiń paski w zakładce Pasek, jeśli mają zostać tylko logo i godzina). Ma pierwszeństwo przed zakładką Przerwa.</div>
-      <button class="b1" id="dbShow">▶ POKAŻ</button>
-      <button class="b3" id="dbHideBtn">■ UKRYJ</button>
+      <div class="hint">Plansza startowa pokazuje ramĂłwkÄ 90-minutowej debaty i zasady. Pasek, QR i odliczanie pozostajÄ na wierzchu.</div>
+      <button class="b1" id="dbShow">âś POKAĹť START + PLAN I ZASADY</button>
+      <button class="b3" id="dbHideBtn">â  UKRYJ PLANSZÄ</button>
+      <button class="b2" id="debEnd">â  ZAKOĹCZ DEBATÄ</button>
       <div class="msg" id="dbMsg"></div>
     </div>
 
     <div class="sub" data-sec="segment">
-      <h3>Aktualny segment debaty (belka na górze ekranu)</h3>
+      <h3>Belka z pytaniem / aktualny segment</h3>
       <div class="grid2">
-        <div><label for="sgLabel">Mała etykieta (puste = bez)</label><input type="text" id="sgLabel" maxlength="24" placeholder="TERAZ"></div>
-        <div><label for="sgText">Tekst segmentu</label><input type="text" id="sgText" maxlength="100" placeholder="np. Pytania wzajemne"></div>
+        <div><label for="sgLabel">MaĹa etykieta (puste = bez)</label><input type="text" id="sgLabel" maxlength="24" placeholder="TERAZ"></div>
+        <div><label for="sgText">Pytanie lub tekst belki</label><input type="text" id="sgText" maxlength="100" placeholder="Wpisz pytanie dla kandydatĂłw"></div>
       </div>
-      <label>Szybki wybór (kliknij, żeby wstawić i pokazać)</label>
+      <label>Szybki wybĂłr (kliknij, Ĺźeby wstawiÄ i pokazaÄ)</label>
       <div class="adbtns" id="sgBtns"></div>
-      <label for="sgList">Lista segmentów – jeden w linii. Opcjonalnie czas po kresce: „Gospodarka | 5:00” (kliknięcie wpisuje też ten czas do odliczania poniżej, bez startu)</label>
+      <label for="sgList">Lista segmentĂłw â jeden w linii. Opcjonalnie czas po kresce: âGospodarka | 5:00â (klikniÄcie wpisuje teĹź ten czas do odliczania poniĹźej, bez startu)</label>
       <textarea id="sgList" rows="6" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:9px;border:1px solid var(--line);background:#081529;color:#fff;font:inherit;resize:vertical"></textarea>
-      <button class="b1" id="sgShow">▶ POKAŻ</button>
-      <button class="b2" id="sgSaveBtn">Zapisz (bez zmiany widoczności)</button>
-      <button class="b3" id="sgHideBtn">■ UKRYJ</button>
+      <button class="b1" id="sgShow">âś POKAĹť BELKÄ Z PYTANIEM</button>
+      <button class="b2" id="sgSaveBtn">Zapisz (bez zmiany widocznoĹci)</button>
+      <button class="b3" id="sgHideBtn">â  UKRYJ</button>
       <div class="msg" id="sgMsg"></div>
     </div>
 
@@ -426,16 +427,16 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
         <div><label for="tmSec">Sekundy</label><input type="number" id="tmSec" min="0" max="59" step="1"></div>
       </div>
       <div class="grid2">
-        <div><label for="tmVol">Głośność dźwięków (0–100)</label><input type="number" id="tmVol" min="0" max="100" step="1"></div>
+        <div><label for="tmVol">GĹoĹnoĹÄ dĹşwiÄkĂłw (0â100)</label><input type="number" id="tmVol" min="0" max="100" step="1"></div>
         <div><label for="tmHide">Ukryj po tylu sekundach od zera (0 = zostaje)</label><input type="number" id="tmHide" min="0" max="3600" step="1"></div>
       </div>
-      <label class="chk"><input type="checkbox" id="tmSnd">Dźwięki: tykanie w ostatnich 5 s i gong na zerze</label>
-      <div class="hint">START odpala odliczanie od ustawionego czasu i pokazuje kulę. RESET zatrzymuje i pokazuje pełny czas. UKRYJ zdejmuje kulę z anteny. Kula stoi nad kodem QR (a bez QR – tuż nad paskiem).</div>
-      <button class="b1" id="tmStart">▶ START</button>
-      <button class="b2" id="tmReset">↺ RESET</button>
-      <button class="b3" id="tmHideBtn">■ UKRYJ</button>
+      <label class="chk"><input type="checkbox" id="tmSnd">DĹşwiÄki: tykanie w ostatnich 5 s i gong na zerze</label>
+      <div class="hint">START odpala odliczanie od ustawionego czasu i pokazuje kulÄ. RESET zatrzymuje i pokazuje peĹny czas. UKRYJ zdejmuje kulÄ z anteny. Kula stoi nad kodem QR (a bez QR â tuĹź nad paskiem).</div>
+      <button class="b1" id="tmStart">âś START</button>
+      <button class="b2" id="tmReset">âş RESET</button>
+      <button class="b3" id="tmHideBtn">â  UKRYJ</button>
       <div class="msg" id="tmMsg"></div>
-      <div style="margin-top:8px">Teraz: <b id="tmNow">—</b></div>
+      <div style="margin-top:8px">Teraz: <b id="tmNow">â</b></div>
     </div>
 
   </div>
@@ -443,29 +444,29 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
   <!-- REKLAMY -->
   <div class="tab box" id="tAds" data-sec="ads">
     <h3>Odtwarzanie</h3>
-    <div>Wykryte reklamy: <b id="adCount">…</b></div>
+    <div>Wykryte reklamy: <b id="adCount">âŚ</b></div>
     <div class="adbtns" id="adList"></div>
     <div class="adbtns">
-      <button class="b1" id="adNext">▶ Następna reklama</button>
-      <button class="b1" id="adAll">▶ Wszystkie po kolei</button>
-      <button class="b3" id="adStop">■ Stop</button>
-      <button class="b2" id="adScan">↻ Odśwież listę</button>
+      <button class="b1" id="adNext">âś NastÄpna reklama</button>
+      <button class="b1" id="adAll">âś Wszystkie po kolei</button>
+      <button class="b3" id="adStop">â  Stop</button>
+      <button class="b2" id="adScan">âť OdĹwieĹź listÄ</button>
     </div>
     <h3 style="margin-top:18px">Ustawienia</h3>
     <div class="grid2">
-      <div><label for="adVol">Głośność (0–100)</label><input type="number" id="adVol" min="0" max="100"></div>
-      <div><label for="adEv">Automatycznie co ile minut (0 = tylko ręcznie)</label><input type="number" id="adEv" min="0" max="1440"></div>
+      <div><label for="adVol">GĹoĹnoĹÄ (0â100)</label><input type="number" id="adVol" min="0" max="100"></div>
+      <div><label for="adEv">Automatycznie co ile minut (0 = tylko rÄcznie)</label><input type="number" id="adEv" min="0" max="1440"></div>
     </div>
-    <label class="chk"><input type="checkbox" id="adLabel">Pokazuj plakietkę „REKLAMA”</label>
+    <label class="chk"><input type="checkbox" id="adLabel">Pokazuj plakietkÄ âREKLAMAâ</label>
     <button class="b1" id="adSave">Zapisz</button><div class="msg" id="adMsg"></div>
   </div>
 
   <!-- OVERLAY -->
   <div class="tab box" id="tOver">
-    <h3>Link PGM (cały obraz: gra + overlay – do udostępnienia na Discordzie)</h3>
+    <h3>Link PGM (caĹy obraz: gra + overlay â do udostÄpnienia na Discordzie)</h3>
     <input type="text" id="ovUrl" readonly>
     <button class="b2" id="ovCopy">Kopiuj</button>
-    <div class="hint">Otwórz w osobnym oknie przeglądarki (Chrome/Edge), kliknij raz w stronę (dźwięk) i udostępnij to okno na Discordzie. Obraz skaluje się do rozmiaru okna. Bez dźwięku z tego okna: dopisz <code>&amp;mute=1</code>.</div>
+    <div class="hint">OtwĂłrz w osobnym oknie przeglÄdarki (Chrome/Edge), kliknij raz w stronÄ (dĹşwiÄk) i udostÄpnij to okno na Discordzie. Obraz skaluje siÄ do rozmiaru okna. Bez dĹşwiÄku z tego okna: dopisz <code>&amp;mute=1</code>.</div>
     <h3 style="margin-top:18px">Link do OBS (przezroczysty overlay, bez obrazu gry)</h3>
     <input type="text" id="ovUrlObs" readonly>
     <button class="b2" id="ovCopyObs">Kopiuj</button>
@@ -474,11 +475,11 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <div class="msg" id="ovMsg"></div>
     <h3 style="margin-top:18px">Instrukcja OBS</h3>
     <ol>
-      <li>Dodaj źródło <b>Przeglądarka</b> (Browser).</li>
-      <li>W polu URL wklej powyższy „Link do OBS” (z <code>&amp;clean=1</code>, czyli przezroczysty overlay).</li>
-      <li>Szerokość <b>1920</b>, wysokość <b>1080</b>.</li>
-      <li>Odznacz „Zamykaj źródło, gdy nie jest widoczne” i „Odśwież, gdy scena staje się aktywna”.</li>
-      <li>Ułóż źródło na wierzchu sceny. Po wygenerowaniu nowego klucza wklej w OBS nowy link — stary przestaje działać.</li>
+      <li>Dodaj ĹşrĂłdĹo <b>PrzeglÄdarka</b> (Browser).</li>
+      <li>W polu URL wklej powyĹźszy âLink do OBSâ (z <code>&amp;clean=1</code>, czyli przezroczysty overlay).</li>
+      <li>SzerokoĹÄ <b>1920</b>, wysokoĹÄ <b>1080</b>.</li>
+      <li>Odznacz âZamykaj ĹşrĂłdĹo, gdy nie jest widoczneâ i âOdĹwieĹź, gdy scena staje siÄ aktywnaâ.</li>
+      <li>UĹĂłĹź ĹşrĂłdĹo na wierzchu sceny. Po wygenerowaniu nowego klucza wklej w OBS nowy link â stary przestaje dziaĹaÄ.</li>
     </ol>
   </div>
 </div>
@@ -487,7 +488,7 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
 const $ = id => document.getElementById(id);
 let cfg = null, skew = 0;
 
-/* przyciski akcji (Zapisz / Pokaż / Ukryj + komunikat) zawsze na górze sekcji */
+/* przyciski akcji (Zapisz / PokaĹź / Ukryj + komunikat) zawsze na gĂłrze sekcji */
 ['barSave','stSave','flSave','pSave','mpSave','fSave','lbSave','qrSave','dbShow','sgShow','tmStart','ageSave','ltSave','bkShow','adSave'].forEach(id => {
   const first = $(id); if (!first) return;
   const box = first.closest('.sub') || first.closest('.tab'); if (!box) return;
@@ -506,8 +507,8 @@ async function api(path, method, body){
   const r = await fetch(path, {method: method || 'GET', credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'}, body: body ? JSON.stringify(body) : undefined});
   let j = {}; try { j = await r.json(); } catch (e) {}
-  if (r.status === 401 && path !== '/api/login') { showLogin(); throw new Error('Sesja wygasła – zaloguj się ponownie'); }
-  if (!r.ok) throw new Error(j.error || ('Błąd ' + r.status));
+  if (r.status === 401 && path !== '/api/login') { showLogin(); throw new Error('Sesja wygasĹa â zaloguj siÄ ponownie'); }
+  if (!r.ok) throw new Error(j.error || ('BĹÄd ' + r.status));
   return j;
 }
 const say = (id, m, ok) => { const e = $(id); e.textContent = m; e.className = 'msg ' + (ok ? 'ok' : 'er'); };
@@ -529,14 +530,14 @@ async function start(){
   fillBar(); fillPoll(); fillMap(); fillFund(); fillBadge(); fillQr(); fillTimer(); fillDebate(); fillSegment(); fillAge(); fillLt(); fillFlash(); fillStream(); fillBrk(); fillAds(); fillOverlay(); renderChips(); scanAds();
 }
 
-/* ---------- zakładki ---------- */
+/* ---------- zakĹadki ---------- */
 $('tabs').onclick = e => {
   const t = e.target.dataset && e.target.dataset.t; if (!t) return;
   document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b === e.target));
   document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x.id === t));
 };
 
-/* ---------- podgląd ---------- */
+/* ---------- podglÄd ---------- */
 function fitPreview(){ $('prevFrame').style.transform = 'scale(' + ($('prevWrap').clientWidth / 1920) + ')'; }
 addEventListener('resize', fitPreview);
 function setPreview(){ $('prevFrame').src = '/overlay?preview=1&lite=1&key=' + encodeURIComponent(cfg.overlayKey); fitPreview(); }
@@ -544,12 +545,12 @@ function setPreview(){ $('prevFrame').src = '/overlay?preview=1&lite=1&key=' + e
 /* ---------- pasek ---------- */
 function newsRow(v){
   const d = document.createElement('div'); d.className = 'nrow';
-  const i = document.createElement('input'); i.type = 'text'; i.value = v; i.maxLength = 300; i.placeholder = 'Treść newsa';
+  const i = document.createElement('input'); i.type = 'text'; i.value = v; i.maxLength = 300; i.placeholder = 'TreĹÄ newsa';
   const mk = (t, f) => { const b = document.createElement('button'); b.className = 'b3 sm'; b.textContent = t; b.onclick = f; return b; };
   d.append(i,
-    mk('↑', () => { if (d.previousElementSibling) d.parentNode.insertBefore(d, d.previousElementSibling); }),
-    mk('↓', () => { if (d.nextElementSibling) d.parentNode.insertBefore(d.nextElementSibling, d); }),
-    mk('✕', () => d.remove()));
+    mk('â', () => { if (d.previousElementSibling) d.parentNode.insertBefore(d, d.previousElementSibling); }),
+    mk('â', () => { if (d.nextElementSibling) d.parentNode.insertBefore(d.nextElementSibling, d); }),
+    mk('â', () => d.remove()));
   $('newsList').appendChild(d);
 }
 function fillBar(){
@@ -560,7 +561,7 @@ function fillBar(){
 }
 $('newsAdd').onclick = () => newsRow('');
 async function save(section, data, msgId, auto){
-  try { const r = await api('/api/config', 'POST', {section, data, auto}); cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); dirty[section] = false; renderChips(); say(msgId, 'Zapisano ✔', true); return true; }
+  try { const r = await api('/api/config', 'POST', {section, data, auto}); cfg = r.config; skew = Date.parse(r.serverNow) - Date.now(); dirty[section] = false; renderChips(); say(msgId, 'Zapisano â', true); return true; }
   catch (e) { say(msgId, e.message, false); return false; }
 }
 $('barSave').onclick = () => save('bar', {
@@ -569,10 +570,10 @@ $('barSave').onclick = () => save('bar', {
   speed: num($('sp').value), offsetX: num($('mr').value), marginBottom: num($('mb').value)
 }, 'barMsg');
 
-/* ---------- sondaż ---------- */
+/* ---------- sondaĹź ---------- */
 function pollRow(r){
   const d = document.createElement('div'); d.className = 'prow';
-  d.innerHTML = '<input type="text" class="n" placeholder="Nazwa" maxlength="60"><input type="number" class="v" min="0" max="100" step="0.01"><input type="color" class="c"><button class="b3 sm">✕</button><input type="url" class="l lg" placeholder="Logo URL (opcjonalnie, https://…)">';
+  d.innerHTML = '<input type="text" class="n" placeholder="Nazwa" maxlength="60"><input type="number" class="v" min="0" max="100" step="0.01"><input type="color" class="c"><button class="b3 sm">â</button><input type="url" class="l lg" placeholder="Logo URL (opcjonalnie, https://âŚ)">';
   d.querySelector('.n').value = r.name; d.querySelector('.v').value = r.value;
   d.querySelector('.c').value = r.color; d.querySelector('.l').value = r.logo || '';
   d.querySelector('button').onclick = () => d.remove();
@@ -592,12 +593,12 @@ const pollData = () => ({
 $('pSave').onclick = () => save('poll', pollData(), 'pMsg');
 async function pollCmd(action){
   if (action === 'show' && !(await save('poll', pollData(), 'pMsg'))) return;
-  try { cfg = (await api('/api/poll', 'POST', {action})).config; say('pMsg', action === 'show' ? 'Sondaż uruchomiony ✔' : 'Sondaż ukryty ✔', true); }
+  try { cfg = (await api('/api/poll', 'POST', {action})).config; say('pMsg', action === 'show' ? 'SondaĹź uruchomiony â' : 'SondaĹź ukryty â', true); }
   catch (e) { say('pMsg', e.message, false); }
 }
 $('pShow').onclick = () => pollCmd('show'); $('pHide').onclick = () => pollCmd('hide');
 
-/* ---------- zbiórka ---------- */
+/* ---------- zbiĂłrka ---------- */
 function fundNow(){
   const f = cfg.fund, inc = f.everySeconds > 0 ? Math.max(0, Date.now() + skew - Date.parse(f.startedAt)) / 1000 / f.everySeconds : 0;
   return Math.max(0, Math.min(100, Math.floor((+f.percent || 0) + inc)));
@@ -616,19 +617,26 @@ $('fSave').onclick = async () => {
   if (ok) fillFund();
 };
 
-/* ---------- widżety: plakietka NA ŻYWO ---------- */
+/* ---------- widĹźety: plakietka NA ĹťYWO ---------- */
 function fillBadge(){ const l = cfg.live_badge; $('lbVis').checked = l.visible; $('lbText').value = l.text; $('lbTop').value = l.top; $('lbRight').value = l.right; }
 $('lbSave').onclick = () => save('live_badge', {visible: $('lbVis').checked, text: $('lbText').value, top: num($('lbTop').value), right: num($('lbRight').value)}, 'lbMsg');
 
-/* ---------- widżety: kod QR ---------- */
+/* ---------- widĹźety: kod QR ---------- */
 function fillQr(){ $('qrVis').checked = cfg.qr.visible; }
 
 
-/* ---------- debata: ekran tytułowy ---------- */
+/* ---------- debata: ekran tytuĹowy ---------- */
 function fillDebate(){ const d = cfg.debate; $('dbTop').value = d.title; $('dbBot').value = d.subtitle; $('dbFoot').value = d.footer || ''; }
 const dbData = v => ({visible: v, title: $('dbTop').value, subtitle: $('dbBot').value, footer: $('dbFoot').value});
 $('dbShow').onclick = () => save('debate', dbData(true), 'dbMsg');
 $('dbHideBtn').onclick = () => save('debate', dbData(false), 'dbMsg');
+$('debEnd').onclick = async () => {
+  const now = Date.now() + skew;
+  const ok = await save('debate', dbData(false), 'dbMsg');
+  if (!ok) return;
+  const r = await save('break_screen', {visible:true, kind:'break', title:'DEBATA ZAKOĹCZONA', subtitle:'DziÄkujemy za uwagÄ', footer:'', endsAt:'', startedAt:new Date(now).toISOString(), music:false, volume:0}, 'dbMsg');
+  if (r) fillBrk();
+};
 
 /* ---------- debata: aktualny segment ---------- */
 function sgParse(line){
@@ -644,9 +652,10 @@ function sgBtns(){
   const box = $('sgBtns'); box.replaceChildren();
   sgLines().forEach(l => {
     const p = sgParse(l), b = document.createElement('button'); b.className = 'b2 sm';
-    b.textContent = p.text + (p.sec ? ' · ' + Math.floor(p.sec / 60) + ':' + String(p.sec % 60).padStart(2, '0') : '');
+    b.textContent = p.text + (p.sec ? ' Âˇ ' + Math.floor(p.sec / 60) + ':' + String(p.sec % 60).padStart(2, '0') : '');
     b.onclick = async () => {
       $('sgText').value = p.text;
+      if (!$('sgLabel').value.trim()) $('sgLabel').value = 'PYTANIE';
       if (p.sec) { $('tmMin').value = Math.floor(p.sec / 60); $('tmSec').value = p.sec % 60; dirty.timer = true; }
       await save('segment', sgData(true), 'sgMsg');
     };
@@ -656,11 +665,11 @@ function sgBtns(){
 function fillSegment(){ const g = cfg.segment; $('sgLabel').value = g.label || ''; $('sgText').value = g.text || ''; $('sgList').value = (g.list || []).join('\n'); sgBtns(); }
 const sgData = v => ({visible: v, label: $('sgLabel').value, text: $('sgText').value, list: sgLines()});
 $('sgList').addEventListener('input', sgBtns);
-$('sgShow').onclick = () => save('segment', sgData(true), 'sgMsg');
+$('sgShow').onclick = () => { if (!$('sgLabel').value.trim() || $('sgLabel').value.trim() === 'TERAZ') $('sgLabel').value = 'PYTANIE'; return save('segment', sgData(true), 'sgMsg'); };
 $('sgSaveBtn').onclick = () => save('segment', sgData(!!cfg.segment.visible), 'sgMsg');
 $('sgHideBtn').onclick = () => save('segment', sgData(false), 'sgMsg');
 
-/* ---------- widżety: odliczanie ---------- */
+/* ---------- widĹźety: odliczanie ---------- */
 function fillTimer(){
   const t = cfg.timer, s = +t.seconds || 0;
   $('tmMin').value = Math.floor(s / 60); $('tmSec').value = s % 60;
@@ -678,44 +687,44 @@ setInterval(() => {
   if (!cfg || !cfg.timer) return; const t = cfg.timer, e = $('tmNow'); if (!e) return;
   const end = t.endsAt ? Date.parse(t.endsAt) : 0, p2 = n => String(n).padStart(2, '0');
   const rem = end ? Math.max(0, Math.ceil((end - (Date.now() + skew)) / 1000)) : (+t.seconds || 0);
-  e.textContent = (t.visible ? 'NA ANTENIE · ' : 'ukryte · ') + (end ? (rem ? 'leci ' : 'koniec ') : 'stoi ') + (rem >= 3600 ? Math.floor(rem / 3600) + ':' : '') + p2(Math.floor(rem % 3600 / 60)) + ':' + p2(rem % 60);
+  e.textContent = (t.visible ? 'NA ANTENIE Âˇ ' : 'ukryte Âˇ ') + (end ? (rem ? 'leci ' : 'koniec ') : 'stoi ') + (rem >= 3600 ? Math.floor(rem / 3600) + ':' : '') + p2(Math.floor(rem % 3600 / 60)) + ':' + p2(rem % 60);
 }, 500);
 $('qrSave').onclick = () => save('qr', {visible: $('qrVis').checked}, 'qrMsg');
 
-/* ---------- widżety: ograniczenie wiekowe ---------- */
+/* ---------- widĹźety: ograniczenie wiekowe ---------- */
 function fillAge(){ const a = cfg.age; $('ageVis').checked = a.visible; $('ageRat').value = String(a.rating); }
 $('ageSave').onclick = () => save('age', {visible: $('ageVis').checked, rating: num($('ageRat').value)}, 'ageMsg');
 
-/* ---------- widżety: plansza rozmówcy (lista gości) ---------- */
+/* ---------- widĹźety: plansza rozmĂłwcy (lista goĹci) ---------- */
 let ltGuests = [];
 function fillGuests(){
-  const sel = $('ltGuest'); sel.replaceChildren(new Option('— wybierz z listy —', ''));
-  ltGuests.forEach((g, i) => sel.appendChild(new Option(g.name + (g.role ? ' · ' + g.role : ''), String(i))));
+  const sel = $('ltGuest'); sel.replaceChildren(new Option('â wybierz z listy â', ''));
+  ltGuests.forEach((g, i) => sel.appendChild(new Option(g.name + (g.role ? ' Âˇ ' + g.role : ''), String(i))));
 }
 function fillLt(){
   const l = cfg.lower_third; $('ltVis').checked = l.visible; $('ltName').value = l.name; $('ltRole').value = l.role; $('ltHide').value = l.hideAfter;
   ltGuests = (l.guests || []).map(g => ({name: g.name, role: g.role || ''})); fillGuests();
 }
 $('ltGLoad').onclick = () => {
-  const g = ltGuests[+$('ltGuest').value]; if (!g || $('ltGuest').value === '') { say('ltMsg', 'Wybierz gościa z listy', false); return; }
-  $('ltName').value = g.name; $('ltRole').value = g.role; say('ltMsg', 'Wczytano – kliknij Zapisz, aby wyświetlić', true);
+  const g = ltGuests[+$('ltGuest').value]; if (!g || $('ltGuest').value === '') { say('ltMsg', 'Wybierz goĹcia z listy', false); return; }
+  $('ltName').value = g.name; $('ltRole').value = g.role; say('ltMsg', 'Wczytano â kliknij Zapisz, aby wyĹwietliÄ', true);
 };
 $('ltGAdd').onclick = () => {
-  const name = $('ltName').value.trim(); if (!name) { say('ltMsg', 'Wpisz imię i nazwisko, żeby zapisać gościa', false); return; }
+  const name = $('ltName').value.trim(); if (!name) { say('ltMsg', 'Wpisz imiÄ i nazwisko, Ĺźeby zapisaÄ goĹcia', false); return; }
   const g = {name, role: $('ltRole').value.trim()}, i = ltGuests.findIndex(x => x.name.toLowerCase() === name.toLowerCase());
-  if (i >= 0) ltGuests[i] = g; else if (ltGuests.length >= 40) { say('ltMsg', 'Maks. 40 gości na liście', false); return; } else ltGuests.push(g);
-  fillGuests(); $('ltGuest').value = String(i >= 0 ? i : ltGuests.length - 1); say('ltMsg', 'Dodano do listy – kliknij Zapisz', true);
+  if (i >= 0) ltGuests[i] = g; else if (ltGuests.length >= 40) { say('ltMsg', 'Maks. 40 goĹci na liĹcie', false); return; } else ltGuests.push(g);
+  fillGuests(); $('ltGuest').value = String(i >= 0 ? i : ltGuests.length - 1); say('ltMsg', 'Dodano do listy â kliknij Zapisz', true);
 };
 $('ltGDel').onclick = () => {
-  const i = $('ltGuest').value; if (i === '') { say('ltMsg', 'Wybierz gościa do usunięcia', false); return; }
-  ltGuests.splice(+i, 1); fillGuests(); say('ltMsg', 'Usunięto z listy – kliknij Zapisz', true);
+  const i = $('ltGuest').value; if (i === '') { say('ltMsg', 'Wybierz goĹcia do usuniÄcia', false); return; }
+  ltGuests.splice(+i, 1); fillGuests(); say('ltMsg', 'UsuniÄto z listy â kliknij Zapisz', true);
 };
 $('ltSave').onclick = () => save('lower_third', {visible: $('ltVis').checked, name: $('ltName').value, role: $('ltRole').value, hideAfter: num($('ltHide').value),
   guests: ltGuests}, 'ltMsg');
 
 
 
-/* ---------- stream: publikacja okna gry do LiveKit + start/stop wysyłki na Twitcha/TikToka ---------- */
+/* ---------- stream: publikacja okna gry do LiveKit + start/stop wysyĹki na Twitcha/TikToka ---------- */
 function fillStream(){
   const t = cfg.stream; $('stTwOn').checked = t.twitchOn; $('stTwUrl').value = t.twitchUrl; $('stTwKey').value = t.twitchKey;
   $('stTkOn').checked = t.tiktokOn; $('stTkUrl').value = t.tiktokUrl; $('stTkKey').value = t.tiktokKey; $('stFps').value = String(t.fps); $('stBr').value = String(t.bitrate || 8000); stOpInit(); stRender(); if (cfg.game_pause) { gamePaused = !!cfg.game_pause.paused; pauseUi(); }
@@ -730,7 +739,7 @@ function loadLk(){
   return lkLib || (lkLib = new Promise((ok, er) => {
     if (window.LivekitClient) return ok();
     const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/livekit-client@2.5.7/dist/livekit-client.umd.min.js';
-    sc.onload = ok; sc.onerror = () => { lkLib = null; er(new Error('Nie udało się załadować biblioteki LiveKit (sprawdź internet)')); }; document.head.appendChild(sc);
+    sc.onload = ok; sc.onerror = () => { lkLib = null; er(new Error('Nie udaĹo siÄ zaĹadowaÄ biblioteki LiveKit (sprawdĹş internet)')); }; document.head.appendChild(sc);
   }));
 }
 try { const v = localStorage.getItem('jeden_pri'); if (v) $('stPri').value = v; const b = localStorage.getItem('jeden_pubbr'); if (b) $('stPubBr').value = b; } catch (e) {}
@@ -739,14 +748,14 @@ $('stPri').onchange = async () => { try { localStorage.setItem('jeden_pri', $('s
 let stPrev = null;
 async function stQualTick(){
   const el = $('stQual'), lv = lkTracks[0];
-  if (!lkRoom || !lv || !lv.sender) { stPrev = null; el.className = 'hint'; el.textContent = 'Wysyłka do overlayu: nie publikuję'; return; }
+  if (!lkRoom || !lv || !lv.sender) { stPrev = null; el.className = 'hint'; el.textContent = 'WysyĹka do overlayu: nie publikujÄ'; return; }
   try {
     const rep = await lv.sender.getStats(); let o = null; rep.forEach(r => { if (r.type === 'outbound-rtp' && r.kind === 'video') o = r; });
     if (!o) return;
     const now = performance.now(), mb = stPrev ? ((o.bytesSent - stPrev.b) * 8 / 1e6) / ((now - stPrev.t) / 1000) : 0; stPrev = {t: now, b: o.bytesSent};
-    const why = o.qualityLimitationReason, hint = why === 'cpu' ? 'procesor nie wyrabia – obniż fps do 30, zamknij inne programy' : why === 'bandwidth' ? 'za wolny upload – obniż bitrate/fps lub wybierz „Płynność”' : '';
+    const why = o.qualityLimitationReason, hint = why === 'cpu' ? 'procesor nie wyrabia â obniĹź fps do 30, zamknij inne programy' : why === 'bandwidth' ? 'za wolny upload â obniĹź bitrate/fps lub wybierz âPĹynnoĹÄâ' : '';
     el.className = 'hint' + (hint ? ' er' : '');
-    el.textContent = 'Wysyłka do overlayu: ' + (o.frameWidth || '?') + '×' + (o.frameHeight || '?') + ' · ' + Math.round(o.framesPerSecond || 0) + ' kl/s · ' + mb.toFixed(1) + ' Mb/s' + (hint ? ' · ⚠ ' + hint : ' · bez ograniczeń ✔');
+    el.textContent = 'WysyĹka do overlayu: ' + (o.frameWidth || '?') + 'Ă' + (o.frameHeight || '?') + ' Âˇ ' + Math.round(o.framesPerSecond || 0) + ' kl/s Âˇ ' + mb.toFixed(1) + ' Mb/s' + (hint ? ' Âˇ â  ' + hint : ' Âˇ bez ograniczeĹ â');
   } catch (e) { /* brak statystyk */ }
 }
 setInterval(stQualTick, 2000);
@@ -754,25 +763,25 @@ let lkBusy = false, stOpName = '', lkAudioErrs = [], lkAuSig = '';
 const auSig = () => JSON.stringify([$('auGame').checked, $('auDc').checked, $('auMode').value, $('auDev').value]);
 function stOpInit(){ try { stOpName = localStorage.getItem('jeden_op') || ''; } catch (e) {} if (!$('stOp').value) $('stOp').value = stOpName; }
 $('stOp').onchange = () => { stOpName = $('stOp').value.trim(); try { localStorage.setItem('jeden_op', stOpName); } catch (e) {} };
-// komunikaty publikacji widać zawsze: w zakładce Stream i pod monitorami
+// komunikaty publikacji widaÄ zawsze: w zakĹadce Stream i pod monitorami
 const pubSay = (m, ok) => { say('stMsg', m, ok); const e = $('capMsg'); if (e) { e.textContent = m; e.style.color = ok ? 'var(--ok)' : 'var(--er)'; } };
 async function lkPublish(opt){
-  const soft = !!(opt && opt.soft);   // soft: obraz idzie do overlayu nawet gdy dźwięk nie działa (START STREAM jest ścisły)
+  const soft = !!(opt && opt.soft);   // soft: obraz idzie do overlayu nawet gdy dĹşwiÄk nie dziaĹa (START STREAM jest ĹcisĹy)
   if (lkBusy) return false;
-  if (lkRoom) { pubSay( 'Już publikujesz', true); return true; }
+  if (lkRoom) { pubSay( 'JuĹź publikujesz', true); return true; }
   lkBusy = true;
   let room = null;
   try {
-    // 1) obraz z gry (jeśli jeszcze nie wybrano okna)
+    // 1) obraz z gry (jeĹli jeszcze nie wybrano okna)
     if (!capStream) await capStart();
     if (!capStream) { pubSay( 'Najpierw wybierz okno gry', false); return false; }
-    // 2) dźwięk operatora – zanim ruszy sieć; błąd zaznaczonego źródła zatrzymuje start
-    pubSay( 'Przygotowuję dźwięk…', true);
+    // 2) dĹşwiÄk operatora â zanim ruszy sieÄ; bĹÄd zaznaczonego ĹşrĂłdĹa zatrzymuje start
+    pubSay( 'PrzygotowujÄ dĹşwiÄkâŚ', true);
     const au = await auBuild();
     lkAudioErrs = au.errs; lkAuSig = auSig();
-    if (au.errs.length && !soft) { auCleanup(); pubSay( 'Dźwięk: ' + au.errs.join(' · ') + ' – popraw ustawienia lub odznacz to źródło', false); return false; }
-    // 3) połączenie i publikacja
-    pubSay( 'Łączę z serwerem…', true);
+    if (au.errs.length && !soft) { auCleanup(); pubSay( 'DĹşwiÄk: ' + au.errs.join(' Âˇ ') + ' â popraw ustawienia lub odznacz to ĹşrĂłdĹo', false); return false; }
+    // 3) poĹÄczenie i publikacja
+    pubSay( 'ĹÄczÄ z serweremâŚ', true);
     const j = await api('/api/lk', 'POST', {action: 'publisher'}); await loadLk();
     const L = window.LivekitClient, fps = num($('stFps').value) || 60, ebr = num($('stBr').value) || 8000;
     const br = (num($('stPubBr').value) || 12000) * 1000;   // bitrate obrazu do overlayu (ustawienie operatora)
@@ -793,11 +802,11 @@ async function lkPublish(opt){
     room.on(L.RoomEvent.Disconnected, reason => {
       if (lkRoom !== mine) return;
       lkRoom = null; lkTracks = []; auCleanup(); stRender();
-      if (L.DisconnectReason && reason === L.DisconnectReason.DUPLICATE_IDENTITY) pubSay( 'Inny operator przejął publikację – Twój obraz i dźwięk zostały zatrzymane', false);
+      if (L.DisconnectReason && reason === L.DisconnectReason.DUPLICATE_IDENTITY) pubSay( 'Inny operator przejÄĹ publikacjÄ â TwĂłj obraz i dĹşwiÄk zostaĹy zatrzymane', false);
     });
     lkRoom = room; room = null; stRender();
-    if (au.errs.length) pubSay( 'Obraz publikowany ✔ w overlayu – ale dźwięk NIE działa: ' + au.errs.join(' · '), false);
-    else pubSay( au.used.length ? 'Publikuję obraz ✔ i dźwięk ✔ (' + au.used.join(' + ') + ')' : 'Publikuję obraz ✔ (dźwięk: cisza – mikrofon możesz włączyć w każdej chwili)', true);
+    if (au.errs.length) pubSay( 'Obraz publikowany â w overlayu â ale dĹşwiÄk NIE dziaĹa: ' + au.errs.join(' Âˇ '), false);
+    else pubSay( au.used.length ? 'PublikujÄ obraz â i dĹşwiÄk â (' + au.used.join(' + ') + ')' : 'PublikujÄ obraz â (dĹşwiÄk: cisza â mikrofon moĹźesz wĹÄczyÄ w kaĹźdej chwili)', true);
     return true;
   } catch (e) { if (room) { try { room.disconnect(false); } catch (x) {} } auCleanup(); pubSay( e.message || String(e), false); return false; }
   finally { lkBusy = false; }
@@ -809,7 +818,7 @@ async function lkUnpublish(){
 }
 $('stPub').onclick = async () => { if (lkRoom) await lkUnpublish(); await lkPublish({soft: true}); }; $('stUnpub').onclick = lkUnpublish;
 
-/* ---------- dźwięk do streamu: gra i/lub Discord i/lub mikrofon (miks) – ustawienia operatora tylko w tej przeglądarce ---------- */
+/* ---------- dĹşwiÄk do streamu: gra i/lub Discord i/lub mikrofon (miks) â ustawienia operatora tylko w tej przeglÄdarce ---------- */
 let auExtra = null, auCtx = null, auMicS = null, auGains = {}, auNodes = [], auAna = null, auMeterT = null, auMix = null, auMicAna = null, auMicNodes = [], auMicMuted = false, auMicBusy = false;
 const auCfgLoad = () => { try { return JSON.parse(localStorage.getItem('jeden_au') || '{}'); } catch (e) { return {}; } };
 const auCfgSave = () => { try { localStorage.setItem('jeden_au', JSON.stringify({game: $('auGame').checked, dc: $('auDc').checked, mic: $('auMic').checked, mode: $('auMode').value, dev: $('auDev').value, micDev: $('auMicDev').value, proc: $('auMicProc').value,
@@ -822,13 +831,13 @@ const auCfgSave = () => { try { localStorage.setItem('jeden_au', JSON.stringify(
 function auVis(){ $('auDevWrap').style.display = $('auMode').value === 'dev' ? '' : 'none'; }
 async function auDevices(ask){
   if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
-  if (ask) { try { const t = await navigator.mediaDevices.getUserMedia({audio: true}); t.getTracks().forEach(x => x.stop()); } catch (e) { say('auMsg', 'Brak zgody na dostęp do urządzeń audio', false); } }
+  if (ask) { try { const t = await navigator.mediaDevices.getUserMedia({audio: true}); t.getTracks().forEach(x => x.stop()); } catch (e) { say('auMsg', 'Brak zgody na dostÄp do urzÄdzeĹ audio', false); } }
   const list = (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'audioinput' && d.deviceId !== 'default' && d.deviceId !== 'communications');
-  const opts = list.map((d, i) => '<option value="' + d.deviceId + '">' + (d.label || 'Urządzenie ' + (i + 1)).replace(/</g, '&lt;') + '</option>').join('');
+  const opts = list.map((d, i) => '<option value="' + d.deviceId + '">' + (d.label || 'UrzÄdzenie ' + (i + 1)).replace(/</g, '&lt;') + '</option>').join('');
   const sel = $('auDev'), keep = sel.value || auCfgLoad().dev || '';
-  sel.innerHTML = '<option value="">— wybierz urządzenie —</option>' + opts;
+  sel.innerHTML = '<option value="">â wybierz urzÄdzenie â</option>' + opts;
   const ms = $('auMicDev'), mk = ms.value || auCfgLoad().micDev || '';
-  ms.innerHTML = '<option value="">Domyślny</option>' + opts;
+  ms.innerHTML = '<option value="">DomyĹlny</option>' + opts;
   if ([...ms.options].some(o => o.value === mk)) ms.value = mk;
   if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
   else { const cab = [...sel.options].find(o => /cable output|voicemeeter|vb-audio/i.test(o.text)); if (cab && !keep) sel.value = cab.value; }
@@ -844,10 +853,10 @@ function auCleanup(){
   if (auCtx) { try { auCtx.close(); } catch (e) {} auCtx = null; }
   auGains = {}; auNodes = []; auAna = null; auMix = null;
 }
-/* ----- mikrofon: opcjonalny, dołączany / odłączany do miksu na żywo (bez restartu streamu) ----- */
-function auMicUi(){ const b = $('auMicMute'); b.textContent = auMicMuted ? '🔇 Mikrofon: WYCISZONY' : '🎙 Mikrofon: włączony'; b.style.opacity = auMicMuted ? '.7' : '1'; }
+/* ----- mikrofon: opcjonalny, doĹÄczany / odĹÄczany do miksu na Ĺźywo (bez restartu streamu) ----- */
+function auMicUi(){ const b = $('auMicMute'); b.textContent = auMicMuted ? 'đ Mikrofon: WYCISZONY' : 'đ Mikrofon: wĹÄczony'; b.style.opacity = auMicMuted ? '.7' : '1'; }
 function auMicGain(){ if (auGains.mic) auGains.mic.gain.value = auMicMuted ? 0 : +$('auVm').value / 100; }
-$('auMicMute').onclick = () => { auMicMuted = !auMicMuted; auMicGain(); auMicUi(); if ($('auMic').checked && !lkRoom) say('auMsg', 'Wyciszenie zadziała od startu publikacji', true); };
+$('auMicMute').onclick = () => { auMicMuted = !auMicMuted; auMicGain(); auMicUi(); if ($('auMic').checked && !lkRoom) say('auMsg', 'Wyciszenie zadziaĹa od startu publikacji', true); };
 function auMicCons(){
   const id = $('auMicDev').value, p = $('auMicProc').value;
   return {audio: Object.assign({channelCount: 1, sampleRate: 48000, echoCancellation: p === 'full', noiseSuppression: p !== 'raw', autoGainControl: p !== 'raw'}, id ? {deviceId: {exact: id}} : {})};
@@ -856,12 +865,12 @@ async function auMicAdd(){
   const s = await navigator.mediaDevices.getUserMedia(auMicCons()), tr = s.getAudioTracks()[0];
   auMicS = s;
   const node = auCtx.createMediaStreamSource(new MediaStream([tr])), hp = auCtx.createBiquadFilter();
-  hp.type = 'highpass'; hp.frequency.value = 80;   // obcina buczenie / uderzenia w stół
+  hp.type = 'highpass'; hp.frequency.value = 80;   // obcina buczenie / uderzenia w stĂłĹ
   const g = auCtx.createGain(); g.gain.value = auMicMuted ? 0 : +$('auVm').value / 100;
   node.connect(hp); hp.connect(g); g.connect(auMix);
-  auMicAna = auCtx.createAnalyser(); auMicAna.fftSize = 512; hp.connect(auMicAna);   // miernik przed wyciszeniem – widzisz, że mówisz do wyciszonego mikrofonu
+  auMicAna = auCtx.createAnalyser(); auMicAna.fftSize = 512; hp.connect(auMicAna);   // miernik przed wyciszeniem â widzisz, Ĺźe mĂłwisz do wyciszonego mikrofonu
   auGains.mic = g; auMicNodes = [node, hp, g, auMicAna];
-  tr.onended = () => { if (auMicS === s) say('auMsg', 'Mikrofon się rozłączył (odpięty?) – wybierz go ponownie', false); };
+  tr.onended = () => { if (auMicS === s) say('auMsg', 'Mikrofon siÄ rozĹÄczyĹ (odpiÄty?) â wybierz go ponownie', false); };
   return tr;
 }
 function auMicRemove(){
@@ -870,15 +879,15 @@ function auMicRemove(){
   $('auMicLvl').style.width = '0';
 }
 async function auMicApply(){
-  if (!lkRoom || !auCtx || !auMix || auMicBusy) return;   // bez aktywnej publikacji – zastosuje się przy starcie
+  if (!lkRoom || !auCtx || !auMix || auMicBusy) return;   // bez aktywnej publikacji â zastosuje siÄ przy starcie
   auMicBusy = true;
   try {
     auMicRemove();
     if ($('auMic').checked) {
       const id = $('auMicDev').value;
-      if (id && id === $('auDev').value && $('auDc').checked && $('auMode').value === 'dev') throw new Error('mikrofon i Discord to to samo urządzenie – wybierz dla nich różne');
-      await auMicAdd(); say('auMsg', 'Mikrofon włączony ✔ – działa na żywo, bez restartu streamu', true);
-    } else say('auMsg', 'Mikrofon wyłączony ✔', true);
+      if (id && id === $('auDev').value && $('auDc').checked && $('auMode').value === 'dev') throw new Error('mikrofon i Discord to to samo urzÄdzenie â wybierz dla nich rĂłĹźne');
+      await auMicAdd(); say('auMsg', 'Mikrofon wĹÄczony â â dziaĹa na Ĺźywo, bez restartu streamu', true);
+    } else say('auMsg', 'Mikrofon wyĹÄczony â', true);
   } catch (e) { $('auMic').checked = false; auCfgSave(); say('auMsg', 'Mikrofon: ' + (e && e.message || e), false); }
   finally { auMicBusy = false; }
 }
@@ -890,10 +899,10 @@ async function auPrepare(){
   if ($('auMode').value === 'tab') {
     s = await navigator.mediaDevices.getDisplayMedia({video: true, audio: raw, selfBrowserSurface: 'exclude', systemAudio: 'exclude'});
     s.getVideoTracks().forEach(t => t.stop());
-    if (!s.getAudioTracks()[0]) { s.getTracks().forEach(t => t.stop()); throw new Error('Nie zaznaczono „Udostępnij dźwięk karty” – wybierz kartę z Discordem i zaznacz dźwięk'); }
+    if (!s.getAudioTracks()[0]) { s.getTracks().forEach(t => t.stop()); throw new Error('Nie zaznaczono âUdostÄpnij dĹşwiÄk kartyâ â wybierz kartÄ z Discordem i zaznacz dĹşwiÄk'); }
   } else {
     const id = $('auDev').value;
-    if (!id) throw new Error('wybierz urządzenie z dźwiękiem Discorda (np. CABLE Output)');
+    if (!id) throw new Error('wybierz urzÄdzenie z dĹşwiÄkiem Discorda (np. CABLE Output)');
     s = await navigator.mediaDevices.getUserMedia({audio: Object.assign({channelCount: 2}, raw, {deviceId: {exact: id}})});
     await auDevices(false);
   }
@@ -902,32 +911,32 @@ async function auPrepare(){
   return s.getAudioTracks()[0];
 }
 $('auPrep').onclick = async () => {
-  try { $('auDc').checked = true; const t = await auPrepare(); say('auMsg', 'Discord podłączony ✔ (' + (t.label || 'dźwięk') + ')', true); auCfgSave(); }
-  catch (e) { say('auMsg', e && e.name === 'NotAllowedError' ? 'Anulowano wybór.' : (e.message || String(e)), false); }
+  try { $('auDc').checked = true; const t = await auPrepare(); say('auMsg', 'Discord podĹÄczony â (' + (t.label || 'dĹşwiÄk') + ')', true); auCfgSave(); }
+  catch (e) { say('auMsg', e && e.name === 'NotAllowedError' ? 'Anulowano wybĂłr.' : (e.message || String(e)), false); }
 };
-// buduje miks z ustawień TEGO operatora: { track, used: [nazwy], errs: [błędy zaznaczonych źródeł] }
+// buduje miks z ustawieĹ TEGO operatora: { track, used: [nazwy], errs: [bĹÄdy zaznaczonych ĹşrĂłdeĹ] }
 async function auBuild(){
   const errs = [], used = [], src = [];
   if ($('auGame').checked) {
     const g = capStream ? capStream.getAudioTracks()[0] : null;
-    if (g) src.push(['game', 'gra', g, +$('auVg').value]);   // okno zwykle nie ma dźwięku – to nie błąd, po prostu obraz bez dźwięku gry
+    if (g) src.push(['game', 'gra', g, +$('auVg').value]);   // okno zwykle nie ma dĹşwiÄku â to nie bĹÄd, po prostu obraz bez dĹşwiÄku gry
   }
   if ($('auDc').checked) {
     try { src.push(['dc', 'Discord', await auPrepare(), +$('auVd').value]); }
-    catch (e) { errs.push('Discord: ' + (e && e.name === 'NotAllowedError' ? 'kliknij najpierw „Połącz dźwięk Discorda”' : (e.message || e))); }
+    catch (e) { errs.push('Discord: ' + (e && e.name === 'NotAllowedError' ? 'kliknij najpierw âPoĹÄcz dĹşwiÄk Discordaâ' : (e.message || e))); }
   }
   if ($('auMic').checked) {
     const id = $('auMicDev').value;
-    if (id && id === $('auDev').value && $('auDc').checked && $('auMode').value === 'dev') errs.push('mikrofon i Discord to to samo urządzenie – wybierz dla nich różne');
+    if (id && id === $('auDev').value && $('auDc').checked && $('auMode').value === 'dev') errs.push('mikrofon i Discord to to samo urzÄdzenie â wybierz dla nich rĂłĹźne');
   }
   if (errs.length) return {track: null, used, errs};
-  // miks zawsze istnieje (nawet bez źródeł) – dzięki temu mikrofon można włączyć w trakcie streamu bez restartu
+  // miks zawsze istnieje (nawet bez ĹşrĂłdeĹ) â dziÄki temu mikrofon moĹźna wĹÄczyÄ w trakcie streamu bez restartu
   const AC = window.AudioContext || window.webkitAudioContext;
   auCtx = new AC({sampleRate: 48000, latencyHint: 'interactive'});
   try { await auCtx.resume(); } catch (e) {}
   const dest = auCtx.createMediaStreamDestination(); dest.channelCount = 2;
   auMix = auCtx.createGain();
-  const lim = auCtx.createDynamicsCompressor();   // limiter na sumie: miks głosu + gry + Discorda nie przesterowuje
+  const lim = auCtx.createDynamicsCompressor();   // limiter na sumie: miks gĹosu + gry + Discorda nie przesterowuje
   lim.threshold.value = -3; lim.knee.value = 3; lim.ratio.value = 20; lim.attack.value = 0.002; lim.release.value = 0.15;
   auMix.connect(lim); lim.connect(dest);
   auAna = auCtx.createAnalyser(); auAna.fftSize = 512; lim.connect(auAna);
@@ -948,23 +957,23 @@ async function auBuild(){
   }, 100);
   return {track: dest.stream.getAudioTracks()[0], used, errs};
 }
-/* ---------- ZATRZYMAJ / WZNÓW obraz z gry w streamie ---------- */
+/* ---------- ZATRZYMAJ / WZNĂW obraz z gry w streamie ---------- */
 let gamePaused = false, pauseLock = 0;
-function pauseUi(){ const b = $('stPause'); b.textContent = gamePaused ? '▶ WZNÓW' : '⏸ ZATRZYMAJ'; b.className = gamePaused ? 'b1' : 'b2'; localPauseApply(); }
-/* ZATRZYMAJ = zamrożona klatka: w momencie kliknięcia robimy zdjęcie obrazu z gry i pokazujemy je zamiast wideo (overlay zostaje na wierzchu).
-   Klatka zostaje także po przerwaniu przechwytywania / zamknięciu gry, aż do WZNÓW. Dotyczy monitorów PGM/PVW w panelu i okna na Discorda. */
+function pauseUi(){ const b = $('stPause'); b.textContent = gamePaused ? 'âś WZNĂW' : 'â¸ ZATRZYMAJ'; b.className = gamePaused ? 'b1' : 'b2'; localPauseApply(); }
+/* ZATRZYMAJ = zamroĹźona klatka: w momencie klikniÄcia robimy zdjÄcie obrazu z gry i pokazujemy je zamiast wideo (overlay zostaje na wierzchu).
+   Klatka zostaje takĹźe po przerwaniu przechwytywania / zamkniÄciu gry, aĹź do WZNĂW. Dotyczy monitorĂłw PGM/PVW w panelu i okna na Discorda. */
 function freezeApply(video, on){
   if (!video || !video.parentNode) return;
   const doc = video.ownerDocument, host = video.parentNode;
   let c = host.querySelector('canvas.frz');
   if (!c) { c = doc.createElement('canvas'); c.className = 'frz'; c.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;display:none'; video.parentNode.insertBefore(c, video.nextSibling); }
   if (on) {
-    if (c.dataset.f === '1') return;                     // już zamrożone – nie podmieniamy klatki na nowszą
-    if (!video.videoWidth) return;                       // brak obrazu do zamrożenia
+    if (c.dataset.f === '1') return;                     // juĹź zamroĹźone â nie podmieniamy klatki na nowszÄ
+    if (!video.videoWidth) return;                       // brak obrazu do zamroĹźenia
     try { c.width = video.videoWidth; c.height = video.videoHeight; c.getContext('2d').drawImage(video, 0, 0); c.style.display = 'block'; c.dataset.f = '1'; host.classList.add('frozen'); } catch (e) { /* ignoruj */ }
   } else { c.style.display = 'none'; c.dataset.f = ''; host.classList.remove('frozen'); }
 }
-/* OSTATNIA DOBRA KLATKA: gdy przechwytywanie padnie (gra zminimalizowana → czerń, albo koniec ścieżki), monitor PGM i okno na Discorda pokazują ostatni dobry obraz zamiast czerni */
+/* OSTATNIA DOBRA KLATKA: gdy przechwytywanie padnie (gra zminimalizowana â czerĹ, albo koniec ĹcieĹźki), monitor PGM i okno na Discorda pokazujÄ ostatni dobry obraz zamiast czerni */
 const lastSt = new WeakMap();
 const lastProbe = document.createElement('canvas'); lastProbe.width = 32; lastProbe.height = 18;
 const lastPctx = lastProbe.getContext('2d', {willReadFrequently: true});
@@ -973,7 +982,7 @@ function lastIsBlack(v){
     lastPctx.drawImage(v, 0, 0, 32, 18);
     const d = lastPctx.getImageData(0, 0, 32, 18).data; let sum = 0, mx = 0;
     for (let i = 0; i < d.length; i += 4) { const m = Math.max(d[i], d[i+1], d[i+2]); sum += m; if (m > mx) mx = m; }
-    return (sum / 576) < 1.5 && mx < 8;      // niemal idealna czerń = awaria przechwytywania, nie scena z gry
+    return (sum / 576) < 1.5 && mx < 8;      // niemal idealna czerĹ = awaria przechwytywania, nie scena z gry
   } catch (e) { return false; }
 }
 function lastTick(v){
@@ -994,13 +1003,13 @@ function lastTick(v){
 }
 setInterval(function(){
   lastTick($('capA'));
-  try { if (outWin && !outWin.closed) lastTick(outWin.document.getElementById('v')); } catch (e) { /* okno wyjściowe jeszcze nie istnieje */ }
+  try { if (outWin && !outWin.closed) lastTick(outWin.document.getElementById('v')); } catch (e) { /* okno wyjĹciowe jeszcze nie istnieje */ }
 }, 500);
 function localPauseApply(){
   ['capA', 'capB'].forEach(id => freezeApply($(id), gamePaused));
-  try { if (outWin && !outWin.closed) freezeApply(outWin.document.getElementById('v'), gamePaused); } catch (e) { /* okno wyjściowe jeszcze nie istnieje / zamknięte */ }
+  try { if (outWin && !outWin.closed) freezeApply(outWin.document.getElementById('v'), gamePaused); } catch (e) { /* okno wyjĹciowe jeszcze nie istnieje / zamkniÄte */ }
 }
-function auPauseApply(){   // dźwięk gry cichnie / wraca płynnie (0,7 s); mikrofon i Discord bez zmian
+function auPauseApply(){   // dĹşwiÄk gry cichnie / wraca pĹynnie (0,7 s); mikrofon i Discord bez zmian
   const g = auGains.game; if (!g || !auCtx) return;
   const t = auCtx.currentTime, v = gamePaused ? 0 : +$('auVg').value / 100;
   try { g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(v, t + 0.7); } catch (e) { g.gain.value = v; }
@@ -1008,41 +1017,41 @@ function auPauseApply(){   // dźwięk gry cichnie / wraca płynnie (0,7 s); mik
 async function setGamePause(on){
   if (gamePaused === on) return;
   gamePaused = on; pauseLock = Date.now() + 6000; pauseUi(); auPauseApply();
-  if (lkRoom) { try { lkRoom.localParticipant.publishData(new TextEncoder().encode(JSON.stringify({t: 'pause', on})), {reliable: true, topic: 'pause'}).catch(() => {}); } catch (e) { /* serwer i tak podeśle stan */ } }
-  try { await api('/api/lk', 'POST', {action: 'pause', paused: on}); say('stMsg', on ? 'Obraz z gry zatrzymany ✔ – WZNÓW wraca na żywo' : 'Obraz z gry wznowiony ✔', true); }
-  catch (e) { gamePaused = !on; pauseUi(); auPauseApply(); say('stMsg', 'Nie udało się: ' + e.message, false); }
+  if (lkRoom) { try { lkRoom.localParticipant.publishData(new TextEncoder().encode(JSON.stringify({t: 'pause', on})), {reliable: true, topic: 'pause'}).catch(() => {}); } catch (e) { /* serwer i tak podeĹle stan */ } }
+  try { await api('/api/lk', 'POST', {action: 'pause', paused: on}); say('stMsg', on ? 'Obraz z gry zatrzymany â â WZNĂW wraca na Ĺźywo' : 'Obraz z gry wznowiony â', true); }
+  catch (e) { gamePaused = !on; pauseUi(); auPauseApply(); say('stMsg', 'Nie udaĹo siÄ: ' + e.message, false); }
 }
 $('stPause').onclick = () => setGamePause(!gamePaused);
 if (cfg && cfg.game_pause) gamePaused = !!cfg.game_pause.paused; pauseUi();
 let stLive = 'off', stErr = '', stBy = '';
 function stRender(){
-  const m = {off: 'wyłączony', starting: 'uruchamianie…', live: '● NA ŻYWO – wysyłam na Twitcha/TikToka', ending: 'kończenie…'};
-  $('stStat').innerHTML = 'Obraz z gry: <b style="color:' + (lkRoom ? 'var(--ok)' : 'var(--er)') + '">' + (lkRoom ? 'publikowany' : 'nie publikowany') + '</b> · Stream: <b style="color:' + (stLive === 'live' ? 'var(--ok)' : '#fff') + '">' + (m[stLive] || stLive) + '</b>' + (stBy && stLive !== 'off' ? ' · publikuje: <b>' + stBy.replace(/</g, '&lt;') + '</b>' : '') + (stErr ? ' · <span class="er">' + stErr.replace(/</g, '&lt;') + '</span>' : '');
+  const m = {off: 'wyĹÄczony', starting: 'uruchamianieâŚ', live: 'â NA ĹťYWO â wysyĹam na Twitcha/TikToka', ending: 'koĹczenieâŚ'};
+  $('stStat').innerHTML = 'Obraz z gry: <b style="color:' + (lkRoom ? 'var(--ok)' : 'var(--er)') + '">' + (lkRoom ? 'publikowany' : 'nie publikowany') + '</b> Âˇ Stream: <b style="color:' + (stLive === 'live' ? 'var(--ok)' : '#fff') + '">' + (m[stLive] || stLive) + '</b>' + (stBy && stLive !== 'off' ? ' Âˇ publikuje: <b>' + stBy.replace(/</g, '&lt;') + '</b>' : '') + (stErr ? ' Âˇ <span class="er">' + stErr.replace(/</g, '&lt;') + '</span>' : '');
 }
 async function stPoll(){
   if (!cfg || $('app').hidden) return;
-  try { const r = await api('/api/lk', 'POST', {action: 'status'}); stLive = r.status; stErr = r.error || ''; stBy = r.operator || ''; if (typeof r.paused === 'boolean' && r.paused !== gamePaused && Date.now() > pauseLock) { gamePaused = r.paused; pauseUi(); auPauseApply(); } } catch (e) { /* brak LiveKit / chwilowy błąd */ }
+  try { const r = await api('/api/lk', 'POST', {action: 'status'}); stLive = r.status; stErr = r.error || ''; stBy = r.operator || ''; if (typeof r.paused === 'boolean' && r.paused !== gamePaused && Date.now() > pauseLock) { gamePaused = r.paused; pauseUi(); auPauseApply(); } } catch (e) { /* brak LiveKit / chwilowy bĹÄd */ }
   stRender();
 }
 $('stGo').onclick = async () => {
   try {
     if ($('stOp').value.trim() !== stOpName) $('stOp').onchange();
-    if (lkRoom && (lkAudioErrs.length || lkAuSig !== auSig())) await lkUnpublish();   // dźwięk nie działał / zmieniono ustawienia → publikuję od nowa
-    if (!lkRoom) { if (!(await lkPublish())) return; }   // obraz + dźwięk ZE SWOIMI ustawieniami
+    if (lkRoom && (lkAudioErrs.length || lkAuSig !== auSig())) await lkUnpublish();   // dĹşwiÄk nie dziaĹaĹ / zmieniono ustawienia â publikujÄ od nowa
+    if (!lkRoom) { if (!(await lkPublish())) return; }   // obraz + dĹşwiÄk ZE SWOIMI ustawieniami
     if (!(await save('stream', stData(), 'stMsg'))) return;
     const s = await api('/api/lk', 'POST', {action: 'status'});
     if (s.status === 'live' || s.status === 'starting') {
       await api('/api/lk', 'POST', {action: 'operator', operator: stOpName});
       stLive = s.status; stErr = ''; stRender();
-      say('stMsg', 'Przejąłeś publikację ✔ – stream na platformach leci dalej (Twój obraz i dźwięk)', true); return;
+      say('stMsg', 'PrzejÄĹeĹ publikacjÄ â â stream na platformach leci dalej (TwĂłj obraz i dĹşwiÄk)', true); return;
     }
-    say('stMsg', 'Uruchamiam wysyłkę w chmurze…', true);
+    say('stMsg', 'Uruchamiam wysyĹkÄ w chmurzeâŚ', true);
     const r = await api('/api/lk', 'POST', {action: 'start', operator: stOpName}); stLive = 'starting'; stErr = ''; stRender();
-    say('stMsg', 'Start ✔ – cele: ' + r.targets + ' · ' + r.fps + ' kl/s · ' + r.bitrate + ' kb/s' + (r.clamped ? ' (obniżone do 8 000 – limit Twitcha)' : '') + '. Za kilka sekund powinno być widać na platformach.', true);
+    say('stMsg', 'Start â â cele: ' + r.targets + ' Âˇ ' + r.fps + ' kl/s Âˇ ' + r.bitrate + ' kb/s' + (r.clamped ? ' (obniĹźone do 8 000 â limit Twitcha)' : '') + '. Za kilka sekund powinno byÄ widaÄ na platformach.', true);
   } catch (e) { say('stMsg', e.message, false); }
 };
 $('stStop').onclick = async () => {
-  try { await api('/api/lk', 'POST', {action: 'stop'}); stLive = 'off'; stErr = ''; stRender(); say('stMsg', 'Stream zatrzymany ✔', true); }
+  try { await api('/api/lk', 'POST', {action: 'stop'}); stLive = 'off'; stErr = ''; stRender(); say('stMsg', 'Stream zatrzymany â', true); }
   catch (e) { say('stMsg', e.message, false); }
 };
 setInterval(stPoll, 5000);
@@ -1054,18 +1063,18 @@ $('flSave').onclick = () => save('flash', flData($('flVis').checked), 'flMsg');
 $('flShow').onclick = async () => { $('flVis').checked = true; await save('flash', flData(true), 'flMsg'); };
 $('flHideBtn').onclick = async () => { $('flVis').checked = false; await save('flash', flData(false), 'flMsg'); };
 
-/* ---------- mapa wyników ---------- */
+/* ---------- mapa wynikĂłw ---------- */
 const uid = () => 'x' + Math.random().toString(36).slice(2, 8);
 function partyOpts(sel, want){
   const cur = want !== undefined ? want : sel.value;
-  sel.replaceChildren(new Option('— brak danych —', ''));
+  sel.replaceChildren(new Option('â brak danych â', ''));
   document.querySelectorAll('.mprow').forEach(d => sel.appendChild(new Option(d.querySelector('.n').value.trim() || 'Partia', d.dataset.id)));
   sel.value = [...sel.options].some(o => o.value === cur) ? cur : '';
 }
 const refreshParties = () => document.querySelectorAll('.rgrow .pt').forEach(sel => partyOpts(sel));
 function mpPartyRow(p){
   const d = document.createElement('div'); d.className = 'mprow'; d.dataset.id = p.id;
-  d.innerHTML = '<input type="text" class="n" placeholder="Nazwa partii" maxlength="40"><input type="number" class="v" min="0" max="1000" step="0.01"><input type="color" class="c"><button class="b3 sm">✕</button>';
+  d.innerHTML = '<input type="text" class="n" placeholder="Nazwa partii" maxlength="40"><input type="number" class="v" min="0" max="1000" step="0.01"><input type="color" class="c"><button class="b3 sm">â</button>';
   d.querySelector('.n').value = p.name; d.querySelector('.v').value = p.value; d.querySelector('.c').value = p.color;
   d.querySelector('.n').addEventListener('input', refreshParties);
   d.querySelector('button').onclick = () => { d.remove(); refreshParties(); };
@@ -1073,8 +1082,8 @@ function mpPartyRow(p){
 }
 function mpRegionRow(r){
   const d = document.createElement('div'); d.className = 'rgrow'; d.dataset.id = r.id;
-  d.innerHTML = '<input type="text" class="cd" placeholder="Skrót" maxlength="5"><input type="text" class="nm" placeholder="Nazwa regionu" maxlength="40"><select class="pt"></select>' +
-    '<input type="number" class="pc" min="0" max="100" step="0.1" placeholder="%"><button class="b3 sm">✕</button>' +
+  d.innerHTML = '<input type="text" class="cd" placeholder="SkrĂłt" maxlength="5"><input type="text" class="nm" placeholder="Nazwa regionu" maxlength="40"><select class="pt"></select>' +
+    '<input type="number" class="pc" min="0" max="100" step="0.1" placeholder="%"><button class="b3 sm">â</button>' +
     '<div class="xy">Siatka: kolumna X <input type="number" class="gx" min="0" max="14"> wiersz Y <input type="number" class="gy" min="0" max="9"></div>';
   d.querySelector('.cd').value = r.code; d.querySelector('.nm').value = r.name; d.querySelector('.pc').value = r.pct || '';
   d.querySelector('.gx').value = r.x; d.querySelector('.gy').value = r.y;
@@ -1095,7 +1104,7 @@ $('rgAdd').onclick = () => {
   let x = 0, y = 0; outer: for (y = 0; y <= 9; y++) for (x = 0; x <= 14; x++) if (!used.has(x + ',' + y)) break outer;
   mpRegionRow({id: uid(), name: 'Nowy region', code: 'NR', x, y, party: '', pct: 0});
 };
-$('rgClear').onclick = () => { document.querySelectorAll('.rgrow').forEach(d => { d.querySelector('.pt').value = ''; d.querySelector('.pc').value = ''; }); say('mpMsg', 'Wyczyszczono wyniki regionów – kliknij Zapisz', true); };
+$('rgClear').onclick = () => { document.querySelectorAll('.rgrow').forEach(d => { d.querySelector('.pt').value = ''; d.querySelector('.pc').value = ''; }); say('mpMsg', 'Wyczyszczono wyniki regionĂłw â kliknij Zapisz', true); };
 const mapData = visible => ({
   visible, kind: $('mpKind').value, badge: $('mpBadge').value, title: $('mpTitle').value, subtitle: $('mpSub').value, note: $('mpNote').value,
   winner: $('mpWinner').checked, unit: $('mpUnit').value,
@@ -1105,9 +1114,9 @@ const mapData = visible => ({
     pct: d.querySelector('.pc').value === '' ? 0 : num(d.querySelector('.pc').value)}))
 });
 $('mpSave').onclick = () => save('map', mapData(!!cfg.map.visible), 'mpMsg');
-$('mpShow').onclick = async () => { if (await save('map', mapData(true), 'mpMsg')) say('mpMsg', 'Mapa na antenie ✔', true); };
+$('mpShow').onclick = async () => { if (await save('map', mapData(true), 'mpMsg')) say('mpMsg', 'Mapa na antenie â', true); };
 $('mpHide').onclick = async () => {
-  try { const r = await api('/api/config', 'POST', {section: 'map', patch: {visible: false}}); cfg = r.config; renderChips(); say('mpMsg', 'Mapa ukryta ✔', true); }
+  try { const r = await api('/api/config', 'POST', {section: 'map', patch: {visible: false}}); cfg = r.config; renderChips(); say('mpMsg', 'Mapa ukryta â', true); }
   catch (e) { say('mpMsg', e.message, false); }
 };
 
@@ -1117,9 +1126,9 @@ function fillBrk(){
   $('bkKind').value = k.kind; $('bkTitle').value = k.title; $('bkSub').value = k.subtitle; $('bkFoot').value = k.footer;
   $('bkMusic').checked = k.music; $('bkVol').value = k.volume;
   $('bkTime').value = k.endsAt ? new Date(k.endsAt).toLocaleTimeString('pl-PL', {hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Warsaw'}) : '';
-  $('bkNow').textContent = k.visible ? ('Na antenie' + (k.endsAt ? ' – wracamy o ' + new Date(k.endsAt).toLocaleTimeString('pl-PL', {hour: '2-digit', minute: '2-digit'}) : '')) : 'Plansza ukryta';
+  $('bkNow').textContent = k.visible ? ('Na antenie' + (k.endsAt ? ' â wracamy o ' + new Date(k.endsAt).toLocaleTimeString('pl-PL', {hour: '2-digit', minute: '2-digit'}) : '')) : 'Plansza ukryta';
 }
-/* godzina odliczania (Warszawa) -> ISO; jeśli godzina już minęła, to jutro */
+/* godzina odliczania (Warszawa) -> ISO; jeĹli godzina juĹź minÄĹa, to jutro */
 function warsawOffset(ms){ const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {timeZone: 'Europe/Warsaw', hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).formatToParts(new Date(ms)).map(x => [x.type, x.value])); return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - Math.floor(ms / 1000) * 1000; }
 function bkTargetIso(now, hhmm){
   if (!hhmm) return '';
@@ -1137,7 +1146,7 @@ $('bkShow').onclick = async () => {
   if (ok) fillBrk();
 };
 $('bkHide').onclick = async () => {
-  try { const r = await api('/api/config', 'POST', {section: 'break_screen', patch: {visible: false}}); cfg = r.config; dirty.break_screen = false; fillBrk(); say('bkMsg', 'Plansza ukryta ✔', true); }
+  try { const r = await api('/api/config', 'POST', {section: 'break_screen', patch: {visible: false}}); cfg = r.config; dirty.break_screen = false; fillBrk(); say('bkMsg', 'Plansza ukryta â', true); }
   catch (e) { say('bkMsg', e.message, false); }
 };
 
@@ -1145,7 +1154,7 @@ $('bkHide').onclick = async () => {
 function fillAds(){ const a = cfg.ads; $('adVol').value = a.volume; $('adEv').value = a.everyMinutes; $('adLabel').checked = a.label; }
 $('adSave').onclick = () => save('ads', {volume: num($('adVol').value), everyMinutes: num($('adEv').value), label: $('adLabel').checked}, 'adMsg');
 async function adCmd(action, n){
-  try { cfg = (await api('/api/ads', 'POST', {action, n: n || 0})).config; say('adMsg', action === 'stop' ? 'Reklama zatrzymana ✔' : 'Reklama uruchomiona ✔', true); }
+  try { cfg = (await api('/api/ads', 'POST', {action, n: n || 0})).config; say('adMsg', action === 'stop' ? 'Reklama zatrzymana â' : 'Reklama uruchomiona â', true); }
   catch (e) { say('adMsg', e.message, false); }
 }
 $('adNext').onclick = () => adCmd('play', 0); $('adAll').onclick = () => adCmd('all'); $('adStop').onclick = () => adCmd('stop');
@@ -1156,14 +1165,14 @@ async function scanAds(){
       if (r.ok && /video|octet/i.test(r.headers.get('content-type') || '')) found.push(n); } catch (e) {}
   }));
   found.sort((a, b) => a - b); $('adCount').textContent = found.length || 'brak';
-  $('adList').replaceChildren(...found.map(n => { const b = document.createElement('button'); b.className = 'b2 sm'; b.textContent = '▶ ' + n + '.mp4'; b.onclick = () => adCmd('play', n); return b; }));
+  $('adList').replaceChildren(...found.map(n => { const b = document.createElement('button'); b.className = 'b2 sm'; b.textContent = 'âś ' + n + '.mp4'; b.onclick = () => adCmd('play', n); return b; }));
 }
 $('adScan').onclick = scanAds;
 
-/* ---------- żywa synchronizacja z innymi osobami ---------- */
+/* ---------- Ĺźywa synchronizacja z innymi osobami ---------- */
 const FILL = {bar: fillBar, poll: fillPoll, map: fillMap, fund: fillFund, live_badge: fillBadge, qr: fillQr, timer: fillTimer, debate: fillDebate, segment: fillSegment, age: fillAge, lower_third: fillLt, flash: fillFlash, stream: fillStream, break_screen: fillBrk, ads: fillAds};
 const MSG = {bar: 'barMsg', poll: 'pMsg', map: 'mpMsg', fund: 'fMsg', live_badge: 'lbMsg', qr: 'qrMsg', timer: 'tmMsg', debate: 'dbMsg', segment: 'sgMsg', age: 'ageMsg', lower_third: 'ltMsg', flash: 'flMsg', stream: 'stMsg', break_screen: 'bkMsg', ads: 'adMsg'};
-const NAME = {bar: 'Pasek', map: 'Mapa', fund: 'Zbiórka', live_badge: 'Na żywo', qr: 'QR', age: 'Wiek', lower_third: 'Rozmówca', flash: 'Pilne', timer: 'Odliczanie', debate: 'Debata', segment: 'Segment'};
+const NAME = {bar: 'Pasek', map: 'Mapa', fund: 'ZbiĂłrka', live_badge: 'Na Ĺźywo', qr: 'QR', age: 'Wiek', lower_third: 'RozmĂłwca', flash: 'Pilne', timer: 'Odliczanie', debate: 'Debata', segment: 'Segment'};
 const dirty = {};
 const markDirty = e => { const t = e.target.closest && e.target.closest('[data-sec]'); if (t) dirty[t.dataset.sec] = true; };
 document.addEventListener('input', markDirty);
@@ -1173,7 +1182,7 @@ function renderChips(){
   const box = $('chips'); box.replaceChildren(box.firstChild);
   Object.keys(NAME).forEach((k, n) => {
     const on = !!cfg[k].visible, b = document.createElement('button'); b.dataset.k = k;
-    b.className = 'chip' + (on ? ' on' : ''); b.innerHTML = '<kbd>' + (n + 1) + '</kbd><span>' + NAME[k] + '</span><small>' + (on ? 'NA ANTENIE' : 'wyłączone') + '</small>';
+    b.className = 'chip' + (on ? ' on' : ''); b.innerHTML = '<kbd>' + (n + 1) + '</kbd><span>' + NAME[k] + '</span><small>' + (on ? 'NA ANTENIE' : 'wyĹÄczone') + '</small>';
     b.onclick = async () => {
       try { const r = await api('/api/config', 'POST', {section: k, patch: {visible: !cfg[k].visible}}); cfg = r.config; if (!dirty[k]) FILL[k](); renderChips(); }
       catch (e) { say(MSG[k], e.message, false); }
@@ -1182,7 +1191,7 @@ function renderChips(){
   });
 }
 function conflict(k){
-  const el = $(MSG[k]); el.className = 'msg er'; el.textContent = '⚠ Ktoś inny zmienił te ustawienia. ';
+  const el = $(MSG[k]); el.className = 'msg er'; el.textContent = 'â  KtoĹ inny zmieniĹ te ustawienia. ';
   const b = document.createElement('button'); b.className = 'b2 sm'; b.textContent = 'Wczytaj zmiany (utracisz swoje)';
   b.onclick = () => { dirty[k] = false; FILL[k](); el.textContent = ''; }; el.appendChild(b);
 }
@@ -1201,7 +1210,7 @@ async function sync(){
     }
     if (old.overlayKey !== cfg.overlayKey) fillOverlay();
     renderChips();
-  } catch (e) { /* chwilowy brak sieci – spróbujemy za chwilę */ }
+  } catch (e) { /* chwilowy brak sieci â sprĂłbujemy za chwilÄ */ }
   finally { syncing = false; }
 }
 setInterval(sync, 2500);
@@ -1212,21 +1221,21 @@ function fillOverlay(){ $('ovUrl').value = location.origin + '/overlay?key=' + c
 $('ovCopy').onclick = async () => {
   try { await navigator.clipboard.writeText($('ovUrl').value); }
   catch (e) { $('ovUrl').select(); document.execCommand('copy'); }
-  say('ovMsg', 'Skopiowano ✔', true);
+  say('ovMsg', 'Skopiowano â', true);
 };
 $('ovCopyObs').onclick = async () => {
   try { await navigator.clipboard.writeText($('ovUrlObs').value); }
   catch (e) { $('ovUrlObs').select(); document.execCommand('copy'); }
-  say('ovMsg', 'Skopiowano ✔', true);
+  say('ovMsg', 'Skopiowano â', true);
 };
 $('ovRegen').onclick = async () => {
-  if (!confirm('Wygenerować nowy klucz? Stary link w OBS przestanie działać i trzeba będzie wkleić nowy.')) return;
-  try { cfg = (await api('/api/key', 'POST')).config; fillOverlay(); say('ovMsg', 'Nowy klucz wygenerowany – wklej nowy link w OBS', true); }
+  if (!confirm('WygenerowaÄ nowy klucz? Stary link w OBS przestanie dziaĹaÄ i trzeba bÄdzie wkleiÄ nowy.')) return;
+  try { cfg = (await api('/api/key', 'POST')).config; fillOverlay(); say('ovMsg', 'Nowy klucz wygenerowany â wklej nowy link w OBS', true); }
   catch (e) { say('ovMsg', e.message, false); }
 };
 
 
-/* ---------- skróty ---------- */
+/* ---------- skrĂłty ---------- */
 document.addEventListener('keydown', e => {
   if (!cfg || e.ctrlKey || e.metaKey || e.altKey) return;
   const t = e.target; if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
@@ -1236,11 +1245,11 @@ document.addEventListener('keydown', e => {
   if (/^[1-9]$/.test(e.key)) { const b = document.querySelectorAll('#chips .chip')[+e.key - 1]; if (b) b.click(); }
 });
 
-/* ---------- podgląd okna / aplikacji (tylko w panelu) ---------- */
+/* ---------- podglÄd okna / aplikacji (tylko w panelu) ---------- */
 let capStream = null;
 const capSay = (m, er) => { const e = $('capMsg'); e.textContent = m; e.style.color = er ? 'var(--er)' : ''; };
 async function capStart(){
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) { capSay('Ta przeglądarka nie obsługuje przechwytywania ekranu (użyj Chrome/Edge po HTTPS).', true); return; }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) { capSay('Ta przeglÄdarka nie obsĹuguje przechwytywania ekranu (uĹźyj Chrome/Edge po HTTPS).', true); return; }
   try {
     const fps = +($('stFps').value) || 60;
     const st = await navigator.mediaDevices.getDisplayMedia({video: {cursor: 'never', frameRate: {ideal: fps, max: fps}, width: {ideal: 1920, max: 1920}, height: {ideal: 1080, max: 1080}}, audio: {echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: {ideal: 2}, sampleRate: {ideal: 48000}}});
@@ -1253,22 +1262,22 @@ async function capStart(){
     const sg = tr.getSettings ? tr.getSettings() : {};
     if (outWin && !outWin.closed) outAttach(outWin, st);
     const lowRes = sg.height && sg.height < 1000;
-    capSay('Podgląd: ' + (tr.label || 'okno') + (sg.width ? ' · ' + sg.width + '×' + sg.height : '') + (sg.frameRate ? ' @ ' + Math.round(sg.frameRate) + ' kl/s' : '') + (lowRes ? ' · ⚠ okno ma mniej niż 1080p – ustaw grę na 1920×1080 (pełny ekran lub okno bez ramki), inaczej obraz będzie rozciągnięty i miękki' : ''), !!lowRes);
-  } catch (e) { capSay(e && e.name === 'NotAllowedError' ? 'Anulowano wybór okna.' : 'Nie udało się: ' + (e && e.message), true); }
+    capSay('PodglÄd: ' + (tr.label || 'okno') + (sg.width ? ' Âˇ ' + sg.width + 'Ă' + sg.height : '') + (sg.frameRate ? ' @ ' + Math.round(sg.frameRate) + ' kl/s' : '') + (lowRes ? ' Âˇ â  okno ma mniej niĹź 1080p â ustaw grÄ na 1920Ă1080 (peĹny ekran lub okno bez ramki), inaczej obraz bÄdzie rozciÄgniÄty i miÄkki' : ''), !!lowRes);
+  } catch (e) { capSay(e && e.name === 'NotAllowedError' ? 'Anulowano wybĂłr okna.' : 'Nie udaĹo siÄ: ' + (e && e.message), true); }
 }
 function capStop(){
   lkUnpublish();
   if (capStream) { capStream.getTracks().forEach(t => { t.onended = null; t.stop(); }); capStream = null; }
   ['capA', 'capB'].forEach(id => { $(id).srcObject = null; });
   $('prevWrap').classList.remove('live'); $('capWrap').classList.remove('live'); $('capStop').disabled = true;
-  capSay('Skróty: 1–9 przełączają elementy na antenie · Spacja = ukryj wszystko (panic)', false);
+  capSay('SkrĂłty: 1â9 przeĹÄczajÄ elementy na antenie Âˇ Spacja = ukryj wszystko (panic)', false);
 }
 $('capStart').onclick = capStart; $('capPh').onclick = capStart; $('capStop').onclick = capStop;
 $('monOv').onchange = () => $('prevWrap').classList.toggle('noov', !$('monOv').checked);
 $('monFit').onchange = () => { const c = !$('monFit').checked; $('prevWrap').classList.toggle('cover', c); $('capWrap').classList.toggle('cover', c); };
 let swapped = false;
 $('capSwap').onclick = () => { swapped = !swapped; document.querySelector('.mons').style.flexDirection = ''; document.querySelectorAll('.mons .mon').forEach((m, i) => m.style.order = swapped ? 1 - i : i); };
-/* ---------- okno wyjściowe (do udostępnienia na Discordzie): PGM albo PVW, obraz prosto z przechwytywania ---------- */
+/* ---------- okno wyjĹciowe (do udostÄpnienia na Discordzie): PGM albo PVW, obraz prosto z przechwytywania ---------- */
 let outWin = null;
 const OUT_HTML = '<!doctype html><meta charset="utf-8"><title>JEDEN</title><style>html,body{margin:0;height:100%;background:#000;overflow:hidden;cursor:none}' +
   '#s{position:absolute;inset:0}#s.pgm{inset:auto;left:50%;top:50%;width:1920px;height:1080px;margin:-540px 0 0 -960px;transform-origin:50% 50%}' +
@@ -1284,19 +1293,19 @@ window.jedenOutMode = (w, mode) => {
     const d = w.document, s = d.getElementById('s'), f = d.getElementById('f');
     s.className = mode === 'pgm' ? 'pgm' : '';
     if (mode === 'pgm') { if (!f.src || f.src === 'about:blank') f.src = location.origin + '/overlay?preview=1&lite=1&key=' + encodeURIComponent(cfg.overlayKey); }
-    d.title = 'JEDEN – ' + (mode === 'pgm' ? 'PGM' : 'PVW');
+    d.title = 'JEDEN â ' + (mode === 'pgm' ? 'PGM' : 'PVW');
     w.fit();
   } catch (e) {}
 };
 function outAttach(w, st){ try { const v = w.document.getElementById('v'); v.srcObject = st; v.play().catch(() => {}); } catch (e) {} localPauseApply(); }
 function openOut(mode){
   $('outPick').hidden = true;
-  if (!capStream) { capSay('Najpierw wybierz okno gry (przycisk „Wybierz okno / ekran”)', true); return; }
+  if (!capStream) { capSay('Najpierw wybierz okno gry (przycisk âWybierz okno / ekranâ)', true); return; }
   const w = window.open('', 'jeden_out', 'popup=yes,width=1280,height=720');
-  if (!w) { capSay('Przeglądarka zablokowała nowe okno – zezwól tej stronie na wyskakujące okna', true); return; }
+  if (!w) { capSay('PrzeglÄdarka zablokowaĹa nowe okno â zezwĂłl tej stronie na wyskakujÄce okna', true); return; }
   if (!w.document.getElementById('s')) { w.document.open(); w.document.write(OUT_HTML); w.document.close(); }
   outWin = w; outAttach(w, capStream); window.jedenOutMode(w, mode); w.focus();
-  capSay('Otwarto okno ' + (mode === 'pgm' ? 'PGM' : 'PVW') + ' – w Discordzie udostępnij to okno', false);
+  capSay('Otwarto okno ' + (mode === 'pgm' ? 'PGM' : 'PVW') + ' â w Discordzie udostÄpnij to okno', false);
 }
 $('capFs').onclick = () => { $('outPick').hidden = !$('outPick').hidden; };
 $('outPgm').onclick = () => openOut('pgm'); $('outPvw').onclick = () => openOut('pvw'); $('outCancel').onclick = () => { $('outPick').hidden = true; };
