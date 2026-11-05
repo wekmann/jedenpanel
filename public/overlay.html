@@ -357,6 +357,8 @@ html.pgm #pgmfreeze.on{display:block}
 #pgmlast{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;z-index:0;pointer-events:none}
 html.pgm #pgmlast.on{display:block}
 #scene.dbt #sgwrap,#scene.dbt #tmwrap,#scene.dbt #barwrap,#scene.dbt #livewrap,#scene.dbt #fundwrap,#scene.dbt #qrwrap,#scene.dbt #ltwrap,#scene.dbt #flashwrap,#scene.dbt #agewrap{z-index:45}
+/* Pełnoekranowa plansza debaty działa jak plansza reklamowa: bez konkurujących belek i widżetów. */
+#scene.dbt #sgwrap,#scene.dbt #tmwrap,#scene.dbt #barwrap,#scene.dbt #livewrap,#scene.dbt #fundwrap,#scene.dbt #qrwrap,#scene.dbt #ltwrap,#scene.dbt #flashwrap,#scene.dbt #agewrap,#scene.dbt #pollwrap,#scene.dbt #mapwrap,#scene.dbt #adwrap{display:none!important}
 #tmwrap,#barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity,translate}
 #pgmwait{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;color:#9fb3d1;font:700 40px/1.2 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:2px}
 #pgmwait small{font-size:24px;font-weight:700;color:#6f84a8;letter-spacing:1px}
@@ -870,7 +872,12 @@ function renderBreak(k){
   if (deb) FLAG.start(); else FLAG.stop();
   if (!on) { bmSig = ''; bmGo(false, 0, ''); $('brk').classList.remove('zero'); return; }
   if (deb) {
-    $('dbwt').textContent = k.title || 'Debata'; $('dbrt').textContent = k.subtitle || 'Prezydencka'; $('dbfoot').textContent = k.footer || '';
+    const title = k.title || 'Debata', subtitle = k.subtitle || 'Prezydencka';
+    $('dbwt').textContent = title; $('dbrt').textContent = subtitle; $('dbfoot').textContent = k.footer || '';
+    // Dopasuj wielkość fontu do długości dowolnego napisu, żeby nie wychodził poza planszę.
+    const titleSize = Math.max(34, Math.min(112, 730 / Math.max(1, title.length * .66)));
+    const subSize = Math.max(26, Math.min(76, 860 / Math.max(1, subtitle.length * .64)));
+    $('dbwt').style.fontSize = titleSize + 'px'; $('dbrt').style.fontSize = subSize + 'px';
     const e = k.endsAt ? Date.parse(k.endsAt) : 0;
     $('dbat').style.display = e ? '' : 'none'; if (e) $('dbat').textContent = 'Wracamy o ' + fmt.format(new Date(e));
   }
