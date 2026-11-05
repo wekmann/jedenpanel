@@ -28,7 +28,7 @@ export const DEFAULTS = {
     text: '',
     list: ['Przedstawienie kandydatów | 8:00', 'Transport i komunikacja | 11:00', 'Mieszkalnictwo i koszty życia | 11:00', 'Bezpieczeństwo | 11:00', 'Edukacja i zdrowie | 11:00', 'Zieleń i środowisko | 11:00', 'Pytania między kandydatami | 12:00', 'Pytanie końcowe | 7:00', 'Zakończenie | 2:00'],
   },
-  timer: { visible: false, seconds: 60, endsAt: '', sound: true, volume: 80, hideAfter: 0 },
+  timer: { visible: false, seconds: 120, endsAt: '', sound: true, volume: 80, hideAfter: 15 },
   stream: { twitchOn: true, twitchUrl: 'rtmp://live.twitch.tv/app', twitchKey: '', tiktokOn: false, tiktokUrl: '', tiktokKey: '', fps: 60, bitrate: 8000 },
   stream_state: { egressId: '', startedAt: '', operator: '' },
   game_pause: { paused: false, at: new Date(0).toISOString() },

@@ -231,7 +231,10 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #d3{left:150px;top:358px;width:105px}
 #dbw{position:absolute;left:180px;top:180px;width:730px;height:158px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.35));opacity:0;transform:translateX(-120px);clip-path:inset(0 100% 0 0)}
 #dbw i{position:absolute;inset:0;background:linear-gradient(180deg,#fff,#f1f3f6 70%,#dfe3ea);clip-path:polygon(0 0,92% 0,100% 98%,5% 100%)}
-#dbwt{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding-left:6px;box-sizing:border-box;font-size:112px;font-weight:900;font-style:italic;letter-spacing:-2px;white-space:nowrap;color:#17327a;background:linear-gradient(180deg,#2d4fa3 0,#17327a 55%,#0f2259);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;-webkit-text-stroke:2px #fff;paint-order:stroke fill;filter:drop-shadow(0 3px 3px rgba(0,0,40,.35))}
+#dbwt{position:absolute;left:0;top:0;width:100%;height:100%;display:grid;place-items:center;padding-left:6px;box-sizing:border-box;font-size:112px;font-weight:900;font-style:italic;letter-spacing:-1px;line-height:1;white-space:nowrap}
+#dbwt span{grid-area:1/1;display:block;white-space:nowrap}
+#dbwt .o{color:#fff;-webkit-text-stroke:7px #fff;paint-order:stroke fill;stroke-linejoin:round;filter:drop-shadow(0 3px 3px rgba(0,0,40,.35))}
+#dbwt .f{color:#17327a;background:linear-gradient(180deg,#3a5fc0 0,#17327a 55%,#0f2259);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 #dbr{position:absolute;left:283px;top:340px;width:860px;height:130px;filter:drop-shadow(0 10px 16px rgba(0,0,0,.45));opacity:0;transform:translateX(140px);clip-path:inset(0 0 0 100%)}
 #dbr i{position:absolute;inset:0;background:linear-gradient(180deg,#f0344a 0,#d4122b 40%,#a50c20 100%);clip-path:polygon(0 0,93% 0,100% 100%,7% 100%)}
 #dbr b{position:absolute;inset:7px 12px;background:none;border:1.5px solid rgba(255,255,255,.75);clip-path:polygon(0 0,93% 0,100% 100%,7% 100%);box-sizing:border-box;border-radius:0}
@@ -571,7 +574,7 @@ html.lite #bkp{display:none}
         <div class="dbd" id="d1"></div><div class="dbd" id="d1b"></div>
         <div class="dbd r" id="d2"></div><div class="dbd r" id="d2b"></div>
         <div class="dbd" id="d3"></div>
-        <div id="dbw"><i></i><div id="dbwt">DEBATA</div></div>
+        <div id="dbw"><i></i><div id="dbwt"><span class="o">DEBATA</span><span class="f">DEBATA</span></div></div>
         <div id="dbr"><i></i><b></b><u></u><div id="dbrt">PREZYDENCKA</div></div>
         <div id="dbn"><div id="dbat"></div><div id="dbcd"></div></div>
       </div>
@@ -873,7 +876,7 @@ function renderBreak(k){
   if (!on) { bmSig = ''; bmGo(false, 0, ''); $('brk').classList.remove('zero'); return; }
   if (deb) {
     const title = k.title || 'Debata', subtitle = k.subtitle || 'Prezydencka';
-    $('dbwt').textContent = title; $('dbrt').textContent = subtitle; $('dbfoot').textContent = k.footer || '';
+    $('dbwt').querySelectorAll('span').forEach(x => x.textContent = title); $('dbrt').textContent = subtitle; $('dbfoot').textContent = k.footer || '';
     // Dopasuj wielkość fontu do długości dowolnego napisu, żeby nie wychodził poza planszę.
     const titleSize = Math.max(34, Math.min(112, 730 / Math.max(1, title.length * .66)));
     const subSize = Math.max(26, Math.min(76, 860 / Math.max(1, subtitle.length * .64)));

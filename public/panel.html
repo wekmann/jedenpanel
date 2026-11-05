@@ -735,26 +735,28 @@ function fillTimer(){
   const t = cfg.timer, s = +t.seconds || 0;
   $('tmMin').value = Math.floor(s / 60); $('tmSec').value = s % 60;
   $('tmSnd').checked = t.sound !== false; $('tmVol').value = t.volume; $('tmHide').value = t.hideAfter;
-  $('tmPause').textContent = t.endsAt ? '⏸ PAUZA' : '▶ WZNÓW';
+  $('tmPause').textContent = (t.endsAt && Date.parse(t.endsAt) > Date.now() + skew) ? '⏸ PAUZA' : '▶ WZNÓW';
 }
+function tmTotal(){ const m = num($('tmMin').value), s = num($('tmSec').value); return Math.max(1, Math.round((isNaN(m) ? 0 : m) * 60 + (isNaN(s) ? 0 : s))); }
+let tmBase = 0;
 function tmData(extra){
-  const m = num($('tmMin').value), s = num($('tmSec').value);
-  return Object.assign({visible: true, seconds: Math.round((isNaN(m) ? 0 : m) * 60 + (isNaN(s) ? 0 : s)), endsAt: cfg.timer.endsAt || '',
+  return Object.assign({visible: true, seconds: tmTotal(), endsAt: cfg.timer.endsAt || '',
     sound: $('tmSnd').checked, volume: num($('tmVol').value), hideAfter: num($('tmHide').value)}, extra || {});
 }
-$('tmStart').onclick = async () => { if (await save('timer', tmData({endsAt: new Date(Date.now() + skew).toISOString()}), 'tmMsg')) fillTimer(); };
+$('tmStart').onclick = async () => { const sec = tmTotal(); tmBase = sec; if (await save('timer', tmData({seconds: sec, endsAt: new Date(Date.now() + skew + sec * 1000).toISOString()}), 'tmMsg')) fillTimer(); };
 $('tmPause').onclick = async () => {
   const t = cfg.timer || {}, end = t.endsAt ? Date.parse(t.endsAt) : 0;
   if (end) {
-    const remaining = Math.max(0, Math.ceil((end - (Date.now() + skew)) / 1000));
+    const remaining = Math.max(1, Math.ceil((end - (Date.now() + skew)) / 1000));
     $('tmMin').value = Math.floor(remaining / 60); $('tmSec').value = remaining % 60;
     if (await save('timer', tmData({seconds: remaining, endsAt: ''}), 'tmMsg')) fillTimer();
   } else {
-    if (await save('timer', tmData({endsAt: new Date(Date.now() + skew).toISOString()}), 'tmMsg')) fillTimer();
+    const sec = tmTotal();
+    if (await save('timer', tmData({seconds: sec, endsAt: new Date(Date.now() + skew + sec * 1000).toISOString()}), 'tmMsg')) fillTimer();
   }
 };
-$('tmReset').onclick = async () => { if (await save('timer', tmData({endsAt: ''}), 'tmMsg')) fillTimer(); };
-$('tmHideBtn').onclick = async () => { if (await save('timer', tmData({visible: false, endsAt: ''}), 'tmMsg')) fillTimer(); };
+$('tmReset').onclick = async () => { const sec = tmBase || tmTotal(); if (await save('timer', tmData({seconds: sec, endsAt: ''}), 'tmMsg')) fillTimer(); };
+$('tmHideBtn').onclick = async () => { const sec = tmBase || tmTotal(); if (await save('timer', tmData({visible: false, seconds: sec, endsAt: ''}), 'tmMsg')) fillTimer(); };
 setInterval(() => {
   if (!cfg || !cfg.timer) return; const t = cfg.timer, e = $('tmNow'); if (!e) return;
   const end = t.endsAt ? Date.parse(t.endsAt) : 0, p2 = n => String(n).padStart(2, '0');
