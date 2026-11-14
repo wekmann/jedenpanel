@@ -50,16 +50,16 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 /* ===== ZWINIĘTE PASKI: zostaje tylko logo + godzina ===== */
 #root{transition:width .7s var(--ease)}
 #barwrap.col #root{width:155px;overflow:hidden}
-#scene.col #flashwrap{left:calc(129px + 155px + 14px + var(--ox,0px));translate:0 0;max-width:1480px}
-#scene.col #ltwrap{left:calc(129px + 155px + 14px + var(--ox,0px));translate:0 calc(-1 * var(--fh,0px))}
-#scene.col #fundwrap{bottom:var(--mb,43px)}
-#scene.col #qrwrap{translate:0 calc(-1 * var(--bh,214px))}
+#scene.col #flashwrap{left:calc(129px + 155px + 14px + var(--ox,0px));bottom:var(--mb,43px);max-width:1480px}
+#scene.col #ltwrap{left:calc(129px + 155px + 14px + var(--ox,0px));bottom:calc(var(--mb,43px) + 14px + var(--fh,0px))}
+#scene.col #fundwrap{bottom:calc(var(--mb,43px) + var(--ffh,0px))}
+#scene.col #qrwrap{bottom:calc(var(--mb,43px) + 14px + var(--bh,214px))}
 
 
 /* ===== ODLICZANIE: kula z flagą nad kodem QR ===== */
-#tmwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + 14px);width:155px;display:flex;justify-content:center;translate:0 calc(-1 * (var(--bh,214px) + var(--fh,0px) + var(--tq,0px)));transition:transform .6s var(--ease),opacity .5s ease,translate .6s var(--ease)}
+#tmwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + 14px + var(--bh,214px) + var(--fh,0px) + var(--tq,0px));width:155px;display:flex;justify-content:center;transition:transform .6s var(--ease),opacity .5s ease,bottom .6s var(--ease)}
 #tmwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - 60px))}
-#scene.col #tmwrap{translate:0 calc(-1 * (var(--bh,214px) + var(--tq,0px)))}
+#scene.col #tmwrap{bottom:calc(var(--mb,43px) + 14px + var(--bh,214px) + var(--tq,0px))}
 #tmball{position:relative;width:140px;height:140px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45))}
 #tmball svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 #tmwave{animation:tmw 2.6s linear infinite}
@@ -122,16 +122,16 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #lpfoot{display:flex;justify-content:space-between;gap:10px;padding:12px 22px 14px;font-size:17px;color:#9fb2d4;border-top:1px solid rgba(255,255,255,.08);margin-top:8px;letter-spacing:.5px}
 
 /* ===== QR (nad logiem JEDEN, lewa krawędź i szerokość równo z logiem) ===== */
-#qrwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + 14px);translate:0 calc(-1 * (var(--bh,214px) + var(--fh,0px)));transition:transform .6s var(--ease),opacity .5s ease,translate .6s var(--ease)}
+#qrwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + 14px + var(--bh,214px) + var(--fh,0px));transition:transform .6s var(--ease),opacity .5s ease,bottom .6s var(--ease)}
 #qrwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - 60px))}
 #fqrbox{box-sizing:border-box;width:155px;background:#fff;padding:8px;box-shadow:0 6px 14px rgba(0,0,0,.45);transition:opacity .45s ease,transform .6s var(--ease);transform-origin:50% 100%}
 #fqrbox.hide{opacity:0;transform:translateY(18px) scale(.9);pointer-events:none}
-#fqrcap{width:155px;margin-top:7px;text-align:center;white-space:nowrap;color:#fff;font:900 23px/1 'Roboto Condensed',Arial,sans-serif;letter-spacing:.3px;text-transform:uppercase;text-shadow:0 0 3px #000,0 2px 4px rgba(0,0,0,.85);transition:opacity .45s ease,transform .6s var(--ease)}
+#fqrcap{width:155px;margin-top:7px;text-align:center;white-space:nowrap;overflow:hidden;color:#fff;font:900 23px/1 'Roboto Condensed',Arial,sans-serif;letter-spacing:.3px;text-transform:uppercase;text-shadow:0 0 3px #000,0 2px 4px rgba(0,0,0,.85);transition:opacity .45s ease,transform .6s var(--ease)}
 #fqrbox.hide + #fqrcap{opacity:0;transform:translateY(18px)}
 #fqr{display:block;width:100%;height:auto}
 
 /* ===== PLANSZA ROZMÓWCY (nad paskiem, od lewej; omija QR gdy ten jest widoczny) ===== */
-#ltwrap{position:absolute;left:calc(129px + var(--ox,0px) + var(--lx,0px));bottom:calc(var(--mb,43px) + 14px);translate:0 calc(-1 * (var(--bh,214px) + var(--fh,0px)));max-width:940px;transition:transform .6s var(--ease),opacity .5s ease,left .4s var(--ease),translate .6s var(--ease)}
+#ltwrap{position:absolute;left:calc(129px + var(--ox,0px) + var(--lx,0px));bottom:calc(var(--mb,43px) + 14px + var(--bh,214px) + var(--fh,0px));max-width:940px;transition:transform .6s var(--ease),opacity .5s ease,left .4s var(--ease),bottom .6s var(--ease)}
 #ltwrap.off{opacity:0;transform:translateX(calc(-100% - 129px - var(--lx,0px) - 60px))}
 #ltbox{display:flex;flex-direction:column;align-items:flex-start;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
 #ltwrap:not(.off) #ltbox{animation:ltin .7s var(--ease)}
@@ -142,7 +142,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 #ltrole{box-sizing:border-box;max-width:100%;background:linear-gradient(90deg,#0e2347,#16305c);color:#e8eef9;font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;line-height:1.2;padding:9px 40px 9px 30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:6px solid #d60f08;font-family:'Roboto Condensed',Arial,sans-serif}
 
 /* ===== PILNE (pasek newsa przyklejony do góry dolnego paska) ===== */
-#flashwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:var(--mb,43px);translate:0 calc(-1 * var(--bh,214px));width:max-content;max-width:1662px;transition:transform .6s var(--ease),opacity .45s ease,translate .6s var(--ease)}
+#flashwrap{position:absolute;left:calc(129px + var(--ox,0px));bottom:calc(var(--mb,43px) + var(--bh,214px));width:max-content;max-width:1662px;transition:transform .6s var(--ease),opacity .45s ease,bottom .6s var(--ease)}
 #flashwrap.off{opacity:0;transform:translateY(60px)}
 #flbox{display:grid;grid-template-columns:155px minmax(0,auto);height:62px;border-radius:0 18px 0 0;box-shadow:0 -4px 12px rgba(0,0,0,.4)}
 #flashwrap:not(.off) #flbox{animation:flin .6s var(--ease)}
@@ -156,7 +156,7 @@ html,body{margin:0;padding:0;background:transparent !important;overflow:hidden;f
 @keyframes flmq{from{transform:translateX(0)}to{transform:translateX(var(--dist,0px))}}
 
 /* ===== ZBIÓRKA (nad paskiem, prawa krawędź równo z paskiem) ===== */
-#fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + 14px);translate:0 calc(-1 * (var(--fbh,var(--bh,214px)) + var(--ffh,0px)));display:flex;align-items:flex-end;transition:transform .6s var(--ease),opacity .5s ease,translate .6s var(--ease)}
+#fundwrap{position:absolute;right:calc(129px - var(--ox,0px));bottom:calc(var(--mb,43px) + 14px + var(--fbh,var(--bh,214px)) + var(--ffh,0px));display:flex;align-items:flex-end;transition:transform .6s var(--ease),opacity .5s ease,bottom .6s var(--ease)}
 #fundwrap.off{opacity:0;transform:translateX(calc(100% + 500px))}
 #fundwrap:not(.off) #fcard{animation:fin .7s var(--ease)}
 @keyframes fin{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
@@ -362,7 +362,7 @@ html.pgm #pgmlast.on{display:block}
 #scene.dbt #sgwrap,#scene.dbt #tmwrap,#scene.dbt #barwrap,#scene.dbt #livewrap,#scene.dbt #fundwrap,#scene.dbt #qrwrap,#scene.dbt #ltwrap,#scene.dbt #flashwrap,#scene.dbt #agewrap{z-index:45}
 /* Pełnoekranowa plansza debaty działa jak plansza reklamowa: bez konkurujących belek i widżetów. */
 #scene.dbt #sgwrap,#scene.dbt #tmwrap,#scene.dbt #barwrap,#scene.dbt #livewrap,#scene.dbt #fundwrap,#scene.dbt #qrwrap,#scene.dbt #ltwrap,#scene.dbt #flashwrap,#scene.dbt #agewrap,#scene.dbt #pollwrap,#scene.dbt #mapwrap,#scene.dbt #adwrap{display:none!important}
-#tmwrap,#barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity,translate}
+#tmwrap,#barwrap,#livewrap,#fundwrap,#qrwrap,#ltwrap,#flashwrap,#agewrap,#pollwrap{will-change:transform,opacity,bottom}
 #pgmwait{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;color:#9fb3d1;font:700 40px/1.2 'Roboto Condensed',Arial,sans-serif;text-transform:uppercase;letter-spacing:2px}
 #pgmwait small{font-size:24px;font-weight:700;color:#6f84a8;letter-spacing:1px}
 html.pgm #pgmwait.on{display:flex}
@@ -1027,6 +1027,7 @@ function showQr(){
   const on = !!(qrCfg && qrCfg.visible && qrOk);
   $('fqrbox').classList.toggle('hide', !on);
   $('fqrcap').textContent = (qrCfg && qrCfg.caption) || 'WESPRZYJ NAS!';
+  { const c = $('fqrcap'); c.style.fontSize = ''; let f = 23; while (f > 11 && c.scrollWidth > 155) { f--; c.style.fontSize = f + 'px'; } }
   $('scene').style.setProperty('--lx', on ? '169px' : '0px'); // plansza rozmówcy omija QR
   try { updTq(); } catch (e) {}
 }
