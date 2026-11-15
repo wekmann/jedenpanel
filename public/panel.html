@@ -229,6 +229,15 @@ body{background:radial-gradient(900px 420px at 10% -10%,#a3162a33,transparent 60
     <label for="pT">Pytanie</label><input type="text" id="pT" maxlength="200">
     <label for="pS">Podpis (źródło)</label><input type="text" id="pS" maxlength="200">
     <label for="pH">Chowaj po (sekundy, 0 = nie chowaj)</label><input type="number" id="pH" min="0" max="3600" style="max-width:160px">
+    <div id="pAi" style="margin:14px 0;padding:12px;border:1px dashed var(--line);border-radius:10px;background:#ffffff08">
+      <b>🤖 Wczytaj wyniki z obrazu (AI)</b>
+      <div style="font-size:13px;opacity:.8;margin:4px 0 8px">Wciśnij <kbd>Ctrl+V</kbd> (obraz ze schowka) w tej zakładce, przeciągnij plik tutaj albo wybierz go przyciskiem. AI przepisze nazwy i procenty do słupków poniżej.</div>
+      <button class="b2 sm" id="pAiBtn" type="button">📷 Wybierz obraz</button>
+      <input type="file" id="pAiFile" accept="image/*" hidden>
+      <label style="display:inline-flex;align-items:center;gap:6px;margin:0 0 0 10px;font-size:13px"><input type="checkbox" id="pAiTitle"> nadpisz też pytanie i podpis</label>
+      <div id="pAiPrev" style="margin-top:8px" hidden><img id="pAiImg" alt="" style="max-width:100%;max-height:160px;border-radius:8px;border:1px solid var(--line)"></div>
+      <div class="msg" id="pAiMsg"></div>
+    </div>
     <label>Opcje (nazwa · % · kolor · usuń) + logo URL</label>
     <div id="pRows"></div>
     <button class="b2 sm" id="pAdd" style="margin-top:8px">+ Dodaj słupek</button><br>
@@ -653,6 +662,57 @@ function fillPoll(){
   $('pRows').innerHTML = ''; p.rows.forEach(pollRow);
 }
 $('pAdd').onclick = () => pollRow({name: 'Nowa opcja', value: 0, color: '#4a8fe7', logo: ''});
+
+/* ---------- sondaż: odczyt z obrazu przez AI (DeepSeek) ---------- */
+const AI_COLORS = ['#1b4f9c', '#dc0432', '#2e9e44', '#f0c93a', '#4a8fe7', '#e6761a', '#8a4fd1', '#18a8a8', '#9aa3b2', '#c2185b', '#7cb342', '#795548'];
+const normName = n => String(n).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ł/g, 'l').toLowerCase().replace(/[^a-z0-9]/g, '');
+function imgToDataUrl(file){
+  return new Promise((ok, no) => {
+    const u = URL.createObjectURL(file), im = new Image();
+    im.onload = () => {
+      const k = Math.min(1, 1600 / Math.max(im.width, im.height)), c = document.createElement('canvas');
+      c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(u); ok(c.toDataURL('image/jpeg', 0.9));
+    };
+    im.onerror = () => { URL.revokeObjectURL(u); no(new Error('Nie udało się wczytać obrazu')); };
+    im.src = u;
+  });
+}
+let aiBusy = false;
+async function pollFromImage(file){
+  if (aiBusy || !file) return;
+  if (!/^image\//.test(file.type)) { say('pAiMsg', 'To nie jest obraz.', false); return; }
+  aiBusy = true; $('pAiBtn').disabled = true; say('pAiMsg', '⏳ AI czyta wyniki z obrazu…', true);
+  try {
+    const image = await imgToDataUrl(file);
+    $('pAiImg').src = image; $('pAiPrev').hidden = false;
+    const r = await api('/api/poll-ai', 'POST', {image});
+    const old = pollData().rows, byName = new Map(old.map(x => [normName(x.name), x]));
+    $('pRows').innerHTML = '';
+    r.rows.forEach((x, i) => {
+      const prev = byName.get(normName(x.name));
+      pollRow({name: x.name, value: x.value, color: prev ? prev.color : AI_COLORS[i % AI_COLORS.length], logo: prev ? prev.logo : ''});
+    });
+    if ($('pAiTitle').checked) { if (r.title) $('pT').value = r.title; if (r.subtitle) $('pS').value = r.subtitle; }
+    dirty.poll = true;
+    const sum = r.rows.reduce((a, x) => a + x.value, 0);
+    say('pAiMsg', '✔ Wczytano ' + r.rows.length + ' pozycji (suma ' + (Math.round(sum * 100) / 100) + '%). Sprawdź dane i kliknij Zapisz lub POKAŻ.', true);
+  } catch (e) { say('pAiMsg', e.message, false); }
+  aiBusy = false; $('pAiBtn').disabled = false;
+}
+$('pAiBtn').onclick = () => $('pAiFile').click();
+$('pAiFile').onchange = e => { pollFromImage(e.target.files[0]); e.target.value = ''; };
+document.addEventListener('paste', e => {
+  if (!$('tPoll').classList.contains('on') || $('app').hidden) return;
+  const it = [...(e.clipboardData ? e.clipboardData.items : [])].find(x => x.type.startsWith('image/'));
+  if (it) { e.preventDefault(); pollFromImage(it.getAsFile()); }
+});
+$('tPoll').addEventListener('dragover', e => { if ([...(e.dataTransfer.types || [])].includes('Files')) e.preventDefault(); });
+$('tPoll').addEventListener('drop', e => {
+  const f = e.dataTransfer.files && e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) { e.preventDefault(); pollFromImage(f); }
+});
 const pollData = () => ({
   title: $('pT').value, subtitle: $('pS').value, hideAfter: num($('pH').value),
   rows: [...document.querySelectorAll('.prow')].map(r => ({
