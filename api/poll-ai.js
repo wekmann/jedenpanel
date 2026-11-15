@@ -1,6 +1,6 @@
 // Odczyt wyników sondażu ze zrzutu ekranu przez AI z obsługą obrazów.
 // Dostawca wybierany po zmiennej środowiskowej (Vercel -> Settings -> Environment Variables):
-//   GEMINI_API_KEY   -> Google Gemini (darmowy limit), opcjonalnie GEMINI_MODEL (domyślnie "gemini-2.5-flash")
+//   GEMINI_API_KEY   -> Google Gemini (darmowy limit), opcjonalnie GEMINI_MODEL (lista po przecinku, domyślnie "gemini-2.5-flash,gemini-2.5-flash-lite")
 //   DEEPSEEK_API_KEY -> DeepSeek (płatny), opcjonalnie DEEPSEEK_MODEL (domyślnie "deepseek-flash")
 // Gdy ustawione obie, używany jest Gemini.
 import { requireAdmin, method, fail } from './_lib.js';
@@ -33,27 +33,43 @@ export default async function handler(req, res) {
 
     let txt = '';
     if (gKey) {
-      const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-        method: 'POST',
-        headers: { 'x-goog-api-key': gKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: PROMPT }, { inline_data: { mime_type: im[1], data: im[2] } }] }],
-          generationConfig: {
-            temperature: 0,
-            responseMimeType: 'application/json',
-            ...(model.startsWith('gemini-2.5-flash') ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
-          },
-        }),
-        signal: AbortSignal.timeout(55000),
-      });
-      const j = await r.json().catch(() => ({}));
-      if (!r.ok) {
-        const m = (j.error && j.error.message) || ('HTTP ' + r.status);
-        const hint = r.status === 400 && /API key/i.test(m) ? ' (zły klucz API)' : r.status === 403 ? ' (klucz nie ma dostępu)' : r.status === 429 ? ' (limit darmowych zapytań – odczekaj chwilę)' : '';
-        return res.status(502).json({ error: 'Gemini: ' + String(m).slice(0, 200) + hint });
+      // Gemini bywa przeciążony (503/429) – ponawiamy i przełączamy się na zapasowy model
+      const models = (process.env.GEMINI_MODEL || 'gemini-2.5-flash,gemini-2.5-flash-lite').split(',').map((x) => x.trim()).filter(Boolean);
+      const t0 = Date.now();
+      let lastErr = '', lastStatus = 0, got = false;
+      outer: for (const model of models) {
+        for (let attempt = 0; attempt < 2; attempt++) {
+          if (Date.now() - t0 > 40000) break outer;
+          let r, j;
+          try {
+            r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+              method: 'POST',
+              headers: { 'x-goog-api-key': gKey, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: PROMPT }, { inline_data: { mime_type: im[1], data: im[2] } }] }],
+                generationConfig: {
+                  temperature: 0,
+                  responseMimeType: 'application/json',
+                  ...(model.startsWith('gemini-2.5-flash') ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+                },
+              }),
+              signal: AbortSignal.timeout(20000),
+            });
+            j = await r.json().catch(() => ({}));
+          } catch (e) { lastErr = 'brak odpowiedzi (timeout)'; lastStatus = 504; await new Promise((ok) => setTimeout(ok, 1200)); continue; }
+          if (r.ok) {
+            txt = String((j.candidates?.[0]?.content?.parts || []).map((x) => x.text || '').join('')).trim();
+            got = true; break outer;
+          }
+          lastStatus = r.status; lastErr = (j.error && j.error.message) || ('HTTP ' + r.status);
+          if (![429, 500, 503, 504].includes(r.status)) break outer; // błąd klucza/zapytania – ponawianie nie pomoże
+          if (attempt === 0) await new Promise((ok) => setTimeout(ok, 1500));
+        }
       }
-      txt = String((j.candidates?.[0]?.content?.parts || []).map((x) => x.text || '').join('')).trim();
+      if (!got) {
+        const hint = lastStatus === 400 && /API key/i.test(lastErr) ? ' (zły klucz API)' : lastStatus === 403 ? ' (klucz nie ma dostępu)' : lastStatus === 429 ? ' (limit darmowych zapytań)' : [500, 503, 504].includes(lastStatus) ? ' (Google jest przeciążony – spróbuj za chwilę)' : '';
+        return res.status(502).json({ error: 'Gemini: ' + String(lastErr).slice(0, 160) + hint });
+      }
     } else {
       const r = await fetch('https://api.deepseek.com/chat/completions', {
         method: 'POST',
