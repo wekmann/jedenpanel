@@ -1,6 +1,8 @@
-// Odczyt wyników sondażu ze zrzutu ekranu przez DeepSeek (model z obsługą obrazów).
-// Klucz: zmienna środowiskowa DEEPSEEK_API_KEY (Vercel -> Settings -> Environment Variables).
-// Opcjonalnie: DEEPSEEK_MODEL (domyślnie "deepseek-flash").
+// Odczyt wyników sondażu ze zrzutu ekranu przez AI z obsługą obrazów.
+// Dostawca wybierany po zmiennej środowiskowej (Vercel -> Settings -> Environment Variables):
+//   GEMINI_API_KEY   -> Google Gemini (darmowy limit), opcjonalnie GEMINI_MODEL (domyślnie "gemini-2.5-flash")
+//   DEEPSEEK_API_KEY -> DeepSeek (płatny), opcjonalnie DEEPSEEK_MODEL (domyślnie "deepseek-flash")
+// Gdy ustawione obie, używany jest Gemini.
 import { requireAdmin, method, fail } from './_lib.js';
 
 const PROMPT = `Na obrazie jest wynik sondażu lub wyborów (wykres, tabela, zrzut ekranu z grafiki telewizyjnej).
@@ -21,40 +23,59 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   try {
     if (!method(req, res, 'POST') || !requireAdmin(req, res)) return;
-    const key = process.env.DEEPSEEK_API_KEY;
-    if (!key) return res.status(503).json({ error: 'Brak zmiennej DEEPSEEK_API_KEY na serwerze (Vercel → Settings → Environment Variables), potem Redeploy.' });
+    const gKey = process.env.GEMINI_API_KEY, dKey = process.env.DEEPSEEK_API_KEY;
+    if (!gKey && !dKey) return res.status(503).json({ error: 'Brak klucza AI na serwerze: dodaj GEMINI_API_KEY (Vercel → Settings → Environment Variables), potem Redeploy.' });
 
     const image = String((req.body && req.body.image) || '');
-    if (!/^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(image))
-      return res.status(400).json({ error: 'Nieprawidłowy obraz (PNG, JPG, WebP lub GIF).' });
+    const im = /^data:(image\/(?:png|jpe?g|webp|gif));base64,([A-Za-z0-9+/=]+)$/.exec(image);
+    if (!im) return res.status(400).json({ error: 'Nieprawidłowy obraz (PNG, JPG, WebP lub GIF).' });
     if (image.length > 4_000_000) return res.status(413).json({ error: 'Obraz jest za duży.' });
 
-    const r = await fetch('https://api.deepseek.com/chat/completions', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: process.env.DEEPSEEK_MODEL || 'deepseek-flash',
-        temperature: 0,
-        max_tokens: 1500,
-        response_format: { type: 'json_object' },
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'text', text: PROMPT },
-            { type: 'image_url', image_url: { url: image } },
-          ],
-        }],
-      }),
-      signal: AbortSignal.timeout(55000),
-    });
-    const j = await r.json().catch(() => ({}));
-    if (!r.ok) {
-      const m = (j.error && (j.error.message || j.error)) || ('HTTP ' + r.status);
-      const hint = r.status === 401 ? ' (zły klucz API)' : r.status === 402 ? ' (brak środków na koncie DeepSeek)' : r.status === 429 ? ' (limit zapytań)' : '';
-      return res.status(502).json({ error: 'DeepSeek: ' + String(m).slice(0, 200) + hint });
+    let txt = '';
+    if (gKey) {
+      const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+        method: 'POST',
+        headers: { 'x-goog-api-key': gKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: PROMPT }, { inline_data: { mime_type: im[1], data: im[2] } }] }],
+          generationConfig: {
+            temperature: 0,
+            responseMimeType: 'application/json',
+            ...(model.startsWith('gemini-2.5-flash') ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+          },
+        }),
+        signal: AbortSignal.timeout(55000),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        const m = (j.error && j.error.message) || ('HTTP ' + r.status);
+        const hint = r.status === 400 && /API key/i.test(m) ? ' (zły klucz API)' : r.status === 403 ? ' (klucz nie ma dostępu)' : r.status === 429 ? ' (limit darmowych zapytań – odczekaj chwilę)' : '';
+        return res.status(502).json({ error: 'Gemini: ' + String(m).slice(0, 200) + hint });
+      }
+      txt = String((j.candidates?.[0]?.content?.parts || []).map((x) => x.text || '').join('')).trim();
+    } else {
+      const r = await fetch('https://api.deepseek.com/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${dKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: process.env.DEEPSEEK_MODEL || 'deepseek-flash',
+          temperature: 0,
+          max_tokens: 1500,
+          response_format: { type: 'json_object' },
+          messages: [{ role: 'user', content: [{ type: 'text', text: PROMPT }, { type: 'image_url', image_url: { url: image } }] }],
+        }),
+        signal: AbortSignal.timeout(55000),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        const m = (j.error && (j.error.message || j.error)) || ('HTTP ' + r.status);
+        const hint = r.status === 401 ? ' (zły klucz API)' : r.status === 402 ? ' (brak środków na koncie DeepSeek)' : r.status === 429 ? ' (limit zapytań)' : '';
+        return res.status(502).json({ error: 'DeepSeek: ' + String(m).slice(0, 200) + hint });
+      }
+      txt = String(j.choices?.[0]?.message?.content || '').trim();
     }
 
-    let txt = String(j.choices?.[0]?.message?.content || '').trim();
     txt = txt.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
     let data;
     try { data = JSON.parse(txt); }
